@@ -45,6 +45,9 @@ namespace GoldstarrTrading
                 case "Merchandise":
                     this.ContentFrame.Navigate(typeof(Merchandise));
                     break;
+                case "Stock":
+                    this.ContentFrame.Navigate(typeof(Stock));
+                    break;
             }
             
         }
