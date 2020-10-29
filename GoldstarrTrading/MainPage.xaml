@@ -9,29 +9,39 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
-        <NavigationView x:Name="NavigationViewControl" >
-            <NavigationView.MenuItems>
-                <NavigationViewItem Content="Customers" x:Name="Customers" />
-                <NavigationViewItem Content="Merchandise" x:Name="B" />
-                <NavigationViewItem Content="Stock" x:Name="C" />
-                <NavigationViewItem Content="Orders" x:Name="D" />
-            </NavigationView.MenuItems>
-        </NavigationView>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
 
+        <Frame Grid.Row="0">
+            <NavigationView x:Name="NavigationViewControl" SelectionChanged="Customers_Click" PaneDisplayMode="Top" IsBackButtonVisible="Collapsed"  >
+                <NavigationView.MenuItems>
+                    <NavigationViewItem Content="Customers" x:Name="Customers" />
+                    <NavigationViewItem Content="Merchandise" x:Name="Merchandise" />
+                    <NavigationViewItem Content="Stock" x:Name="Stock" />
+                    <NavigationViewItem Content="Orders" x:Name="Orders" />
+                </NavigationView.MenuItems>
+            </NavigationView>
 
-        <VisualStateManager.VisualStateGroups>
-            <VisualStateGroup>
-                <VisualState>
-                    <VisualState.StateTriggers>
-                        <AdaptiveTrigger
-                        MinWindowWidth="{x:Bind NavigationViewControl.CompactModeThresholdWidth}" />
-                    </VisualState.StateTriggers>
+            <VisualStateManager.VisualStateGroups>
+                <VisualStateGroup>
+                    <VisualState>
+                        <VisualState.StateTriggers>
+                            <AdaptiveTrigger
+                                MinWindowWidth="{x:Bind NavigationViewControl.CompactModeThresholdWidth}" />
+                        </VisualState.StateTriggers>
 
-                    <VisualState.Setters>
-                        <Setter Target="NavigationViewControl.PaneDisplayMode" Value="Top"/>
-                    </VisualState.Setters>
-                </VisualState>
-            </VisualStateGroup>
-        </VisualStateManager.VisualStateGroups>
+                        <VisualState.Setters>
+                            <Setter Target="NavigationViewControl.PaneDisplayMode" Value="Top"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateManager.VisualStateGroups>
+        </Frame >
+
+        <Frame x:Name="ContentFrame" Grid.Row="1">
+
+        </Frame>
     </Grid>
 </Page>

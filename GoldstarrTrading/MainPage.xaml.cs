@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -25,6 +26,27 @@ namespace GoldstarrTrading
         public MainPage()
         {
             this.InitializeComponent();
+        }
+
+        private void Cusomers_Click(object sender, RoutedEventArgs eventArgs)
+        {
+            
+        }
+
+        private void Customers_Click(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
+        {
+            Debug.WriteLine(args.SelectedItemContainer.Name);
+
+            switch (args.SelectedItemContainer.Name)
+            {
+                case "Customers":
+                    this.ContentFrame.Navigate(typeof(Customers));
+                    break;
+                case "Merchandise":
+                    this.ContentFrame.Navigate(typeof(Merchandise));
+                    break;
+            }
+            
         }
     }
 }
