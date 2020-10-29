@@ -12,6 +12,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using GoldstarrTrading.Classes;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -22,9 +23,15 @@ namespace GoldstarrTrading
     /// </summary>
     public sealed partial class Merchandise : Page
     {
-        public Merchandise()
+        
+        /// <summary>
+        /// Binding Merchandise list to merchandiseList listview
+        /// </summary>
+        public Merchandise() 
         {
             this.InitializeComponent();
+            merchandiseList.ItemsSource = Merchandises.GetMerchandises();
         }
+
     }
 }
