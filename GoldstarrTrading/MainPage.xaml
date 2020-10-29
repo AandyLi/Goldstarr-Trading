@@ -9,6 +9,29 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
+        <NavigationView x:Name="NavigationViewControl" >
+            <NavigationView.MenuItems>
+                <NavigationViewItem Content="Customers" x:Name="Customers" />
+                <NavigationViewItem Content="Merchandise" x:Name="B" />
+                <NavigationViewItem Content="Stock" x:Name="C" />
+                <NavigationViewItem Content="Orders" x:Name="D" />
+            </NavigationView.MenuItems>
+        </NavigationView>
 
+
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger
+                        MinWindowWidth="{x:Bind NavigationViewControl.CompactModeThresholdWidth}" />
+                    </VisualState.StateTriggers>
+
+                    <VisualState.Setters>
+                        <Setter Target="NavigationViewControl.PaneDisplayMode" Value="Top"/>
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
     </Grid>
 </Page>
