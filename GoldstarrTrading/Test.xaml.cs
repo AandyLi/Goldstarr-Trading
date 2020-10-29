@@ -22,9 +22,26 @@ namespace GoldstarrTrading
     /// </summary>
     public sealed partial class Test : Page
     {
+        List<MyClass> myList = new List<MyClass>();
         public Test()
         {
             this.InitializeComponent();
+
+            for (int i = 0; i < 60; i++)
+            {
+                MyClass a = new MyClass();
+                a.Name = "Name " + i;
+                a.LastName = "Lastname " + i;
+                myList.Add(a);
+            }
+
+            TestListView.ItemsSource = myList;
         }
+    }
+
+    class MyClass
+    {
+        public string Name { get; set; }
+        public string LastName { get; set; }
     }
 }
