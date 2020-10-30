@@ -8,6 +8,7 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="20" />
@@ -26,6 +27,7 @@
         <TextBlock Text="Order history" Grid.Column="2" Grid.Row="1" FontSize="38"/>
 
         <Grid Grid.Row="1" Grid.Column="1">
+
             <Grid.RowDefinitions>
                 <RowDefinition Height="70" />
                 <RowDefinition Height="*" />
@@ -47,7 +49,9 @@
             <DropDownButton x:Name="CustomerDropDown" Grid.Row="2" Grid.Column="2" VerticalAlignment="Center" Width="auto"  />
 
             <TextBlock Text="Merchandise" FontSize="32" Grid.Row="3" VerticalAlignment="Center" />
-            <ComboBox ItemsSource="{x:Bind vm.ObsMerch}" x:Name="Combo" Grid.Row="3" Grid.Column="2" VerticalAlignment="Center" PlaceholderText="Merchandise" SelectionChanged="Combo_SelectionChanged">
+            
+            
+            <ComboBox ItemsSource="{x:Bind tempMerch}" x:Name="Combo" Grid.Row="3" Grid.Column="2" VerticalAlignment="Center" PlaceholderText="Merchandise" SelectionChanged="Combo_SelectionChanged">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <TextBlock Text="{Binding ProductName}" ></TextBlock>

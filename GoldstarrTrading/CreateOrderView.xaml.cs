@@ -25,6 +25,7 @@ namespace GoldstarrTrading
     public sealed partial class CreateOrderView : Page
     {
         private ViewModel vm { get; set; }
+        private ObservableCollection<MerchandiseModel> tempMerch;
         public CreateOrderView()
         {
             this.InitializeComponent();
@@ -34,8 +35,20 @@ namespace GoldstarrTrading
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             vm = (ViewModel)e.Parameter;
-
+            tempMerch = new ObservableCollection<MerchandiseModel>();
+            foreach (var item in vm.ObsMerch.Where(x => x.Amount > 0))
+            {
+                tempMerch.Add(item);
+            }
         }
+
+
+       
+        public static ObservableCollection<MerchandiseModel> Filter(ObservableCollection<MerchandiseModel> merch)
+
+            => (ObservableCollection<MerchandiseModel>)merch.Where(x => x.Amount > 0);
+            
+        
 
         private void Combo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
