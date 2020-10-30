@@ -37,10 +37,10 @@ namespace GoldstarrTrading
         {
             Merchandises.MerchandisesList = new List<Classes.Merchandise>()
             {
-                new Classes.Merchandise {ProductName = "Airscoop", Supplier = "Acne AB", Amount = 0 },
-                new Classes.Merchandise {ProductName = "Hyper-transceiver", Supplier = "Corelian Inc", Amount = 0 },
-                new Classes.Merchandise {ProductName = "Nanosporoid", Supplier = "Corelian Inc", Amount = 0},
-                new Classes.Merchandise {ProductName = "Boarding-spike", Supplier = "Joruba Consortium", Amount = 0}
+                new Classes.Merchandise {ProductName = "Airscoop", Supplier = "Acne AB", Amount = 500 },
+                new Classes.Merchandise {ProductName = "Hyper-transceiver", Supplier = "Corelian Inc", Amount = 32 },
+                new Classes.Merchandise {ProductName = "Nanosporoid", Supplier = "Corelian Inc", Amount = 1000},
+                new Classes.Merchandise {ProductName = "Boarding-spike", Supplier = "Joruba Consortium", Amount = 64}
             };
         }
 
@@ -69,6 +69,9 @@ namespace GoldstarrTrading
                     break;
                 case "Orders":
                     this.ContentFrame.Navigate(typeof(CreateOrderView));
+                    break;
+                case "Deliveries":
+                    this.ContentFrame.Navigate(typeof(Deliveries));
                     break;
             }
             
