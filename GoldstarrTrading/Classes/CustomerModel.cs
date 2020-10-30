@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GoldstarrTrading.Classes
 {
-    class Customers : IAddToListView
+    class CustomerModel : IAddToListView
     {
         public string Name { get; set; }
         public string Address { get; set; }
