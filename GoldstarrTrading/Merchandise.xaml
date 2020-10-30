@@ -9,7 +9,22 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
-        <TextBlock HorizontalAlignment="Left" Margin="877,337,0,0" Text="Merchandise" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="48"/>
 
+        <ListView x:Name="merchandiseList" Grid.Row ="1" Margin="140,163,417,59">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock Text="Produktnamn:" FontSize="20"/>
+                        <TextBlock Text="{Binding ProductName}" FontSize="20" />
+                        <TextBlock Text="Leverantör:" FontSize="20"/>
+                        <TextBlock Text="{Binding Supplier}" FontSize="16"/>
+                        <TextBlock Text="Antal i lager:" FontSize="20"/>
+                        <TextBlock Text="{Binding Amount}" FontSize="16"/>
+                    </StackPanel>
+
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
     </Grid>
+
 </Page>
