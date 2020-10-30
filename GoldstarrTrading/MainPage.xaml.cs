@@ -14,6 +14,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using GoldstarrTrading.Classes;
+using System.Collections.ObjectModel;
 
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
@@ -38,15 +39,15 @@ namespace GoldstarrTrading
 
         private void CreateMerchandisesList()
         {
-            viewModel.MerchList = new List<MerchandiseModel>()
+            viewModel.ObsMerch = new ObservableCollection<MerchandiseModel>()
             {
                 new MerchandiseModel {ProductName = "Airscoop", Supplier = "Acne AB", Amount = 0 },
                 new MerchandiseModel {ProductName = "Hyper-transceiver", Supplier = "Corelian Inc", Amount = 0 },
                 new MerchandiseModel {ProductName = "Nanosporoid", Supplier = "Corelian Inc", Amount = 0},
                 new MerchandiseModel {ProductName = "Boarding-spike", Supplier = "Joruba Consortium", Amount = 0}
             };
-            viewModel.MerchList = viewModel.MerchList;
-            viewModel.UpdateList();
+            viewModel.ObsMerch = viewModel.ObsMerch;
+            //viewModel.UpdateList();
         }
 
         
@@ -66,7 +67,7 @@ namespace GoldstarrTrading
                     this.ContentFrame.Navigate(typeof(Customers));
                     break;
                 case "Merchandise":
-                    this.ContentFrame.Navigate(typeof(Merchandise), viewModel.MerchList);
+                    this.ContentFrame.Navigate(typeof(Merchandise), viewModel);
                     break;
                 case "Stock":
                     this.ContentFrame.Navigate(typeof(Stock));

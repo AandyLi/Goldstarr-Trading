@@ -12,24 +12,52 @@ namespace GoldstarrTrading
 {
     class ViewModel : INotifyPropertyChanged
     {
-        public event PropertyChangedEventHandler PropertyChanged;
 
-        public ObservableCollection<MerchandiseModel> ObsMerch;
+        private ObservableCollection<MerchandiseModel> _obsMerch;
 
-        private OrderModel Order { get; set; }
+        public ObservableCollection<MerchandiseModel> ObsMerch
+        {
+            get { return _obsMerch; }
+            set
+            {
+                _obsMerch = value;
+                RaisePropertyChanged("ObsMerch");
+            }
+        }
 
-        public List<MerchandiseModel> MerchList { get; set; }
+        private OrderModel _order;
 
+        public OrderModel Order
+        {
+            get { return _order; }
+
+            set
+            {
+                _order = value;
+                RaisePropertyChanged("Order");
+            }
+        }
         public ViewModel()
         {
             ObsMerch = new ObservableCollection<MerchandiseModel>();
         }
 
-        public void UpdateList()
+        //public List<MerchandiseModel> MerchList { get; set; } // Skip for now
+        //public void UpdateList()
+        //{
+        //    foreach (var item in MerchList)
+        //    {
+        //        ObsMerch.Add(item);
+        //    }
+        //}
+
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void RaisePropertyChanged(string name)
         {
-            foreach (var item in MerchList)
+            if (PropertyChanged != null)
             {
-                ObsMerch.Add(item);
+                PropertyChanged(this, new PropertyChangedEventArgs(name));
             }
         }
     }

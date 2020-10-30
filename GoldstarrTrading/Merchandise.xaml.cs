@@ -33,7 +33,7 @@ namespace GoldstarrTrading
         }
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            merchandiseList.ItemsSource = e.Parameter;
+            merchandiseList.ItemsSource = ((ViewModel)e.Parameter).ObsMerch;
         }
     }
 }
