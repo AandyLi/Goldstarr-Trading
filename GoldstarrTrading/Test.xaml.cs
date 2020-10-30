@@ -22,14 +22,14 @@ namespace GoldstarrTrading
     /// </summary>
     public sealed partial class Test : Page
     {
-        List<MyClass> myList = new List<MyClass>();
+        List<MyClass1> myList = new List<MyClass1>();
         public Test()
         {
             this.InitializeComponent();
 
             for (int i = 0; i < 60; i++)
             {
-                MyClass a = new MyClass();
+                MyClass1 a = new MyClass1();
                 a.Name = "Name " + i;
                 a.LastName = "Lastname " + i;
                 myList.Add(a);
@@ -39,7 +39,7 @@ namespace GoldstarrTrading
         }
     }
 
-    class MyClass
+    class MyClass1
     {
         public string Name { get; set; }
         public string LastName { get; set; }
