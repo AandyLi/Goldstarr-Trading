@@ -1,5 +1,7 @@
-﻿using System;
+﻿using GoldstarrTrading.Classes;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -33,6 +35,19 @@ namespace GoldstarrTrading
         {
             vm = (ViewModel)e.Parameter;
 
+        }
+
+        private void Combo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var container = sender as ComboBox;
+            var selectedItem = container.SelectedItem as MerchandiseModel;
+
+            AmountDropDown.Items.Clear();
+
+            for (int i = 0; i < selectedItem.Amount; i++)
+            {
+                AmountDropDown.Items.Add(i + 1);
+            }
         }
     }
 }

@@ -11,11 +11,11 @@ namespace GoldstarrTrading.Classes
     {
         public string ProductName { get; set; }
         public string Supplier { get; set; }
-        public int Amount { get; set; }
+        public int Amount { get; set; } = 0;
 
         public int ViewStockAmount()
         {
-            return 0;
+            return Amount;
         }
 
         public void RemoveStock(int amount)
