@@ -26,7 +26,10 @@ namespace GoldstarrTrading
         public Deliveries()
         {
             this.InitializeComponent();
-            deliveriesList.ItemsSource = Merchandises.GetMerchandises();
+    }
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            deliveriesList.ItemsSource = ((ViewModel)e.Parameter).ObsMerch;
         }
     }
 }
