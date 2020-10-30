@@ -7,7 +7,7 @@ using GoldstarrTrading.Classes;
 
 namespace GoldstarrTrading.Classes
 {
-    public class Merchandise : IAddToListView
+    public class MerchandiseModel : IAddToListView
     {
         public string ProductName { get; set; }
         public string Supplier { get; set; }
@@ -33,20 +33,20 @@ namespace GoldstarrTrading.Classes
         }
     }
 
-    public static class Merchandises // Skapade en klass som innehåller en lista av Merchandise Klassen.
-    {
-        public static List<Merchandise> MerchandisesList;
+    //public static class Merchandises // Skapade en klass som innehåller en lista av Merchandise Klassen.
+    //{
+    //    public static List<Merchandise> MerchandisesList;
 
-        /// <summary>
-        /// Metod som returnerar listan.
-        /// </summary>
-        /// <returns>List<Merchandise></returns>
-        /// 
-        public static List<Merchandise> GetMerchandises()
-        {
-            return MerchandisesList;
-        }
-    }
+    //    /// <summary>
+    //    /// Metod som returnerar listan.
+    //    /// </summary>
+    //    /// <returns>List<Merchandise></returns>
+    //    /// 
+    //    public static List<Merchandise> GetMerchandises()
+    //    {
+    //        return MerchandisesList;
+    //    }
+    //}
 
     
 

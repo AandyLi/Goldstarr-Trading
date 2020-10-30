@@ -43,14 +43,21 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <TextBlock Text="Customer" FontSize="32" Grid.Row="2" />
-            <DropDownButton Grid.Row="2" Grid.Column="2" VerticalAlignment="Center" Width="auto" />
+            <TextBlock Text="Customer" FontSize="32" Grid.Row="2" VerticalAlignment="Center" />
+            <DropDownButton x:Name="CustomerDropDown" Grid.Row="2" Grid.Column="2" VerticalAlignment="Center" Width="auto"  />
 
-            <TextBlock Text="Merchandise" FontSize="32" Grid.Row="3" />
-            <DropDownButton Grid.Row="3" Grid.Column="2" VerticalAlignment="Center" Width="auto" />
+            <TextBlock Text="Merchandise" FontSize="32" Grid.Row="3" VerticalAlignment="Center" />
+            <ComboBox Header="Merchandise" ItemsSource="{x:Bind vm.ObsMerch}" x:Name="Combo" Grid.Row="3" Grid.Column="2" VerticalAlignment="Center" PlaceholderText="Merchandise">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding ProductName}" ></TextBlock>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
 
-            <TextBlock Text="Amount" FontSize="32" Grid.Row="4" />
-            <DropDownButton Grid.Row="4" Grid.Column="2" VerticalAlignment="Center" Width="auto" />
+            </ComboBox>
+
+            <TextBlock Text="Amount" FontSize="32" Grid.Row="4" VerticalAlignment="Center"/>
+            <DropDownButton x:Name="AmountDropDown" Grid.Row="4" Grid.Column="2" VerticalAlignment="Center" Width="auto" />
             
 
         </Grid>

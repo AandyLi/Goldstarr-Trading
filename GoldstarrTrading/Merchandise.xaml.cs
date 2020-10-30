@@ -30,8 +30,10 @@ namespace GoldstarrTrading
         public Merchandise() 
         {
             this.InitializeComponent();
-            merchandiseList.ItemsSource = Merchandises.GetMerchandises();
         }
-
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            merchandiseList.ItemsSource = e.Parameter;
+        }
     }
 }

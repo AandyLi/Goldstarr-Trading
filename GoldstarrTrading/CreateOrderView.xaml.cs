@@ -22,9 +22,17 @@ namespace GoldstarrTrading
     /// </summary>
     public sealed partial class CreateOrderView : Page
     {
+        private ViewModel vm { get; set; }
         public CreateOrderView()
         {
             this.InitializeComponent();
+
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            vm = (ViewModel)e.Parameter;
+
         }
     }
 }

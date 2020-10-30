@@ -26,23 +26,30 @@ namespace GoldstarrTrading
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        private ViewModel viewModel;
 
         public MainPage()
         {
             this.InitializeComponent();
+            viewModel = new ViewModel();
+
             CreateMerchandisesList();
         }
 
         private void CreateMerchandisesList()
         {
-            Merchandises.MerchandisesList = new List<Classes.Merchandise>()
+            viewModel.MerchList = new List<MerchandiseModel>()
             {
-                new Classes.Merchandise {ProductName = "Airscoop", Supplier = "Acne AB", Amount = 0 },
-                new Classes.Merchandise {ProductName = "Hyper-transceiver", Supplier = "Corelian Inc", Amount = 0 },
-                new Classes.Merchandise {ProductName = "Nanosporoid", Supplier = "Corelian Inc", Amount = 0},
-                new Classes.Merchandise {ProductName = "Boarding-spike", Supplier = "Joruba Consortium", Amount = 0}
+                new MerchandiseModel {ProductName = "Airscoop", Supplier = "Acne AB", Amount = 0 },
+                new MerchandiseModel {ProductName = "Hyper-transceiver", Supplier = "Corelian Inc", Amount = 0 },
+                new MerchandiseModel {ProductName = "Nanosporoid", Supplier = "Corelian Inc", Amount = 0},
+                new MerchandiseModel {ProductName = "Boarding-spike", Supplier = "Joruba Consortium", Amount = 0}
             };
+            viewModel.MerchList = viewModel.MerchList;
+            viewModel.UpdateList();
         }
+
+        
 
         private void Cusomers_Click(object sender, RoutedEventArgs eventArgs)
         {
@@ -59,7 +66,7 @@ namespace GoldstarrTrading
                     this.ContentFrame.Navigate(typeof(Customers));
                     break;
                 case "Merchandise":
-                    this.ContentFrame.Navigate(typeof(Merchandise));
+                    this.ContentFrame.Navigate(typeof(Merchandise), viewModel.MerchList);
                     break;
                 case "Stock":
                     this.ContentFrame.Navigate(typeof(Stock));
@@ -68,7 +75,7 @@ namespace GoldstarrTrading
                     this.ContentFrame.Navigate(typeof(Test));
                     break;
                 case "Orders":
-                    this.ContentFrame.Navigate(typeof(CreateOrderView));
+                    this.ContentFrame.Navigate(typeof(CreateOrderView), viewModel);
                     break;
             }
             
