@@ -74,7 +74,7 @@ namespace GoldstarrTrading
 
             switch (args.SelectedItemContainer.Name)
             {
-                case "CustomerModel":
+                case "Customers":
                     this.ContentFrame.Navigate(typeof(Customers), viewModel);
                     break;
                 case "Merchandise":
