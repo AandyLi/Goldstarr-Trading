@@ -40,7 +40,7 @@
 
 
 
-        <ListView Grid.Row="1" Grid.Column="1" x:Name="TestListView" HorizontalAlignment="Left" Margin="276,0,0,0" Width="464">
+        <ListView ItemsSource="{x:Bind vm.CustomerList}"  Grid.Row="1" Grid.Column="1" x:Name="TestListView" HorizontalAlignment="Left" Margin="276,0,0,0" Width="464">
             <ListView.HeaderTemplate>
                 <DataTemplate>
                     <Grid Padding="12" Background="{ThemeResource SystemBaseLowColor}">
