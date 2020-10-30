@@ -1,5 +1,5 @@
 ﻿<Page
-    x:Class="GoldstarrTrading.Merchandise"
+    x:Class="GoldstarrTrading.Deliveries"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:GoldstarrTrading"
@@ -20,33 +20,34 @@
             <ColumnDefinition Width="40"/>
         </Grid.ColumnDefinitions>
 
-        <TextBlock Grid.Column="1" Grid.Row="0" HorizontalAlignment="Left" Text="Merchandise" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="40"/>
+        <TextBlock Grid.Column="1" Grid.Row="0" HorizontalAlignment="Left" Text="Deliveries" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="40"/>
 
 
-        <GridView x:Name="merchandiseList" Grid.Row ="1" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderBrush="AliceBlue" BorderThickness="5">
-            <GridView.ItemTemplate>
+        <ListView x:Name="deliveriesList" Grid.Row ="1" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderBrush="AliceBlue" BorderThickness="5">
+            <ListView.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Vertical" Margin="5" Width="300">
 
                         <TextBlock Margin="0,5,0,0">
                                            <Run Text="Product Name: " FontSize="20" FontWeight="SemiBold"/>
                                            <Run Text="{Binding ProductName}" FontSize="16"/>
-                            </TextBlock>
-                            <TextBlock>
+                        </TextBlock>
+                        <TextBlock>
                                            <Run Text="Supplier: " FontSize="20" FontWeight="SemiBold"/>
                                            <Run Text="{Binding Supplier}" FontSize="16"/>
-                            </TextBlock>
+                        </TextBlock>
                         <TextBlock>
-                                           <Run Text="Stock Quantity: " FontSize="20" FontWeight="SemiBold"/>
+                                           <Run Text="Delivery Quantity: " FontSize="20" FontWeight="SemiBold"/>
                                            <Run Text="{Binding Amount}" FontSize="16"/>
                         </TextBlock>
+                        <Button Content="Receive Order" Margin="10"/>
                     </StackPanel>
                 </DataTemplate>
-            </GridView.ItemTemplate>
+            </ListView.ItemTemplate>
 
 
 
-        </GridView>
+        </ListView>
 
 
 
