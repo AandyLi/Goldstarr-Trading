@@ -14,6 +14,7 @@ namespace GoldstarrTrading
     {
 
         private ObservableCollection<MerchandiseModel> _obsMerch;
+        private ObservableCollection<CustomerModel> _customerList;
 
         public ObservableCollection<MerchandiseModel> ObsMerch
         {
@@ -40,7 +41,22 @@ namespace GoldstarrTrading
         public ViewModel()
         {
             ObsMerch = new ObservableCollection<MerchandiseModel>();
+            CustomerList = new ObservableCollection<CustomerModel>();
         }
+
+
+        public ObservableCollection<CustomerModel> CustomerList
+        {
+            get { return _customerList; }
+            set
+            {
+                _customerList = value;
+                RaisePropertyChanged("CustomerList");
+            }
+        }
+
+        
+       
 
         //public List<MerchandiseModel> MerchList { get; set; } // Skip for now
         //public void UpdateList()
