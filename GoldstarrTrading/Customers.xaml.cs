@@ -26,7 +26,11 @@ namespace GoldstarrTrading
     public sealed partial class Customers : Page
     {
         private ViewModel vm { get; set; }
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            vm = (ViewModel)e.Parameter;
 
+        }
         public Customers()
         {
             this.InitializeComponent();

@@ -18,6 +18,7 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="10" />
             <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
             <ColumnDefinition Width="10" />
         </Grid.ColumnDefinitions>
 
@@ -40,14 +41,14 @@
 
 
 
-        <ListView ItemsSource="{x:Bind vm.CustomerList}"  Grid.Row="1" Grid.Column="1" x:Name="TestListView" HorizontalAlignment="Left" Margin="276,0,0,0" Width="464">
+        <ListView ItemsSource="{x:Bind vm.CustomerList}" Grid.Row="1" Grid.Column="2" x:Name="TestListView" HorizontalAlignment="Right">
             <ListView.HeaderTemplate>
                 <DataTemplate>
                     <Grid Padding="12" Background="{ThemeResource SystemBaseLowColor}">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="230"/>
+                            <ColumnDefinition Width="600"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Text="Name" Style="{ThemeResource CaptionTextBlockStyle}"/>
+                        <TextBlock Text="Customer name" Style="{ThemeResource CaptionTextBlockStyle}"/>
                     </Grid>
                 </DataTemplate>
             </ListView.HeaderTemplate>
@@ -61,8 +62,11 @@
                             <ColumnDefinition Width="0"/>
                             <ColumnDefinition Width="300"/>
                             <ColumnDefinition Width="300"/>
+
                         </Grid.ColumnDefinitions>
+
                         <TextBlock Text="{Binding Name}" FontWeight="Bold" Grid.Row="0" Grid.Column="1" Padding="0,0,5,0" />
+                        
                     </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>
