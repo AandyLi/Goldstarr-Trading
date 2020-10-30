@@ -70,7 +70,7 @@ namespace GoldstarrTrading
                     this.ContentFrame.Navigate(typeof(Merchandise), viewModel);
                     break;
                 case "Stock":
-                    this.ContentFrame.Navigate(typeof(Stock));
+                    this.ContentFrame.Navigate(typeof(Stock), viewModel);
                     break;
                 case "Test":
                     this.ContentFrame.Navigate(typeof(Test));
