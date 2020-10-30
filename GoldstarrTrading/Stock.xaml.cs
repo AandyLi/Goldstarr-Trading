@@ -22,35 +22,25 @@ namespace GoldstarrTrading
     /// </summary>
     public sealed partial class Stock : Page
     {
-        List <MyClass> myList = new List<MyClass>();
+        private ViewModel vm { get; set; }
         public Stock()
         {
             this.InitializeComponent();
-            
-            for (int i = 0; i < 40; i++)
-            {
-                MyClass a = new MyClass();
-                a.ProductName = "Product name" + i;
-                a.AmountInStock = 0;
-                myList.Add(a);
-            }
-
-            StockList.ItemsSource = myList;
         }
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
 
         }
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            vm = (ViewModel)e.Parameter;
 
+        }
 
     }
 
-    class MyClass
-    {
-        public string ProductName { get; set; }
-        public int AmountInStock { get; set; }
-    }
+   
 
 
 }
