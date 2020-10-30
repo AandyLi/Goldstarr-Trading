@@ -1,8 +1,10 @@
-﻿using System;
+﻿using GoldstarrTrading.Classes;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Security.Cryptography.X509Certificates;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -28,3 +30,4 @@ namespace GoldstarrTrading
         }
     }
 }
+
