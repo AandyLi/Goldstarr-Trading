@@ -9,10 +9,10 @@ namespace GoldstarrTrading
 {
     class OrderModel
     {
-        private DateTime OrderDate { get; set; } = DateTime.Now;
-        private string CustomerName { get; set; }
-        private MerchandiseModel Merch { get; set; }
-        private int OrderedAmount { get; set; }
+        public DateTime OrderDate { get; set; } = DateTime.Now;
+        public string CustomerName { get; set; }
+        public MerchandiseModel Merch { get; set; }
+        public int OrderedAmount { get; set; }
 
         public void CreateOrder(string customerName, MerchandiseModel merchandise, int orderedAmount)
         {

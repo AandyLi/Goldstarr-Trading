@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -102,11 +103,11 @@ namespace GoldstarrTrading
             OrderModel newOrder = new OrderModel();
             MerchandiseModel tmpMerchModel = GetMerchModel(MerchCombo);
 
-            string customerName = CustomerCombo.SelectedValue.ToString();
+            CustomerModel tmpCustModel = CustomerCombo.SelectedItem as CustomerModel;
 
             int orderedAmount = orderedAmount = Int32.Parse(AmountDropDown.SelectedItem.ToString());
 
-            newOrder.CreateOrder(customerName, tmpMerchModel, orderedAmount);
+            newOrder.CreateOrder(tmpCustModel.Name, tmpMerchModel, orderedAmount);
 
             vm.Order.Add(newOrder);
         }
