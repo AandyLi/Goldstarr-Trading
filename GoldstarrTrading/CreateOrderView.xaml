@@ -65,7 +65,7 @@
                 </ComboBox.ItemTemplate>
             </ComboBox>
 
-            <Button x:Name="ConfirmOrderButton" Content="Create Order" Grid.Row="5" Grid.Column="0" IsEnabled="False" Opacity="0.5" >
+            <Button x:Name="ConfirmOrderButton" Content="Create Order" Grid.Row="5" Grid.Column="0" IsEnabled="False" Opacity="0.5" Click="ConfirmOrderButton_Click" >
 
 
             </Button>

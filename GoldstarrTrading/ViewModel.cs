@@ -26,9 +26,9 @@ namespace GoldstarrTrading
             }
         }
 
-        private OrderModel _order;
+        private ObservableCollection<OrderModel> _order;
 
-        public OrderModel Order
+        public ObservableCollection<OrderModel> Order
         {
             get { return _order; }
 
@@ -42,6 +42,7 @@ namespace GoldstarrTrading
         {
             ObsMerch = new ObservableCollection<MerchandiseModel>();
             CustomerList = new ObservableCollection<CustomerModel>();
+            Order = new ObservableCollection<OrderModel>();
         }
 
 

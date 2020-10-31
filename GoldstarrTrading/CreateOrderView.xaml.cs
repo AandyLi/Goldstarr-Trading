@@ -56,12 +56,11 @@ namespace GoldstarrTrading
 
         private void MerchCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var container = sender as ComboBox;
-            var selectedItem = container.SelectedItem as MerchandiseModel;
+            MerchandiseModel tmpMerchModel = GetMerchModel(sender);
 
             AmountDropDown.Items.Clear();
 
-            for (int i = 0; i < selectedItem.Amount; i++)
+            for (int i = 0; i < tmpMerchModel.Amount; i++)
             {
                 AmountDropDown.Items.Add(i + 1);
             }
@@ -69,6 +68,14 @@ namespace GoldstarrTrading
             // Always reset button when we change merchandise
             ConfirmOrderButton.IsEnabled = false;
             ConfirmOrderButton.Opacity = 0.5;
+        }
+
+        private MerchandiseModel GetMerchModel(object obj)
+        {
+            var container = obj as ComboBox;
+            var selectedItem = container.SelectedItem as MerchandiseModel;
+
+            return selectedItem;
         }
 
         private void AmountDropDown_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -88,6 +95,20 @@ namespace GoldstarrTrading
                 ConfirmOrderButton.IsEnabled = true;
                 ConfirmOrderButton.Opacity = 1.0;
             }
+        }
+
+        private void ConfirmOrderButton_Click(object sender, RoutedEventArgs e)
+        {
+            OrderModel newOrder = new OrderModel();
+            MerchandiseModel tmpMerchModel = GetMerchModel(MerchCombo);
+
+            string customerName = CustomerCombo.SelectedValue.ToString();
+
+            int orderedAmount = orderedAmount = Int32.Parse(AmountDropDown.SelectedItem.ToString());
+
+            newOrder.CreateOrder(customerName, tmpMerchModel, orderedAmount);
+
+            vm.Order.Add(newOrder);
         }
     }
 }
