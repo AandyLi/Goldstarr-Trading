@@ -106,6 +106,7 @@ namespace GoldstarrTrading
             CustomerModel tmpCustModel = CustomerCombo.SelectedItem as CustomerModel;
 
             int orderedAmount = orderedAmount = Int32.Parse(AmountDropDown.SelectedItem.ToString());
+            tmpMerchModel.RemoveStock(orderedAmount);
 
             newOrder.CreateOrder(tmpCustModel.Name, tmpMerchModel, orderedAmount);
 
