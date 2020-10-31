@@ -25,7 +25,7 @@ namespace GoldstarrTrading
     public sealed partial class CreateOrderView : Page
     {
         private ViewModel vm { get; set; }
-        private ObservableCollection<MerchandiseModel> tempMerch;
+        private ObservableCollection<MerchandiseModel> localMerchandise;
         public CreateOrderView()
         {
             this.InitializeComponent();
@@ -35,13 +35,17 @@ namespace GoldstarrTrading
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             vm = (ViewModel)e.Parameter;
-            tempMerch = new ObservableCollection<MerchandiseModel>();
-            foreach (var item in vm.ObsMerch.Where(x => x.Amount > 0))
-            {
-                tempMerch.Add(item);
-            }
+            PopulateAvailableMerchandise();
         }
 
+        private void PopulateAvailableMerchandise()
+        {
+            localMerchandise = new ObservableCollection<MerchandiseModel>();
+            foreach (var item in vm.ObsMerch.Where(x => x.Amount > 0))
+            {
+                localMerchandise.Add(item);
+            }
+        }
 
        
         public static ObservableCollection<MerchandiseModel> Filter(ObservableCollection<MerchandiseModel> merch)
@@ -50,7 +54,7 @@ namespace GoldstarrTrading
             
         
 
-        private void Combo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void MerchCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var container = sender as ComboBox;
             var selectedItem = container.SelectedItem as MerchandiseModel;
@@ -60,6 +64,29 @@ namespace GoldstarrTrading
             for (int i = 0; i < selectedItem.Amount; i++)
             {
                 AmountDropDown.Items.Add(i + 1);
+            }
+
+            // Always reset button when we change merchandise
+            ConfirmOrderButton.IsEnabled = false;
+            ConfirmOrderButton.Opacity = 0.5;
+        }
+
+        private void AmountDropDown_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (CustomerCombo.SelectedValue?.ToString() != "" 
+                && CustomerCombo.SelectedValue != null)
+            {
+                ConfirmOrderButton.IsEnabled = true;
+                ConfirmOrderButton.Opacity = 1.0;
+            }
+        }
+
+        private void CustomerCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (AmountDropDown.Items.Count > 0)
+            {
+                ConfirmOrderButton.IsEnabled = true;
+                ConfirmOrderButton.Opacity = 1.0;
             }
         }
     }

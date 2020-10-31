@@ -46,22 +46,32 @@
             </Grid.ColumnDefinitions>
 
             <TextBlock Text="Customer" FontSize="32" Grid.Row="2" VerticalAlignment="Center" />
-            <DropDownButton x:Name="CustomerDropDown" Grid.Row="2" Grid.Column="2" VerticalAlignment="Center" Width="auto"  />
+            <ComboBox x:Name="CustomerCombo" ItemsSource="{x:Bind vm.CustomerList}" Grid.Row="2" Grid.Column="2" PlaceholderText="Customer" VerticalAlignment="Center" Width="auto" SelectionChanged="CustomerCombo_SelectionChanged" >
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Name}" ></TextBlock>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
 
             <TextBlock Text="Merchandise" FontSize="32" Grid.Row="3" VerticalAlignment="Center" />
-            
-            
-            <ComboBox ItemsSource="{x:Bind tempMerch}" x:Name="Combo" Grid.Row="3" Grid.Column="2" VerticalAlignment="Center" PlaceholderText="Merchandise" SelectionChanged="Combo_SelectionChanged">
+
+
+            <ComboBox ItemsSource="{x:Bind localMerchandise}" x:Name="MerchCombo" Grid.Row="3" Grid.Column="2" VerticalAlignment="Center" PlaceholderText="Merchandise" SelectionChanged="MerchCombo_SelectionChanged">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <TextBlock Text="{Binding ProductName}" ></TextBlock>
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
-
             </ComboBox>
 
+            <Button x:Name="ConfirmOrderButton" Content="Create Order" Grid.Row="5" Grid.Column="0" IsEnabled="False" Opacity="0.5" >
+
+
+            </Button>
+
             <TextBlock Text="Amount" FontSize="32" Grid.Row="4" VerticalAlignment="Center"/>
-            <ComboBox x:Name="AmountDropDown" Grid.Row="4" Grid.Column="2" VerticalAlignment="Center" Width="auto" />
+            <ComboBox x:Name="AmountDropDown" Grid.Row="4" Grid.Column="2" PlaceholderText="Amount" VerticalAlignment="Center" Width="auto" SelectionChanged="AmountDropDown_SelectionChanged" />
             
 
         </Grid>
