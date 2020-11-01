@@ -122,7 +122,7 @@
             </Style>
             </Grid.Resources>
 
-            <ListView x:Name="OrderHistory" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4" ItemsSource="{x:Bind vm.Order}" Style="{StaticResource FixedHeaderListViewStyle}">
+            <ListView  x:Name="OrderHistory" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4" ItemsSource="{x:Bind vm.Order}" Style="{StaticResource FixedHeaderListViewStyle}">
                 <ListView.HeaderTemplate>
                         <DataTemplate>
                             <Grid Padding="12" Background="{ThemeResource SystemBaseLowColor}">

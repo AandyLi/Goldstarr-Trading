@@ -59,16 +59,48 @@ namespace GoldstarrTrading
         {
             MerchandiseModel tmpMerchModel = GetMerchModel(sender);
 
-            AmountDropDown.Items.Clear();
+            ClearAmountDropDown();
 
-            for (int i = 0; i < tmpMerchModel.Amount; i++)
+            if (tmpMerchModel != null)
             {
-                AmountDropDown.Items.Add(i + 1);
+                for (int i = 0; i < tmpMerchModel.Amount; i++)
+                {
+                    AmountDropDown.Items.Add(i + 1);
+                }
             }
 
             // Always reset button when we change merchandise
+            ResetAddOrderButton();
+        }
+
+        private void UpdateAmountDropDown(MerchandiseModel merch)
+        {
+            ClearAmountDropDown();
+
+            for (int i = 0; i < merch.Amount; i++)
+            {
+                AmountDropDown.Items.Add(i + 1);
+            }
+            AmountDropDown.SelectedIndex = 0;
+        }
+
+        private void UpdateMerchCombo(MerchandiseModel merch)
+        {
+            if (merch.Amount == 0)
+            {
+                localMerchandise.Remove(merch);
+            }
+        }
+
+        private void ResetAddOrderButton()
+        {
             ConfirmOrderButton.IsEnabled = false;
             ConfirmOrderButton.Opacity = 0.5;
+        }
+
+        private void ClearAmountDropDown()
+        {
+            AmountDropDown.Items.Clear();
         }
 
         private MerchandiseModel GetMerchModel(object obj)
@@ -101,16 +133,20 @@ namespace GoldstarrTrading
         private void ConfirmOrderButton_Click(object sender, RoutedEventArgs e)
         {
             OrderModel newOrder = new OrderModel();
-            MerchandiseModel tmpMerchModel = GetMerchModel(MerchCombo);
-
             CustomerModel tmpCustModel = CustomerCombo.SelectedItem as CustomerModel;
+
+            MerchandiseModel tmpMerchModel = GetMerchModel(MerchCombo);
 
             int orderedAmount = orderedAmount = Int32.Parse(AmountDropDown.SelectedItem.ToString());
             tmpMerchModel.RemoveStock(orderedAmount);
+            ClearAmountDropDown();
 
             newOrder.CreateOrder(tmpCustModel.Name, tmpMerchModel, orderedAmount);
 
-            vm.Order.Add(newOrder);
+            vm.Order.Insert(0, newOrder);
+
+            UpdateAmountDropDown(tmpMerchModel);
+            UpdateMerchCombo(tmpMerchModel);
         }
     }
 }
