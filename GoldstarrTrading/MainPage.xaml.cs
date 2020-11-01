@@ -83,9 +83,6 @@ namespace GoldstarrTrading
                 case "Stock":
                     this.ContentFrame.Navigate(typeof(Stock), viewModel);
                     break;
-                case "Test":
-                    this.ContentFrame.Navigate(typeof(Test));
-                    break;
                 case "Orders":
                     this.ContentFrame.Navigate(typeof(CreateOrderView), viewModel);
                     break;

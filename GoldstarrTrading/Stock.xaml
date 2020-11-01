@@ -36,9 +36,8 @@
                              GridLinesVisibility="All"
                              AutoGenerateColumns="False"
                              IsHitTestVisible="False"
-                             AlternatingRowBackground="WhiteSmoke"
-                             >
-                
+                             AlternatingRowBackground="WhiteSmoke">
+
                 <Custom:DataGrid.Columns>
                     <Custom:DataGridTextColumn Header="Product Name" Binding="{Binding ProductName}"/>
                     <Custom:DataGridTextColumn Header="Amount" Binding="{Binding Amount}"/>
