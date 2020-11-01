@@ -1,76 +1,51 @@
 ﻿<Page
-    x:Class="GoldstarrTrading.Stock"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:GoldstarrTrading"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:Custom="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    x:Class="GoldstarrTrading.Stock"
     mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    Background="{ThemeResource SystemColorInactiveCaptionBrush}">
+
+    <!--https://docs.microsoft.com/en-us/windows/communitytoolkit/controls/datagrid_guidance/-->
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="20" />
-            <RowDefinition Height="400*" />
-            <RowDefinition Height="20" />
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="10*"/>
+            <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
-
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="213*" />
-            <ColumnDefinition Width="232*" />
+            <ColumnDefinition Width="40"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="40"/>
         </Grid.ColumnDefinitions>
 
-        <Grid Grid.Row="1" Grid.Column="0" >
-            <Grid.RowDefinitions>
-                <RowDefinition Height="55" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
 
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="213*" />
-                <ColumnDefinition Width="232*" />
-                <ColumnDefinition Width="232*" />
-            </Grid.ColumnDefinitions>
+        <TextBlock Grid.Column="1" Grid.Row="0" HorizontalAlignment="Left" Text="Stock" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="40"/>
 
-            <TextBlock Grid.Row="0" Grid.Column="1" Text="Stock" FontSize="48" FontWeight="Bold" TextAlignment="Center" FontFamily="Consolas" TextWrapping="Wrap">
-            </TextBlock>
+        <Grid Grid.Row="1" Grid.Column="1" BorderThickness="5" BorderBrush="AliceBlue">
+
+            <Custom:DataGrid x:Name="stockList"
+                             ItemsSource="{x:Bind vm.ObsMerch}"
+                             Grid.Column="1" Grid.Row="1"
+                             HorizontalAlignment="Stretch"
+                             VerticalAlignment="Stretch"
+                             GridLinesVisibility="All"
+                             AutoGenerateColumns="False"
+                             IsHitTestVisible="False"
+                             AlternatingRowBackground="WhiteSmoke"
+                             >
+                
+                <Custom:DataGrid.Columns>
+                    <Custom:DataGridTextColumn Header="Product Name" Binding="{Binding ProductName}"/>
+                    <Custom:DataGridTextColumn Header="Amount" Binding="{Binding Amount}"/>
+                </Custom:DataGrid.Columns>
+                
+            </Custom:DataGrid>
         </Grid>
-
-
-
-        <Grid Grid.Row="1" Grid.Column="1">
-
-        </Grid>
-        <ListView ItemsSource="{x:Bind vm.ObsMerch}" x:Name="StockList" Grid.Row="1" Grid.Column="1" BorderBrush="Black" BorderThickness="1">
-            <ListView.HeaderTemplate>
-                <DataTemplate>
-                    <Grid Padding="12" Background="{ThemeResource SystemBaseLowColor}">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="400"/>
-                            <ColumnDefinition Width="400"/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" Text="Product Name" Style="{ThemeResource CaptionTextBlockStyle}"/>
-                        <TextBlock Grid.Column="1" Text="Amount in stock" Style="{ThemeResource CaptionTextBlockStyle}"/>
-                    </Grid>
-                </DataTemplate>
-            </ListView.HeaderTemplate>
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="400" />
-                            <ColumnDefinition Width="400" />
-                        </Grid.ColumnDefinitions>
-
-                        <TextBlock Text="{Binding ProductName}" FontWeight="Bold" Grid.Row="0" Grid.Column="1"/>
-                        <TextBlock Text="{Binding Amount}" FontWeight="Bold" Grid.Row="0" Grid.Column="2" />
-                    </Grid>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
 
     </Grid>
 </Page>

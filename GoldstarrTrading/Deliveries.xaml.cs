@@ -42,9 +42,6 @@ namespace GoldstarrTrading
             {
                 deliveryComboBox.Items.Add(product.ProductName);
             }
-
-            
-
         }
 
         private void Add_Click(object sender, RoutedEventArgs e)

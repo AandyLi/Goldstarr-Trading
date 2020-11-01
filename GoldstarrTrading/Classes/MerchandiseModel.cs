@@ -20,16 +20,16 @@ namespace GoldstarrTrading.Classes
 
         public void RemoveStock(int amount)
         {
-            this.Amount -= amount;
+            Amount -= amount;
         }
 
         public void AddStock(int amount)
         {
-            this.Amount += amount;
+            Amount += amount;
         }
         public string GetInfo()
         {
-            throw new NotImplementedException();
+            return $"{ProductName} : {Supplier} : {Amount}";
         }
     }
 
