@@ -42,6 +42,7 @@
         </Frame >
 
         <Frame x:Name="ContentFrame" Grid.Row="1">
+            <TextBlock Text="Welcome to Goldstarr Trading!" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="48" TextWrapping="Wrap"/>
 
         </Frame>
     </Grid>
