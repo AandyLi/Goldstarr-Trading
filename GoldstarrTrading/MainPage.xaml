@@ -6,7 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    Background="{ThemeResource SystemColorInactiveCaptionBrush}">
 
     <Grid>
         <Grid.RowDefinitions>
@@ -17,12 +17,11 @@
         <Frame Grid.Row="0">
             <NavigationView x:Name="NavigationViewControl" SelectionChanged="Customers_Click" PaneDisplayMode="Top" IsBackButtonVisible="Collapsed"  >
                 <NavigationView.MenuItems>
-                    <NavigationViewItem Content="Customers" x:Name="Customers" />
                     <NavigationViewItem Content="Merchandise" x:Name="Merchandise" />
+                    <NavigationViewItem Content="Customers" x:Name="Customers" />
+                    <NavigationViewItem Content="Customer Orders" x:Name="Orders" />
                     <NavigationViewItem Content="Stock" x:Name="Stock" />
-                    <NavigationViewItem Content="Orders" x:Name="Orders" />
                     <NavigationViewItem Content="Deliveries" x:Name="Deliveries" />
-                    <NavigationViewItem Content="Test" x:Name="Test" />
                 </NavigationView.MenuItems>
             </NavigationView>
 

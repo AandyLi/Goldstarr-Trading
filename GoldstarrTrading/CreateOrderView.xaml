@@ -6,25 +6,31 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    Background="{ThemeResource SystemColorInactiveCaptionBrush}">
 
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="20" />
+            <RowDefinition Height="60" />
             <RowDefinition Height="400*" />
-            <RowDefinition Height="20" />
+            <RowDefinition Height="40" />
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="10" />
+            <ColumnDefinition Width="40" />
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="10" />
+            <ColumnDefinition Width="40" />
         </Grid.ColumnDefinitions>
+        <TextBlock Text="Customer Order Management" Grid.Column="1" Grid.Row="0" FontSize="40"/>
 
-        <TextBlock Text="Create order" Grid.Column="1" Grid.Row="1" FontSize="38"/>
-        <TextBlock Text="Order history" Grid.Column="2" Grid.Row="1" FontSize="38"/>
+        <Grid Grid.Row="1" Grid.Column="1" BorderBrush="AliceBlue" BorderThickness="2" Margin="5">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50" />
+                <RowDefinition Height="200" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
 
         <Grid Grid.Row="1" Grid.Column="2">
             <Grid.RowDefinitions>
@@ -171,22 +177,17 @@
 
         <Grid Grid.Row="1" Grid.Column="1">
 
-            <Grid.RowDefinitions>
-                <RowDefinition Height="70" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="70" />
-            </Grid.RowDefinitions>
+            <Grid Grid.Row="1" BorderBrush="AliceBlue" BorderThickness="1" Margin="15">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50" />
+                    <RowDefinition Height="50" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
 
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="150" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
 
             <TextBlock Text="Customer" FontSize="32" Grid.Row="2" VerticalAlignment="Center" />
             <ComboBox x:Name="CustomerCombo" ItemsSource="{x:Bind vm.CustomerList}" Grid.Row="2" Grid.Column="2" PlaceholderText="Customer" VerticalAlignment="Center" Width="auto" SelectionChanged="CustomerCombo_SelectionChanged" >
@@ -198,26 +199,38 @@
             </ComboBox>
 
             <TextBlock Text="Merchandise" FontSize="32" Grid.Row="3" VerticalAlignment="Center" />
-
-
-            <ComboBox ItemsSource="{x:Bind localMerchandise}" x:Name="MerchCombo" Grid.Row="3" Grid.Column="2" VerticalAlignment="Center" PlaceholderText="Merchandise" SelectionChanged="MerchCombo_SelectionChanged">
+            
+            
+            <ComboBox ItemsSource="{x:Bind localMerchandise}" x:Name="Combo" Grid.Row="3" Grid.Column="2" VerticalAlignment="Center" PlaceholderText="Merchandise" SelectionChanged="Combo_SelectionChanged">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <TextBlock Text="{Binding ProductName}" ></TextBlock>
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
-            </ComboBox>
 
+                </ComboBox>
             <Button x:Name="ConfirmOrderButton" Content="Create Order" Grid.Row="5" Grid.Column="0" IsEnabled="False" Opacity="0.5" Click="ConfirmOrderButton_Click" >
 
 
             </Button>
+                <TextBlock Text="Amount" FontSize="20" Grid.Row="2" VerticalAlignment="Center" Margin="5"/>
+                <ComboBox x:Name="AmountDropDown" Grid.Row="2" Grid.Column="2" VerticalAlignment="Center" Width="auto" />
 
-            <TextBlock Text="Amount" FontSize="32" Grid.Row="4" VerticalAlignment="Center"/>
-            <ComboBox x:Name="AmountDropDown" Grid.Row="4" Grid.Column="2" PlaceholderText="Amount" VerticalAlignment="Center" Width="auto" SelectionChanged="AmountDropDown_SelectionChanged" />
-
+            </Grid>
+            
 
         </Grid>
+
+        <Grid Grid.Row="1" Grid.Column="2" BorderBrush="AliceBlue" BorderThickness="2" Margin="5">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Text="Order History" Grid.Column="0" Grid.Row="0" FontSize="30" Margin="5"/>
+
+        </Grid>
+
     </Grid>
     
     

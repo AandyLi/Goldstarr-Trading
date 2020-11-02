@@ -29,7 +29,7 @@ namespace GoldstarrTrading.Classes
         }
         public string GetInfo()
         {
-            throw new NotImplementedException();
+            return $"{ProductName} : {Supplier} : {Amount}";
         }
     }
 
