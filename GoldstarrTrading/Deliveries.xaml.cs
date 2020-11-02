@@ -16,6 +16,7 @@ using GoldstarrTrading.Classes;
 using System.Diagnostics;
 using System.ComponentModel;
 using System.Collections.ObjectModel;
+using Windows.UI.Popups;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -27,6 +28,9 @@ namespace GoldstarrTrading
     public sealed partial class Deliveries : Page
     {
         private ViewModel ViewModel { get; set; }
+        private string SelectedProductName{get;set;}
+        private int DeliveryQuantity { get; set; }
+
 
         public Deliveries()
         {
@@ -34,8 +38,17 @@ namespace GoldstarrTrading
         }
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            deliveriesList.ItemsSource = ((ViewModel)e.Parameter).ObsMerch;
+            FillDeliveriesList(e);
+            FillDeliveryComboBox(e);
+        }
 
+        private void FillDeliveriesList(NavigationEventArgs e)
+        {
+            deliveriesList.ItemsSource = ((ViewModel)e.Parameter).ObsMerch;
+        }
+
+        private void FillDeliveryComboBox(NavigationEventArgs e)
+        {
             ViewModel = (ViewModel)e.Parameter;
 
             foreach (var product in ViewModel.ObsMerch)
@@ -46,19 +59,52 @@ namespace GoldstarrTrading
 
         private void Add_Click(object sender, RoutedEventArgs e)
         {
-            string selectedProductName = deliveryComboBox.SelectedValue.ToString();
+            AddDeliveryToStock();
+        }
 
-            int quantity = Int32.Parse(deliveryTextBox.Text);
+        private void AddDeliveryToStock()
+        {
+            SelectedProductName = deliveryComboBox.SelectedValue.ToString();
+
+            DeliveryQuantity = CheckDeliveryQuantity();
 
             for (int i = 0; i < ViewModel.ObsMerch.Count; ++i)
             {
-                if(ViewModel.ObsMerch[i].ProductName == selectedProductName)
+                if (ViewModel.ObsMerch[i].ProductName == SelectedProductName)
                 {
-                    ViewModel.ObsMerch[i].AddStock(quantity);
+                    ViewModel.ObsMerch[i].AddStock(DeliveryQuantity);
                 }
             }
         }
-        
+
+        private int CheckDeliveryQuantity()
+        {
+            int deliveryQuantity = 0;
+
+            try
+            {
+                deliveryQuantity = Int32.Parse(deliveryTextBox.Text);
+            }
+            catch (FormatException fex)
+            {
+                var messageDialog = new MessageDialog(fex.Message);
+                deliveryQuantity = 0;
+                return deliveryQuantity;
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                deliveryQuantity = 0;
+                return deliveryQuantity;
+            }
+            catch (Exception)
+            {
+                deliveryQuantity = 0;
+                return deliveryQuantity;
+            }
+
+            return deliveryQuantity;
+        }
+
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
         }
