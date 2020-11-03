@@ -120,6 +120,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Classes\CustomerModel.cs" />
+    <Compile Include="Classes\FileManager.cs" />
     <Compile Include="Classes\IAddToListView.cs" />
     <Compile Include="CreateOrderView.xaml.cs">
       <DependentUpon>CreateOrderView.xaml</DependentUpon>
