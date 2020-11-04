@@ -7,6 +7,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -27,7 +28,7 @@ namespace GoldstarrTrading
         private ViewModel ViewModel;
         private string newSupplierName;
         private string newSupplierAddress;
-        private string newSupplierPhone;
+        private int newSupplierPhone;
 
 
         public Suppliers()
@@ -46,8 +47,8 @@ namespace GoldstarrTrading
             {
                 if (CheckDuplicateSupplierEntry() == false)
                 {
-                    ViewModel.Supplier.Add(new SupplierModel() { Name = newSupplierName, Address = newSupplierAddress, Phone = newSupplierPhone });
-                    SupplierAddedDialog(newSupplierName);
+                    ViewModel.Supplier.Add(new SupplierModel() { Name = newSupplierName, Address = newSupplierAddress, Phone = newSupplierPhone.ToString() }); //Fullösning med ToString () tills vi har bestämt nummerformat
+                    SupplierAddedDialog();
                 }
                 else
                 {
@@ -55,7 +56,7 @@ namespace GoldstarrTrading
                 }
             }
 
-            EmptyAllTextboxes();
+           // EmptyAllTextboxes();
 
         }
 
@@ -86,10 +87,16 @@ namespace GoldstarrTrading
             {
                 newSupplierName = SupplierNameTextBox.Text;
                 newSupplierAddress = SupplierAddressTextBox.Text;
-                newSupplierPhone = SupplierPhoneTextBox.Text;
+                newSupplierPhone = Int32.Parse(SupplierPhoneTextBox.Text);
             }
             catch (FormatException fex)
             {
+
+                if (fex.Source == SupplierPhoneTextBox.Name)
+                {
+                SupplierPhoneTextBox.BorderBrush = new SolidColorBrush(Color.FromArgb(255, 255, 0, 0));
+                }
+
                 DisplayInputError(fex);
                 return false;
             }
@@ -125,12 +132,12 @@ namespace GoldstarrTrading
             }
         }
 
-        private async void SupplierAddedDialog(string name)
+        private async void SupplierAddedDialog()
         {
             ContentDialog inputError = new ContentDialog()
             {
                 Title = "Supplier Added",
-                Content = $"New supplier {name} was successfully added to the Supplier Directory.",
+                Content = $"New supplier {newSupplierName} was successfully added to the Supplier Directory.",
                 CloseButtonText = "OK"
             };
 
