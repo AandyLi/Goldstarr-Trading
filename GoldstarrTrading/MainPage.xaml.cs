@@ -36,6 +36,7 @@ namespace GoldstarrTrading
 
             CreateMerchandisesList();
             CreateCustomers();
+            CreateSuppliers();
         }
 
         private void CreateMerchandisesList()
