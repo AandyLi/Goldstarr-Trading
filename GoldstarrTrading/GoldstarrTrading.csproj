@@ -144,6 +144,9 @@
     <Compile Include="Stock.xaml.cs">
       <DependentUpon>Stock.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Suppliers.xaml.cs">
+      <DependentUpon>Suppliers.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Test.xaml.cs">
       <DependentUpon>Test.xaml</DependentUpon>
     </Compile>
@@ -190,6 +193,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Stock.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Suppliers.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

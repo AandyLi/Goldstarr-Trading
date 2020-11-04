@@ -61,7 +61,17 @@ namespace GoldstarrTrading
             new CustomerModel { Name = "Snurre Sprätt", Address = "Morotsgatan 1", Phone = "0702-123 456" }
             };
         }
-        
+
+        private void CreateSuppliers()
+        {
+            viewModel.Supplier = new ObservableCollection<SupplierModel>()
+            {
+            new SupplierModel { Name = "Joruba Consortium", Address = "Mid Rim, Galaxy Far Far Away", Phone = "666-66666" },
+            new SupplierModel { Name = "Corelian Inc", Address = "Corellia, Galaxy Far Far Away", Phone = "777-77777" },
+            new SupplierModel { Name = "Acne AB", Address = "Finnstigen 3, Varberg", Phone = "888-88888" },
+            };
+        }
+
 
         private void Cusomers_Click(object sender, RoutedEventArgs eventArgs)
         {
@@ -88,6 +98,9 @@ namespace GoldstarrTrading
                     break;
                 case "Deliveries":
                     this.ContentFrame.Navigate(typeof(Deliveries), viewModel);
+                    break;
+                case "Suppliers":
+                    this.ContentFrame.Navigate(typeof(Suppliers), viewModel);
                     break;
             }
             

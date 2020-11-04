@@ -15,6 +15,8 @@ namespace GoldstarrTrading
 
         private ObservableCollection<MerchandiseModel> _obsMerch;
         private ObservableCollection<CustomerModel> _customerList;
+        private ObservableCollection<OrderModel> _order;
+        private ObservableCollection<SupplierModel> _supplier;
 
         public ObservableCollection<MerchandiseModel> ObsMerch
         {
@@ -26,8 +28,6 @@ namespace GoldstarrTrading
             }
         }
 
-        private ObservableCollection<OrderModel> _order;
-
         public ObservableCollection<OrderModel> Order
         {
             get { return _order; }
@@ -38,13 +38,6 @@ namespace GoldstarrTrading
                 RaisePropertyChanged("Order");
             }
         }
-        public ViewModel()
-        {
-            ObsMerch = new ObservableCollection<MerchandiseModel>();
-            CustomerList = new ObservableCollection<CustomerModel>();
-            Order = new ObservableCollection<OrderModel>();
-        }
-
 
         public ObservableCollection<CustomerModel> CustomerList
         {
@@ -54,6 +47,25 @@ namespace GoldstarrTrading
                 _customerList = value;
                 RaisePropertyChanged("CustomerList");
             }
+        }
+
+        public ObservableCollection<SupplierModel> Supplier
+        {
+            get { return _supplier; }
+            set
+            {
+                _supplier = value;
+                RaisePropertyChanged("Supplier");
+            }
+        }
+
+
+        public ViewModel()
+        {
+            ObsMerch = new ObservableCollection<MerchandiseModel>();
+            CustomerList = new ObservableCollection<CustomerModel>();
+            Order = new ObservableCollection<OrderModel>();
+            Supplier = new ObservableCollection<SupplierModel>();
         }
 
         

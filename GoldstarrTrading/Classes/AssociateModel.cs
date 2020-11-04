@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GoldstarrTrading.Classes
 {
-    class AssociateModel //or AgentModel?
+    abstract class AssociateModel //or AgentModel?
     {
         public string Name { get; set; }
         public string Address { get; set; }
