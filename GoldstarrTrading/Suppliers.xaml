@@ -5,92 +5,11 @@
     xmlns:local="using:GoldstarrTrading"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     mc:Ignorable="d"
     Background="{ThemeResource SystemColorInactiveCaptionBrush}">
 
-        <Grid>
-        <Grid.Resources>
-            <Style TargetType="ListView" x:Name="FixedHeaderListViewStyle">
-                <Setter Property="IsTabStop" Value="False" />
-                <Setter Property="TabNavigation" Value="Once" />
-                <Setter Property="IsSwipeEnabled" Value="True" />
-                <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
-                <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
-                <Setter Property="ScrollViewer.HorizontalScrollMode" Value="Disabled" />
-                <Setter Property="ScrollViewer.IsHorizontalRailEnabled" Value="False" />
-                <Setter Property="ScrollViewer.VerticalScrollMode" Value="Enabled" />
-                <Setter Property="ScrollViewer.IsVerticalRailEnabled" Value="True" />
-                <Setter Property="ScrollViewer.ZoomMode" Value="Disabled" />
-                <Setter Property="ScrollViewer.IsDeferredScrollingEnabled" Value="False" />
-                <Setter Property="ScrollViewer.BringIntoViewOnFocusChange" Value="True" />
-                <Setter Property="UseSystemFocusVisuals" Value="True" />
-                <Setter Property="ItemContainerTransitions">
-                    <Setter.Value>
-                        <TransitionCollection>
-                            <AddDeleteThemeTransition />
-                            <ContentThemeTransition />
-                            <ReorderThemeTransition />
-                            <EntranceThemeTransition IsStaggeringEnabled="False" />
-                        </TransitionCollection>
-                    </Setter.Value>
-                </Setter>
-
-                <Setter Property="ItemsPanel">
-                    <Setter.Value>
-                        <ItemsPanelTemplate>
-                            <ItemsStackPanel Orientation="Vertical" />
-                        </ItemsPanelTemplate>
-                    </Setter.Value>
-                </Setter>
-
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="ListView">
-                            <Border BorderBrush="{TemplateBinding BorderBrush}" 
-                            Background="{TemplateBinding Background}" 
-                            BorderThickness="{TemplateBinding BorderThickness}">
-                                <Grid>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition/>
-                                    </Grid.RowDefinitions>
-
-                                    <ContentControl Content="{TemplateBinding Header}"
-                                                ContentTemplate="{TemplateBinding HeaderTemplate}"
-                                                ContentTransitions="{TemplateBinding HeaderTransitions}"/>
-
-                                    <ScrollViewer x:Name="ScrollViewer"
-                                          Grid.Row="1"
-                                        TabNavigation="{TemplateBinding TabNavigation}"
-                                        HorizontalScrollMode="{TemplateBinding ScrollViewer.HorizontalScrollMode}"
-                                        HorizontalScrollBarVisibility="{TemplateBinding ScrollViewer.HorizontalScrollBarVisibility}"
-                                        IsHorizontalScrollChainingEnabled="{TemplateBinding ScrollViewer.IsHorizontalScrollChainingEnabled}"
-                                        VerticalScrollMode="{TemplateBinding ScrollViewer.VerticalScrollMode}"
-                                        VerticalScrollBarVisibility="{TemplateBinding ScrollViewer.VerticalScrollBarVisibility}"
-                                        IsVerticalScrollChainingEnabled="{TemplateBinding ScrollViewer.IsVerticalScrollChainingEnabled}"
-                                        IsHorizontalRailEnabled="{TemplateBinding ScrollViewer.IsHorizontalRailEnabled}"
-                                        IsVerticalRailEnabled="{TemplateBinding ScrollViewer.IsVerticalRailEnabled}"
-                                        ZoomMode="{TemplateBinding ScrollViewer.ZoomMode}"
-                                        IsDeferredScrollingEnabled="{TemplateBinding ScrollViewer.IsDeferredScrollingEnabled}"
-                                        BringIntoViewOnFocusChange="{TemplateBinding ScrollViewer.BringIntoViewOnFocusChange}"
-                                        AutomationProperties.AccessibilityView="Raw">
-                                        <ItemsPresenter 
-                                                Footer="{TemplateBinding Footer}"
-                                                FooterTemplate="{TemplateBinding FooterTemplate}"
-                                                FooterTransitions="{TemplateBinding FooterTransitions}"
-                                                Padding="{TemplateBinding Padding}" />
-                                    </ScrollViewer>
-
-                                </Grid>
-                            </Border>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-
-            </Style>
-        </Grid.Resources>
-
-
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="60" />
             <RowDefinition Height="400*" />
@@ -99,7 +18,7 @@
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="40" />
-            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="450" />
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="40" />
         </Grid.ColumnDefinitions>
@@ -155,41 +74,17 @@
 
             <TextBlock Text="Supplier Directory" Grid.Column="0" Grid.Row="0" FontSize="30" Margin="5"/>
 
-            <ListView  x:Name="SupplierDirectoryList" ItemsSource="{x:Bind ViewModel.Supplier, Mode=OneTime}" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Stretch" >
-                <ListView.HeaderTemplate>
-                    <DataTemplate>
-                        <Grid Padding="12" Background="{ThemeResource SystemBaseLowColor}" HorizontalAlignment="Stretch" >
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            
-                            <TextBlock Text="Supplier Name" Grid.Column="0" Width="200" HorizontalAlignment="Stretch"  Style="{ThemeResource CaptionTextBlockStyle}"/>
-                            <TextBlock Text="Address" Grid.Column="1" Width="600" HorizontalAlignment="Stretch"  Style="{ThemeResource CaptionTextBlockStyle}"/>
-                            <TextBlock Text="Phone Number" Grid.Column="2" Width="200"  HorizontalAlignment="Stretch" Style="{ThemeResource CaptionTextBlockStyle}"/>
-                        </Grid>
-                    </DataTemplate>
-                </ListView.HeaderTemplate>
+            <controls:DataGrid x:Name="stockList"
+                             ItemsSource="{x:Bind ViewModel.Supplier}"
+                             Grid.Column="1" Grid.Row="1"
+                             HorizontalAlignment="Stretch"
+                             VerticalAlignment="Stretch"
+                             GridLinesVisibility="All"
+                             AutoGenerateColumns="True"
+                             IsHitTestVisible="False"
+                             AlternatingRowBackground="WhiteSmoke">
 
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <Grid HorizontalAlignment="Stretch">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="0"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Text="{Binding Name}" Width="200"       HorizontalAlignment="Stretch"  FontWeight="Bold" Grid.Row="0" Grid.Column="1"  />
-                            <TextBlock Text="{Binding Address}" Width="600"    HorizontalAlignment="Stretch"  FontWeight="Bold" Grid.Row="0" Grid.Column="2" TextWrapping="Wrap"/>
-                            <TextBlock Text="{Binding Phone}" Width="200"      HorizontalAlignment="Stretch"  FontWeight="Bold" Grid.Row="0" Grid.Column="3"/>
-                        </Grid>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
+            </controls:DataGrid>
         </Grid>
 
     </Grid>
