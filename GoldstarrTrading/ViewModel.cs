@@ -38,11 +38,25 @@ namespace GoldstarrTrading
                 RaisePropertyChanged("Order");
             }
         }
+
+        private ObservableCollection<OrderModel> _pendingOrder;
+
+        public ObservableCollection<OrderModel> PendingOrder
+        {
+            get { return _pendingOrder; }
+
+            set
+            {
+                _pendingOrder = value;
+                RaisePropertyChanged("PendingOrder");
+            }
+        }
         public ViewModel()
         {
             ObsMerch = new ObservableCollection<MerchandiseModel>();
             CustomerList = new ObservableCollection<CustomerModel>();
             Order = new ObservableCollection<OrderModel>();
+            PendingOrder = new ObservableCollection<OrderModel>();
         }
 
 
