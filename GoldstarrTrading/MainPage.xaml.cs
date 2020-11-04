@@ -36,6 +36,8 @@ namespace GoldstarrTrading
 
             CreateMerchandisesList();
             CreateCustomers();
+
+            //FileManager.LoadAllDataFromFile();
         }
 
         private void CreateMerchandisesList()
