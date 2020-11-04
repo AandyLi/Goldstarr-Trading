@@ -20,10 +20,5 @@ namespace GoldstarrTrading
             this.Merch = merchandise;
             this.OrderedAmount = orderedAmount;
         }
-
-        public void CreatePendingOrder(string customerName, MerchandiseModel merchandise, int orderedAmount)
-        {
-            
-        }
     }
 }

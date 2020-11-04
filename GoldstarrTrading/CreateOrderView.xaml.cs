@@ -3,11 +3,13 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -42,20 +44,23 @@ namespace GoldstarrTrading
         private void PopulateAvailableMerchandise()
         {
             localMerchandise = new ObservableCollection<MerchandiseModel>();
-            foreach (var item in vm.ObsMerch.Where(x => x.Amount > 0))
+            foreach (var item in vm.ObsMerch)
             {
                 localMerchandise.Add(item);
             }
+
+            
+
         }
 
-       
-        public static ObservableCollection<MerchandiseModel> Filter(ObservableCollection<MerchandiseModel> merch)
 
-            => (ObservableCollection<MerchandiseModel>)merch.Where(x => x.Amount > 0);
-            
-        
+        //public static ObservableCollection<MerchandiseModel> Filter(ObservableCollection<MerchandiseModel> merch)
 
-        private void MerchCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        //    => (ObservableCollection<MerchandiseModel>)merch.Where(x => x.Amount > 0);
+
+
+
+        private async void MerchCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             MerchandiseModel tmpMerchModel = GetMerchModel(sender);
 
@@ -67,6 +72,18 @@ namespace GoldstarrTrading
                 {
                     AmountDropDown.Items.Add(i + 1);
                 }
+            }
+
+            //TO DO: se till att Amoun-ComboBoxen populatas även om stock är 0 för nu är den bara blank som en flintskalle
+
+            var message = string.Empty;
+            MessageDialog messageDialog = new MessageDialog(message, "Product has been added to order");
+            if (tmpMerchModel.Amount <= 0)
+            {
+                message = "This product is not currently in stock! Click ok to proceed with the order anyway.";
+                messageDialog = new MessageDialog(message, "Warning!");
+                await messageDialog.ShowAsync();
+                return;
             }
 
             // Always reset button when we change merchandise
@@ -86,10 +103,11 @@ namespace GoldstarrTrading
 
         private void UpdateMerchCombo(MerchandiseModel merch)
         {
-            if (merch.Amount == 0)
+            if (merch.Amount > 0)
             {
-                localMerchandise.Remove(merch);
+                localMerchandise.Add(merch);
             }
+
         }
 
         private void ResetAddOrderButton()
@@ -113,7 +131,7 @@ namespace GoldstarrTrading
 
         private void AmountDropDown_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (CustomerCombo.SelectedValue?.ToString() != "" 
+            if (CustomerCombo.SelectedValue?.ToString() != ""
                 && CustomerCombo.SelectedValue != null)
             {
                 ConfirmOrderButton.IsEnabled = true;
@@ -149,4 +167,6 @@ namespace GoldstarrTrading
             UpdateMerchCombo(tmpMerchModel);
         }
     }
+    
+    
 }
