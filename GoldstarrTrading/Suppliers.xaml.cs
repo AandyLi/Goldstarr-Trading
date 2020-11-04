@@ -56,7 +56,7 @@ namespace GoldstarrTrading
                 }
             }
 
-           // EmptyAllTextboxes();
+           EmptyAllTextboxes();
 
         }
 
@@ -92,10 +92,10 @@ namespace GoldstarrTrading
             catch (FormatException fex)
             {
 
-                if (fex.Source == SupplierPhoneTextBox.Name)
-                {
-                SupplierPhoneTextBox.BorderBrush = new SolidColorBrush(Color.FromArgb(255, 255, 0, 0));
-                }
+                //if (fex.Source == SupplierPhoneTextBox.Name)
+                //{
+                //SupplierPhoneTextBox.BorderBrush = new SolidColorBrush(Color.FromArgb(255, 255, 0, 0));
+                //}
 
                 DisplayInputError(fex);
                 return false;
