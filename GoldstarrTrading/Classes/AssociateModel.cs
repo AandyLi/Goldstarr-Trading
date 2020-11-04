@@ -6,12 +6,10 @@ using System.Threading.Tasks;
 
 namespace GoldstarrTrading.Classes
 {
-    class CustomerModel : AssociateModel, IAddToListView
+    class AssociateModel //or AgentModel?
     {
-       
-        public string GetInfo()
-        {
-            throw new NotImplementedException();
-        }
+        public string Name { get; set; }
+        public string Address { get; set; }
+        public string Phone { get; set; }
     }
 }

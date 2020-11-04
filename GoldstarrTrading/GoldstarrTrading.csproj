@@ -119,8 +119,10 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Classes\AssociateModel.cs" />
     <Compile Include="Classes\CustomerModel.cs" />
     <Compile Include="Classes\IAddToListView.cs" />
+    <Compile Include="Classes\SupplierModel.cs" />
     <Compile Include="CreateOrderView.xaml.cs">
       <DependentUpon>CreateOrderView.xaml</DependentUpon>
     </Compile>
