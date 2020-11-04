@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Text.RegularExpressions;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI;
@@ -12,6 +13,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
+using Windows.UI.Xaml.Documents;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
@@ -28,7 +30,7 @@ namespace GoldstarrTrading
         private ViewModel ViewModel;
         private string newSupplierName;
         private string newSupplierAddress;
-        private int newSupplierPhone;
+        private string newSupplierPhone;
 
 
         public Suppliers()
@@ -47,7 +49,8 @@ namespace GoldstarrTrading
             {
                 if (CheckDuplicateSupplierEntry() == false)
                 {
-                    ViewModel.Supplier.Add(new SupplierModel() { Name = newSupplierName, Address = newSupplierAddress, Phone = newSupplierPhone.ToString() }); //Fullösning med ToString () tills vi har bestämt nummerformat
+                    ViewModel.Supplier.Add(new SupplierModel() { Name = newSupplierName, Address = newSupplierAddress, Phone = newSupplierPhone });
+
                     SupplierAddedDialog();
                 }
                 else
@@ -80,6 +83,12 @@ namespace GoldstarrTrading
             return false;
         }
 
+        public static bool IsPhoneNumber(string number)
+        {
+            return Regex.Match(number, @"^[0-9]{8,10}$").Success;
+
+        }
+
         private bool CheckTextBoxFormat()
         {
 
@@ -87,16 +96,15 @@ namespace GoldstarrTrading
             {
                 newSupplierName = SupplierNameTextBox.Text;
                 newSupplierAddress = SupplierAddressTextBox.Text;
-                newSupplierPhone = Int32.Parse(SupplierPhoneTextBox.Text);
+                newSupplierPhone = SupplierPhoneTextBox.Text;
+
+                if (!IsPhoneNumber(newSupplierPhone))
+                {
+                    throw new FormatException("Phone number can only contain numeric values and be 8-10 characters long."); 
+                }
             }
             catch (FormatException fex)
             {
-
-                //if (fex.Source == SupplierPhoneTextBox.Name)
-                //{
-                //SupplierPhoneTextBox.BorderBrush = new SolidColorBrush(Color.FromArgb(255, 255, 0, 0));
-                //}
-
                 DisplayInputError(fex);
                 return false;
             }
@@ -130,6 +138,7 @@ namespace GoldstarrTrading
             {
                 AddSupplierButton.IsEnabled = true;
             }
+
         }
 
         private async void SupplierAddedDialog()
