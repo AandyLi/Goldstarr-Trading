@@ -57,6 +57,8 @@ namespace GoldstarrTrading
                     ViewModel.ObsMerch[i].AddStock(quantity);
                 }
             }
+
+            FileManager.SaveToFile(ViewModel.ObsMerch);
         }
         
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)

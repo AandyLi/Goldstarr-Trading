@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using Windows.Devices.Geolocation;
 using Windows.Graphics.Printing.OptionDetails;
 using Windows.Storage;
+using Windows.UI.Xaml.Documents;
 using Windows.UI.Xaml.Input;
 
 namespace GoldstarrTrading.Classes
@@ -56,6 +57,18 @@ namespace GoldstarrTrading.Classes
 
     }
 
+    [StructLayout(LayoutKind.Sequential)]
+    struct MerchandiseStruct
+    {
+        public int Amount;
+
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 20)]
+        public string ProductName;
+
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 20)]
+        public string Supplier;
+    }
+
     static class FileManager
     {
         static StorageFolder storageFolder = ApplicationData.Current.LocalFolder;
@@ -86,6 +99,9 @@ namespace GoldstarrTrading.Classes
                 case "OrderModel":
                     HandleOrderModel(collection as ObservableCollection<OrderModel>);
                     break;
+                case "MerchandiseModel":
+                    HandleMerchandiseModel(collection as ObservableCollection<MerchandiseModel>);
+                    break;
             }
 
             await GetFileSaveStatus(); 
@@ -104,6 +120,28 @@ namespace GoldstarrTrading.Classes
                 Debug.WriteLine("File " + file.Name + " could not be saved.");
             }
         }
+
+        private static void HandleMerchandiseModel(ObservableCollection<MerchandiseModel> merch)
+        {
+            MerchandiseStruct[] merchStruct = new MerchandiseStruct[merch.Count];
+            for (int i = 0; i < merch.Count; i++)
+            {
+                merchStruct[i].Amount = merch[i].Amount;
+                merchStruct[i].ProductName = merch[i].ProductName;
+                merchStruct[i].Supplier = merch[i].Supplier;
+
+            }
+
+            Header h = new Header
+            {
+                Name = typeof(MerchandiseStruct).Name,
+                size = Marshal.SizeOf(typeof(MerchandiseStruct)),
+                amount = merch.Count
+            };
+
+            ObjectToByteArray(merchStruct, h);
+        }
+
 
         private static void HandleOrderModel(ObservableCollection<OrderModel> order)
         {
@@ -131,32 +169,115 @@ namespace GoldstarrTrading.Classes
             ObjectToByteArray(orderStruct, h);
         }
 
-        public static void ObjectToByteArray(OrderStruct[] obj, object h)
+        public static void ObjectToByteArray<T>(T[] obj, object h) where T : struct
         {
-            using (var fs = new FileStream(file.Path, FileMode.Open, FileAccess.Write))
+            using (var fs = new FileStream(file.Path, FileMode.Open, FileAccess.ReadWrite))
             {
-                // Write header to file
-                int length = Marshal.SizeOf(h);
-                byte[] bytes = new byte[length];
 
-                IntPtr Handle = Marshal.AllocHGlobal(length);
+                /*
+                Assume we dont know the file layout
+                Look for a matching header (name)
+                Set header as start position
+                Look for next header (header + headerSize + header. (size * amount)
+                If new header is found, copy existing data to end of file, else, write to file
+                Write new header + data
+                Write the rest of the already existing data we saved
+                 */
 
-                Marshal.StructureToPtr(h, Handle, true);
-                Marshal.Copy(Handle, bytes, 0, length);
 
-                Marshal.FreeHGlobal(Handle);
-                fs.Write(bytes, 0, length);
+                // Find a header
 
-                Header header = ((Header)h);
 
-                for (int i = 0; i < header.amount; i++)
+                Header firstHeader = FindNextHeader(fs);
+                bool eof = false;
+                while (true)
                 {
-                    fs.Flush();
-                    WriteStructArrayToFile(fs, Handle, obj[i], header.size);
+
+                    if (firstHeader.Name == ((Header)h).Name || eof )
+                    {
+                        Header nextHeader;
+                        long oldPos = fs.Position;
+                        // Advance position and look for next header
+                        fs.Position = firstHeader.size * firstHeader.amount;
+                        nextHeader = FindNextHeader(fs);
+
+                        // New header was found
+                        if (nextHeader.size > 0 && !eof)
+                        {
+                            // save remaining data
+                            int remainingSize = (int)(fs.Length - fs.Position - Marshal.SizeOf(h));
+                            byte[] remainingData = new byte[remainingSize];
+
+                            fs.Position -= Marshal.SizeOf(h);
+                            fs.Read(remainingData, 0, remainingSize);
+
+                            // Revert fs.position to old position with negative offset for the header
+                            fs.Position = oldPos - Marshal.SizeOf(h);
+
+                            // Continue with normal write operation
+                            WriteHeaderAndStructToFile(fs, h, obj);
+
+                            // Write remaning data
+                            fs.Write(remainingData, 0, remainingSize);
+                            break;
+                        }
+                        else // No new header found
+                        {
+                            if (eof)
+                            {
+                                fs.Position = fs.Length;
+                            }
+                            // Continue with normal write operation
+                            WriteHeaderAndStructToFile(fs, h, obj);
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        fs.Position = (firstHeader.size * firstHeader.amount) + Marshal.SizeOf(h);
+                        firstHeader = FindNextHeader(fs);
+                        if (fs.Position == fs.Length)
+                        {
+                            eof = true;
+                        }
+                    }
                 }
+
             }
         }
 
+        private static void WriteHeaderAndStructToFile<T>(FileStream fs, object h, T[] obj)
+        {
+            // Write header to file
+            int length = Marshal.SizeOf(h);
+            byte[] bytes = new byte[length];
+
+            IntPtr Handle = Marshal.AllocHGlobal(length);
+
+            Marshal.StructureToPtr(h, Handle, true);
+            Marshal.Copy(Handle, bytes, 0, length);
+
+            Marshal.FreeHGlobal(Handle);
+            fs.Write(bytes, 0, length);
+
+            Header header = ((Header)h);
+
+            for (int i = 0; i < header.amount; i++)
+            {
+                fs.Flush();
+                WriteStructArrayToFile(fs, Handle, obj[i], header.size);
+            }
+        }
+
+        private static Header FindNextHeader(FileStream fs)
+        {
+            Header h = new Header();
+            BinaryReader br = new BinaryReader(fs, Encoding.UTF8);
+            h = GetHeader(br);
+
+
+            return h;
+        }
 
         private static void WriteStructArrayToFile(FileStream fs, IntPtr handle, object theStruct, int length)
         {
@@ -227,6 +348,7 @@ namespace GoldstarrTrading.Classes
             br.Read(headerBytes, 0, (int)headerSize);
 
             Header h = new Header();
+            h.size = 0;
             GCHandle handle = GCHandle.Alloc(headerBytes, GCHandleType.Pinned);
             try
             {

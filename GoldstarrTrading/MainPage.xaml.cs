@@ -40,7 +40,6 @@ namespace GoldstarrTrading
             CreateCustomers();
 
             FileManager.LoadAllDataFromFile(viewModel);
-
             // Delay the collection changed events so that they do not trigger when adding stuff from the file to the observable collections
             Task.Delay(3000).ContinueWith(t => viewModel.AllowCollectionChangedEvents());
 
