@@ -138,6 +138,15 @@ namespace GoldstarrTrading
 
         private  bool AddSupplierButtonVisible(bool value)
         {
+            if (value == true)
+            {
+                AddSupplierButton.Opacity = 1;
+            }
+            else
+            {
+                AddSupplierButton.Opacity = 0.5;
+            }
+
             return AddSupplierButton.IsEnabled = value;
         }
         private async void DisplayInputError(Exception exception)

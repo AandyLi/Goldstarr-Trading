@@ -60,7 +60,7 @@
                 <TextBox x:Name="SupplierPhoneTextBox" Grid.Row="2" Grid.Column="2" PlaceholderText="8-10 digits" VerticalAlignment="Center" HorizontalAlignment="Left" Width="160" TextChanged="TextBox_TextChanged" >
                 </TextBox>
 
-                <Button x:Name="AddSupplierButton" Content="Add Supplier" Grid.Row="3" Grid.Column="0" IsEnabled="False" Opacity="0.5" Click="AddSupplierButton_Click" >
+                <Button x:Name="AddSupplierButton" Content="Add Supplier" Grid.Row="3" Grid.Column="1" IsEnabled="False" VerticalAlignment="Top" Margin="5" Opacity="0.5" Click="AddSupplierButton_Click" >
 
                 </Button>
             </Grid>
