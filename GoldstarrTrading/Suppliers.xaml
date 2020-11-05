@@ -53,7 +53,7 @@
 
                 <TextBlock Text="Address:" FontSize="20" Grid.Row="1" VerticalAlignment="Center" Margin="5"/>
 
-                <TextBox x:Name="SupplierAddressTextBox" Grid.Row="1" Grid.Column="2" PlaceholderText="Street, Zip, Country" VerticalAlignment="Center" HorizontalAlignment="Left" Width="160" TextChanged="TextBox_TextChanged">
+                <TextBox x:Name="SupplierAddressTextBox" Grid.Row="1" Grid.Column="2" PlaceholderText="Street, Zip, City" VerticalAlignment="Center" HorizontalAlignment="Left" Width="160" TextChanged="TextBox_TextChanged">
                 </TextBox>
 
                 <TextBlock Text="Phone Number:" FontSize="20" Grid.Row="2" VerticalAlignment="Center" Margin="5"/>
