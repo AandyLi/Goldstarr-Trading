@@ -10,21 +10,27 @@ using System.ServiceModel.Channels;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Devices.Geolocation;
+using Windows.Graphics.Printing.OptionDetails;
 using Windows.Storage;
 using Windows.UI.Xaml.Input;
 
 namespace GoldstarrTrading.Classes
 {
+
+    //Todo: Try to read file content, both header and orderstruct
+
     [StructLayout(LayoutKind.Sequential)]
     struct Header
     {
         public int size;
 
-        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 20)]
+        public int amount;
+
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 120)]
         public string Name;
     }
 
-    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
+    [StructLayout(LayoutKind.Sequential)]
     struct OrderStruct
     {
         public int OrderedAmount;
@@ -55,6 +61,8 @@ namespace GoldstarrTrading.Classes
     {
         static StorageFolder storageFolder = ApplicationData.Current.LocalFolder;
         static StorageFile file;
+
+
 
         const string FileName = "Data.group4";
 
@@ -101,21 +109,22 @@ namespace GoldstarrTrading.Classes
 
         private static void HandleOrderModel(ObservableCollection<OrderModel> order)
         {
-            OrderStruct orderStruct = new OrderStruct();
+            OrderStruct[] orderStruct = new OrderStruct[order.Count];
             for (int i = 0; i < order.Count; i++)
             {
-                orderStruct.CustomerName = order[i].CustomerName;
-                orderStruct.OrderedAmount = order[i].OrderedAmount;
-                orderStruct.Amount = 4;
-                orderStruct.OrderDate = "1111";
-                orderStruct.ProductName = "Test product name";
-                orderStruct.Supplier = "Test supp";
+                orderStruct[i].CustomerName = order[i].CustomerName;
+                orderStruct[i].OrderedAmount = order[i].OrderedAmount;
+                orderStruct[i].Amount = 4;
+                orderStruct[i].OrderDate = DateTime.Now.ToString();
+                orderStruct[i].ProductName = "Test product name";
+                orderStruct[i].Supplier = "Test supp";
 
             }
 
             Header h = new Header();
-            h.Name = "OrderModel";
-            h.size = Marshal.SizeOf(orderStruct);
+            h.Name = typeof(OrderStruct).Name;
+            h.size = Marshal.SizeOf(typeof(OrderStruct));
+            h.amount = order.Count;
 
             byte[] buffer = ObjectToByteArray(orderStruct, h);
             //BytesToFile(buffer);
@@ -141,7 +150,7 @@ namespace GoldstarrTrading.Classes
         }
 
 
-        public static byte[] ObjectToByteArray(object obj, object h)
+        public static byte[] ObjectToByteArray(OrderStruct[] obj, object h)
         {
             BinaryFormatter bf = new BinaryFormatter();
             //using (var ms = new MemoryStream())
@@ -151,9 +160,10 @@ namespace GoldstarrTrading.Classes
             //    return ms.ToArray();
             //}
 
-            using (var fs = new FileStream(file.Path, FileMode.Append, FileAccess.Write))
+            using (var fs = new FileStream(file.Path, FileMode.Open, FileAccess.Write))
             {
 
+                // Write header to file
                 int Length = Marshal.SizeOf(h);
                 byte[] Bytes = new byte[Length];
 
@@ -164,26 +174,40 @@ namespace GoldstarrTrading.Classes
 
                 Marshal.FreeHGlobal(Handle);
                 fs.Write(Bytes, 0, Length);
-                int oldLength = Length;
-                fs.Flush();
 
-                Length = Marshal.SizeOf(obj);
-                Bytes = new byte[Length];
-                Handle = Marshal.AllocHGlobal(Length);
+                Header header = ((Header)h);
 
-
-                Marshal.StructureToPtr(obj, Handle, true);
-                Marshal.Copy(Handle, Bytes, 0, Length);
-
-                Marshal.FreeHGlobal(Handle);
-                //fs.Position = (long)oldLength;
-                //fs.Seek(oldLength, SeekOrigin.Begin);
-                fs.Write(Bytes, 0, Length);
+                for (int i = 0; i < header.amount; i++)
+                {
+                    fs.Flush();
+                    WriteStructArrayToFile(fs, obj[i], header.size);
+                }
             }
 
             return new byte[2];
         }
-        public static async void LoadAllDataFromFile()
+
+
+        private static void WriteStructArrayToFile(FileStream fs, object theStruct, int length)
+        {
+            byte[] Bytes = new byte[length];
+
+            length = Marshal.SizeOf(theStruct);
+
+            IntPtr Handle = Marshal.AllocHGlobal(length);
+
+
+            Marshal.StructureToPtr(theStruct, Handle, true);
+            Marshal.Copy(Handle, Bytes, 0, length);
+
+            Marshal.FreeHGlobal(Handle);
+            //fs.Position = (long)oldLength;
+            //fs.Seek(oldLength, SeekOrigin.Begin);
+            fs.Write(Bytes, 0, length);
+        }
+
+
+        public static async void LoadAllDataFromFile(ViewModel vm)
         {
 
             try
@@ -201,41 +225,23 @@ namespace GoldstarrTrading.Classes
                 using (var fs = new FileStream(file.Path, FileMode.Open, FileAccess.Read))
                 {
                     BinaryReader br = new BinaryReader(fs, Encoding.UTF8);
-                    BinaryFormatter bf = new BinaryFormatter();
+
+                    // Always get header first
+                    Header h = GetHeader(br);
 
 
-                    int headerSize = Marshal.SizeOf(typeof(Header));
-                    byte[] headerChar = new byte[headerSize];
-                    br.Read(headerChar, 0, (int)headerSize);
+                    Type type = Type.GetType(h.Name);
 
-                    Header h = new Header();
-
-                    MemoryStream ms = new MemoryStream(headerChar);
-
-                    //h = (Header)bf.Deserialize(ms);
-
-
-                    //int len = Marshal.SizeOf(obj);
-
-                    //IntPtr i = Marshal.AllocHGlobal(len);
-
-                    //Marshal.Copy(bytearray, 0, i, len);
-
-                    //obj = Marshal.PtrToStructure(i, obj.GetType());
-
-                    //Marshal.FreeHGlobal(i);
-
-                    GCHandle handle = GCHandle.Alloc(headerChar, GCHandleType.Pinned);
-                    try
+                    while (fs.Position < fs.Length)
                     {
-                        h = (Header)Marshal.PtrToStructure(handle.AddrOfPinnedObject(), typeof(Header));
+                        switch (h.Name)
+                        {
+                            case "OrderStruct":
+                                ReadOrderStruct(br, h, vm);
+                                break;
+                        }
+                    
                     }
-                    finally
-                    {
-                        handle.Free();
-                    }
-
-
 
                     Debug.WriteLine("Hsd");
 
@@ -248,5 +254,93 @@ namespace GoldstarrTrading.Classes
             }
         }
 
+        private static Header GetHeader(BinaryReader br )
+        {
+            int headerSize = Marshal.SizeOf(typeof(Header));
+            byte[] headerBytes = new byte[headerSize];
+            br.Read(headerBytes, 0, (int)headerSize);
+
+            Header h = new Header();
+            GCHandle handle = GCHandle.Alloc(headerBytes, GCHandleType.Pinned);
+            try
+            {
+                h = (Header)Marshal.PtrToStructure(handle.AddrOfPinnedObject(), typeof(Header));
+            }
+            finally
+            {
+                handle.Free();
+            }
+            return h;
+        }
+
+        private static void ReadOrderStruct(BinaryReader br, Header h, ViewModel vm)
+        {
+            OrderStruct[] os = new OrderStruct[h.amount];
+            for (int i = 0; i < h.amount; i++)
+            {
+                os[i] = ReadStructData<OrderStruct>(br, h);
+            }
+
+            AddOrderStructToList(os, vm);
+        }
+
+        private static void AddOrderStructToList(OrderStruct[] os, ViewModel vm)
+        {
+            for (int i = 0; i < os.Length; i++)
+            {
+                OrderModel om = new OrderModel
+                {
+                    CustomerName = os[i].CustomerName,
+                    OrderedAmount = os[i].OrderedAmount,
+                    OrderDate = DateTime.Parse(os[i].OrderDate)
+                };
+                MerchandiseModel mm = new MerchandiseModel
+                {
+                    Amount = os[i].Amount,
+                    ProductName = os[i].ProductName,
+                    Supplier = os[i].Supplier
+                };
+
+                om.Merch = mm;
+                vm.Order.Add(om);
+            }
+        }
+
+
+        private static T ReadStructData<T>(BinaryReader br, Header h )
+        {
+            //T os = default(T);
+
+            int structSize = h.size;
+            byte[] bytes = new byte[structSize];
+
+            br.Read(bytes, 0, structSize);
+
+            GCHandle handle = GCHandle.Alloc(bytes, GCHandleType.Pinned);
+            
+            T theStruct = (T)Marshal.PtrToStructure(handle.AddrOfPinnedObject(), typeof(T));
+           
+            handle.Free();
+
+            return theStruct;
+        }
+
     }
 }
+/*
+                   //MemoryStream ms = new MemoryStream(headerChar);
+
+                   //h = (Header)bf.Deserialize(ms);
+
+
+                   //int len = Marshal.SizeOf(obj);
+
+                   //IntPtr i = Marshal.AllocHGlobal(len);
+
+                   //Marshal.Copy(bytearray, 0, i, len);
+
+                   //obj = Marshal.PtrToStructure(i, obj.GetType());
+
+                   //Marshal.FreeHGlobal(i);
+
+                    */
