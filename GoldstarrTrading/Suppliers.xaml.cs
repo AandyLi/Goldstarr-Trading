@@ -1,6 +1,8 @@
 ﻿using GoldstarrTrading.Classes;
+using Microsoft.Toolkit.Uwp.UI.Controls;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
@@ -60,6 +62,7 @@ namespace GoldstarrTrading
             }
 
            EmptyAllTextboxes();
+           stockList.ItemsSource = ViewModel.Supplier;
 
         }
 
@@ -163,6 +166,47 @@ namespace GoldstarrTrading
             };
 
             await inputError.ShowAsync();
+        }
+
+
+        private void SupplierName_Sorting(object sender, DataGridColumnEventArgs e)
+        {
+            //Use the Tag property to pass the bound column name for the sorting implementation 
+            if (e.Column.Tag.ToString() == "Supplier Name")
+            {
+                //Implement sort on the column "Range" using LINQ
+                if (e.Column.SortDirection == null)
+                {
+                    stockList.ItemsSource = new ObservableCollection<SupplierModel>(from item in ViewModel.Supplier
+                                                                        orderby item.Name ascending
+                                                                        select item);
+
+                    e.Column.SortDirection = DataGridSortDirection.Ascending;
+                }
+                else if (e.Column.SortDirection == DataGridSortDirection.Ascending)
+                {
+                    stockList.ItemsSource = new ObservableCollection<SupplierModel>(from item in ViewModel.Supplier
+                                                                        orderby item.Name descending
+                                                                        select item);
+
+                    e.Column.SortDirection = DataGridSortDirection.Descending;
+                }
+                else
+                {
+                    stockList.ItemsSource = ViewModel.Supplier;
+                    e.Column.SortDirection = null;
+                }
+            }
+            // add code to handle sorting by other columns as required
+
+            // Remove sorting indicators from other columns
+            foreach (var dgColumn in stockList.Columns)
+            {
+                if (dgColumn.Tag.ToString() != e.Column.Tag.ToString())
+                {
+                    dgColumn.SortDirection = null;
+                }
+            }
         }
 
     }

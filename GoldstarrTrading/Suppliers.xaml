@@ -47,17 +47,17 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
-                <TextBlock Text="Supplier Name" FontSize="20" Grid.Row="0" VerticalAlignment="Center" Margin="5"/>
+                <TextBlock Text="Supplier Name:" FontSize="20" Grid.Row="0" VerticalAlignment="Center" Margin="5"/>
                 <TextBox x:Name="SupplierNameTextBox" Grid.Row="0" Grid.Column="2" PlaceholderText="Supplier" VerticalAlignment="Center" HorizontalAlignment="Left" Width="160" TextChanged="TextBox_TextChanged">
                 </TextBox>
 
-                <TextBlock Text="Address" FontSize="20" Grid.Row="1" VerticalAlignment="Center" Margin="5"/>
+                <TextBlock Text="Address:" FontSize="20" Grid.Row="1" VerticalAlignment="Center" Margin="5"/>
 
-                <TextBox x:Name="SupplierAddressTextBox" Grid.Row="1" Grid.Column="2" PlaceholderText="Supplier" VerticalAlignment="Center" HorizontalAlignment="Left" Width="160" TextChanged="TextBox_TextChanged">
+                <TextBox x:Name="SupplierAddressTextBox" Grid.Row="1" Grid.Column="2" PlaceholderText="Address" VerticalAlignment="Center" HorizontalAlignment="Left" Width="160" TextChanged="TextBox_TextChanged">
                 </TextBox>
 
                 <TextBlock Text="Phone Number:" FontSize="20" Grid.Row="2" VerticalAlignment="Center" Margin="5"/>
-                <TextBox x:Name="SupplierPhoneTextBox" Grid.Row="2" Grid.Column="2" PlaceholderText="Phone Number" VerticalAlignment="Center" HorizontalAlignment="Left" Width="160" TextChanged="TextBox_TextChanged" >
+                <TextBox x:Name="SupplierPhoneTextBox" Grid.Row="2" Grid.Column="2" PlaceholderText="8-10 digits" VerticalAlignment="Center" HorizontalAlignment="Left" Width="160" TextChanged="TextBox_TextChanged" >
                 </TextBox>
 
                 <Button x:Name="AddSupplierButton" Content="Add Supplier" Grid.Row="3" Grid.Column="0" IsEnabled="False" Opacity="0.5" Click="AddSupplierButton_Click" >
@@ -80,10 +80,16 @@
                              HorizontalAlignment="Stretch"
                              VerticalAlignment="Stretch"
                              GridLinesVisibility="All"
-                             AutoGenerateColumns="True"
-                             IsHitTestVisible="False"
+                             AutoGenerateColumns="False"
+                             CanUserSortColumns="True"
+                             Sorting="SupplierName_Sorting"
+                             IsHitTestVisible="True"
                              AlternatingRowBackground="WhiteSmoke">
-
+                <controls:DataGrid.Columns>
+                    <controls:DataGridTextColumn Header="Supplier Name" Binding="{Binding Name}" Tag="Supplier Name" SortDirection="Ascending"/>
+                    <controls:DataGridTextColumn Header="Address" Binding="{Binding Address}" Tag="Address"/>
+                    <controls:DataGridTextColumn Header="Phone Number" Binding="{Binding Phone}" Tag=""/>
+                </controls:DataGrid.Columns>
             </controls:DataGrid>
         </Grid>
 

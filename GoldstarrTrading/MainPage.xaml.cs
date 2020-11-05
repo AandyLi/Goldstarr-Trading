@@ -67,9 +67,9 @@ namespace GoldstarrTrading
         {
             viewModel.Supplier = new ObservableCollection<SupplierModel>()
             {
-            new SupplierModel { Name = "Joruba Consortium", Address = "Mid Rim, Galaxy Far Far Away", Phone = "666-66666" },
-            new SupplierModel { Name = "Corelian Inc", Address = "Corellia, Galaxy Far Far Away", Phone = "777-77777" },
-            new SupplierModel { Name = "Acne AB", Address = "Finnstigen 3, Varberg", Phone = "888-88888" },
+            new SupplierModel { Name = "Joruba Consortium", Address = "Mid Rim, Galaxy Far Far Away", Phone = "0782955667" },
+            new SupplierModel { Name = "Acne AB", Address = "Finnstigen 3, Varberg", Phone = "0733836669" },
+            new SupplierModel { Name = "Corelian Inc", Address = "Corellia, Galaxy Far Far Away", Phone = "0727247815" }
             };
         }
 
