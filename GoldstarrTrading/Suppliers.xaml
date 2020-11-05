@@ -48,12 +48,12 @@
                 </Grid.ColumnDefinitions>
 
                 <TextBlock Text="Supplier Name:" FontSize="20" Grid.Row="0" VerticalAlignment="Center" Margin="5"/>
-                <TextBox x:Name="SupplierNameTextBox" Grid.Row="0" Grid.Column="2" PlaceholderText="Supplier" VerticalAlignment="Center" HorizontalAlignment="Left" Width="160" TextChanged="TextBox_TextChanged">
+                <TextBox x:Name="SupplierNameTextBox" Grid.Row="0" Grid.Column="2" PlaceholderText="Name" VerticalAlignment="Center" HorizontalAlignment="Left" Width="160" TextChanged="TextBox_TextChanged">
                 </TextBox>
 
                 <TextBlock Text="Address:" FontSize="20" Grid.Row="1" VerticalAlignment="Center" Margin="5"/>
 
-                <TextBox x:Name="SupplierAddressTextBox" Grid.Row="1" Grid.Column="2" PlaceholderText="Address" VerticalAlignment="Center" HorizontalAlignment="Left" Width="160" TextChanged="TextBox_TextChanged">
+                <TextBox x:Name="SupplierAddressTextBox" Grid.Row="1" Grid.Column="2" PlaceholderText="Street, Zip, Country" VerticalAlignment="Center" HorizontalAlignment="Left" Width="160" TextChanged="TextBox_TextChanged">
                 </TextBox>
 
                 <TextBlock Text="Phone Number:" FontSize="20" Grid.Row="2" VerticalAlignment="Center" Margin="5"/>
@@ -82,13 +82,14 @@
                              GridLinesVisibility="All"
                              AutoGenerateColumns="False"
                              CanUserSortColumns="True"
-                             Sorting="SupplierName_Sorting"
+                               Sorting="Supplier_Sorting"
                              IsHitTestVisible="True"
                              AlternatingRowBackground="WhiteSmoke">
+
                 <controls:DataGrid.Columns>
-                    <controls:DataGridTextColumn Header="Supplier Name" Binding="{Binding Name}" Tag="Supplier Name" SortDirection="Ascending"/>
-                    <controls:DataGridTextColumn Header="Address" Binding="{Binding Address}" Tag="Address"/>
-                    <controls:DataGridTextColumn Header="Phone Number" Binding="{Binding Phone}" Tag=""/>
+                    <controls:DataGridTextColumn Header="Supplier Name" Binding="{Binding Name}" CanUserSort="True" Tag="Name"/>
+                    <controls:DataGridTextColumn Header="Address" Binding="{Binding Address}" CanUserSort="True" Tag="Address"/>
+                    <controls:DataGridTextColumn Header="Phone Number" Binding="{Binding Phone}" CanUserSort="True" Tag="Phone"/>
                 </controls:DataGrid.Columns>
             </controls:DataGrid>
         </Grid>

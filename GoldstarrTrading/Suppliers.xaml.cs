@@ -123,7 +123,23 @@ namespace GoldstarrTrading
             }
             return true;
         }
+        
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if ((SupplierNameTextBox.Text.Length > 0) && (SupplierAddressTextBox.Text.Length > 0) && (SupplierPhoneTextBox.Text.Length > 0))
+            {
+                AddSupplierButtonVisible(true);
+            }
+            else
+            {
+                AddSupplierButtonVisible(false);
+            }
+        }
 
+        private  bool AddSupplierButtonVisible(bool value)
+        {
+            return AddSupplierButton.IsEnabled = value;
+        }
         private async void DisplayInputError(Exception exception)
         {
             ContentDialog inputError = new ContentDialog()
@@ -133,15 +149,6 @@ namespace GoldstarrTrading
                 CloseButtonText = "OK"
             };
             await inputError.ShowAsync();
-        }
-        
-        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            if ((SupplierNameTextBox.Text.Length > 0) && (SupplierAddressTextBox.Text.Length > 0) && (SupplierPhoneTextBox.Text.Length > 0))
-            {
-                AddSupplierButton.IsEnabled = true;
-            }
-
         }
 
         private async void SupplierAddedDialog()
@@ -169,12 +176,13 @@ namespace GoldstarrTrading
         }
 
 
-        private void SupplierName_Sorting(object sender, DataGridColumnEventArgs e)
+        private void Supplier_Sorting(object sender, DataGridColumnEventArgs e)
         {
-            //Use the Tag property to pass the bound column name for the sorting implementation 
-            if (e.Column.Tag.ToString() == "Supplier Name")
+            //Use the Tag property to pass the bound column name for the sorting implementation
+
+            if (e.Column.Tag.ToString() == "Name")
             {
-                //Implement sort on the column "Range" using LINQ
+                //Implement sort on the column using LINQ
                 if (e.Column.SortDirection == null)
                 {
                     stockList.ItemsSource = new ObservableCollection<SupplierModel>(from item in ViewModel.Supplier
@@ -188,6 +196,56 @@ namespace GoldstarrTrading
                     stockList.ItemsSource = new ObservableCollection<SupplierModel>(from item in ViewModel.Supplier
                                                                         orderby item.Name descending
                                                                         select item);
+
+                    e.Column.SortDirection = DataGridSortDirection.Descending;
+                }
+                else
+                {
+                    stockList.ItemsSource = ViewModel.Supplier;
+                    e.Column.SortDirection = null;
+                }
+            }
+
+            if (e.Column.Tag.ToString() == "Address")
+            {
+                if (e.Column.SortDirection == null)
+                {
+                    stockList.ItemsSource = new ObservableCollection<SupplierModel>(from item in ViewModel.Supplier
+                                                                                    orderby item.Address ascending
+                                                                                    select item);
+
+                    e.Column.SortDirection = DataGridSortDirection.Ascending;
+                }
+                else if (e.Column.SortDirection == DataGridSortDirection.Ascending)
+                {
+                    stockList.ItemsSource = new ObservableCollection<SupplierModel>(from item in ViewModel.Supplier
+                                                                                    orderby item.Address descending
+                                                                                    select item);
+
+                    e.Column.SortDirection = DataGridSortDirection.Descending;
+                }
+                else
+                {
+                    stockList.ItemsSource = ViewModel.Supplier;
+                    e.Column.SortDirection = null;
+                }
+            }
+
+            if (e.Column.Tag.ToString() == "Phone")
+            {
+                if (e.Column.SortDirection == null)
+                {
+                    stockList.ItemsSource = new ObservableCollection<SupplierModel>(from item in ViewModel.Supplier
+                                                                                    orderby item.Phone ascending
+                                                                                    select item);
+
+                    e.Column.SortDirection = DataGridSortDirection.Ascending;
+                }
+                else if (e.Column.SortDirection == DataGridSortDirection.Ascending)
+                {
+                    stockList.ItemsSource = new ObservableCollection<SupplierModel>(from item in ViewModel.Supplier
+                                                                                    orderby item.Phone descending
+                                                                                    select item);
 
                     e.Column.SortDirection = DataGridSortDirection.Descending;
                 }
