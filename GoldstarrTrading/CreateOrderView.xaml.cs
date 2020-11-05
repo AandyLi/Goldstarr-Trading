@@ -75,6 +75,7 @@ namespace GoldstarrTrading
 
             var message = string.Empty;
             MessageDialog messageDialog = new MessageDialog(message, "Product has been added to order");
+            
             if (tmpMerchModel.Amount <= 0)
             {
                 message = "This product is not currently in stock! If you proceed with the order, it will be added to the pending order queue.";
@@ -87,7 +88,7 @@ namespace GoldstarrTrading
                 isOrderPending = true;
                 return;
             }
-
+            
             // Always reset button when we change merchandise
             ResetAddOrderButton();
         }

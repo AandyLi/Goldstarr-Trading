@@ -192,7 +192,7 @@
 
                 <TextBlock Text="Amount" FontSize="20" Grid.Row="2" VerticalAlignment="Center" Margin="5"/>
                 <ComboBox x:Name="AmountDropDown" Grid.Row="2" Grid.Column="2" PlaceholderText="Amount" VerticalAlignment="Center" Width="auto" SelectionChanged="AmountDropDown_SelectionChanged" />
-                <TextBox x:Name="AmountTextBox" Grid.Row="2" Grid.Column="2" PlaceholderText="Manual amount" VerticalAlignment="Center" Width="auto" Visibility="Collapsed" />
+                <TextBox x:Name="AmountTextBox" Grid.Row="2" Grid.Column="2" PlaceholderText="Enter the amount manually here" VerticalAlignment="Center" Width="auto" Visibility="Collapsed" />
 
                 <Button x:Name="ConfirmOrderButton" Content="Create Order" Grid.Row="3" Grid.Column="0" IsEnabled="False" Opacity="0.5" Click="ConfirmOrderButton_Click" >
                 
