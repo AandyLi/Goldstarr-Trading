@@ -34,7 +34,6 @@ namespace GoldstarrTrading.Classes
     struct OrderStruct
     {
         public int OrderedAmount;
-        public int Amount;
 
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 20)]
         public string OrderDate;
@@ -78,138 +77,106 @@ namespace GoldstarrTrading.Classes
 
             }
 
-            Header h = new Header();
-            h.Name = typeof(T).Name;
-            //h.size = Marshal.SizeOf(collection);
+
+            CachedFileManager.DeferUpdates(file);
 
 
-
-            //OrderModel om = (OrderModel)Convert.ChangeType(collection, typeof(OrderModel));
-
-            //string s = new string(h.Name);
-            //Debug.WriteLine(s);
-
-            switch (h.Name)
+            switch (typeof(T).Name)
             {
                 case "OrderModel":
                     HandleOrderModel(collection as ObservableCollection<OrderModel>);
                     break;
             }
 
-            
+            await GetFileSaveStatus(); 
 
+        }
 
-           // byte[] buffer = ObjectToByteArray(collection);
-
-
-            //BytesToFile(buffer, h);
-
-            //await FileIO.WriteBytesAsync(file, buffer);
+        private static async Task GetFileSaveStatus()
+        {
+            Windows.Storage.Provider.FileUpdateStatus status = await CachedFileManager.CompleteUpdatesAsync(file);
+            if (status == Windows.Storage.Provider.FileUpdateStatus.Complete)
+            {
+                Debug.WriteLine("File " + file.Name + " was saved.");
+            }
+            else
+            {
+                Debug.WriteLine("File " + file.Name + " could not be saved.");
+            }
         }
 
         private static void HandleOrderModel(ObservableCollection<OrderModel> order)
         {
             OrderStruct[] orderStruct = new OrderStruct[order.Count];
+            MerchandiseModel tmpMerch;
             for (int i = 0; i < order.Count; i++)
             {
+                tmpMerch = order[i].Merch;
+
                 orderStruct[i].CustomerName = order[i].CustomerName;
                 orderStruct[i].OrderedAmount = order[i].OrderedAmount;
-                orderStruct[i].Amount = 4;
                 orderStruct[i].OrderDate = DateTime.Now.ToString();
-                orderStruct[i].ProductName = "Test product name";
-                orderStruct[i].Supplier = "Test supp";
+                orderStruct[i].ProductName = tmpMerch.ProductName;
+                orderStruct[i].Supplier = tmpMerch.Supplier;
 
             }
 
-            Header h = new Header();
-            h.Name = typeof(OrderStruct).Name;
-            h.size = Marshal.SizeOf(typeof(OrderStruct));
-            h.amount = order.Count;
+            Header h = new Header
+            {
+                Name = typeof(OrderStruct).Name,
+                size = Marshal.SizeOf(typeof(OrderStruct)),
+                amount = order.Count
+            };
 
-            byte[] buffer = ObjectToByteArray(orderStruct, h);
-            //BytesToFile(buffer);
+            ObjectToByteArray(orderStruct, h);
         }
 
-
-        private static void BytesToFile(byte[] buffer)
+        public static void ObjectToByteArray(OrderStruct[] obj, object h)
         {
-            try
-            {
-                using(var fs = new FileStream(file.Path, FileMode.OpenOrCreate, FileAccess.Write))
-                {
-                    BinaryWriter bw = new BinaryWriter(fs, Encoding.UTF8);
-                    bw.Write(buffer, 0, buffer.Length);
-                    //fs.Write(buffer, 0, buffer.Length);
-                }
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-        }
-
-
-        public static byte[] ObjectToByteArray(OrderStruct[] obj, object h)
-        {
-            BinaryFormatter bf = new BinaryFormatter();
-            //using (var ms = new MemoryStream())
-            //{
-            //    bf.Serialize(ms, h);
-            //    //bf. Serialize(ms, obj);
-            //    return ms.ToArray();
-            //}
-
             using (var fs = new FileStream(file.Path, FileMode.Open, FileAccess.Write))
             {
-
                 // Write header to file
-                int Length = Marshal.SizeOf(h);
-                byte[] Bytes = new byte[Length];
+                int length = Marshal.SizeOf(h);
+                byte[] bytes = new byte[length];
 
-                IntPtr Handle = Marshal.AllocHGlobal(Length);
+                IntPtr Handle = Marshal.AllocHGlobal(length);
 
                 Marshal.StructureToPtr(h, Handle, true);
-                Marshal.Copy(Handle, Bytes, 0, Length);
+                Marshal.Copy(Handle, bytes, 0, length);
 
                 Marshal.FreeHGlobal(Handle);
-                fs.Write(Bytes, 0, Length);
+                fs.Write(bytes, 0, length);
 
                 Header header = ((Header)h);
 
                 for (int i = 0; i < header.amount; i++)
                 {
                     fs.Flush();
-                    WriteStructArrayToFile(fs, obj[i], header.size);
+                    WriteStructArrayToFile(fs, Handle, obj[i], header.size);
                 }
             }
-
-            return new byte[2];
         }
 
 
-        private static void WriteStructArrayToFile(FileStream fs, object theStruct, int length)
+        private static void WriteStructArrayToFile(FileStream fs, IntPtr handle, object theStruct, int length)
         {
-            byte[] Bytes = new byte[length];
+            byte[] bytes = new byte[length];
 
             length = Marshal.SizeOf(theStruct);
 
-            IntPtr Handle = Marshal.AllocHGlobal(length);
+            handle = Marshal.AllocHGlobal(length);
 
+            Marshal.StructureToPtr(theStruct, handle, true);
+            Marshal.Copy(handle, bytes, 0, length);
 
-            Marshal.StructureToPtr(theStruct, Handle, true);
-            Marshal.Copy(Handle, Bytes, 0, length);
+            Marshal.FreeHGlobal(handle);
 
-            Marshal.FreeHGlobal(Handle);
-            //fs.Position = (long)oldLength;
-            //fs.Seek(oldLength, SeekOrigin.Begin);
-            fs.Write(Bytes, 0, length);
+            fs.Write(bytes, 0, length);
         }
 
 
         public static async void LoadAllDataFromFile(ViewModel vm)
         {
-
             try
             {
                 file = await storageFolder.GetFileAsync(FileName);
@@ -240,10 +207,9 @@ namespace GoldstarrTrading.Classes
                                 ReadOrderStruct(br, h, vm);
                                 break;
                         }
-                    
                     }
 
-                    Debug.WriteLine("Hsd");
+                    Debug.WriteLine("Loading Successfull");
 
                 }
             }
@@ -296,7 +262,7 @@ namespace GoldstarrTrading.Classes
                 };
                 MerchandiseModel mm = new MerchandiseModel
                 {
-                    Amount = os[i].Amount,
+                    Amount = os[i].OrderedAmount,
                     ProductName = os[i].ProductName,
                     Supplier = os[i].Supplier
                 };

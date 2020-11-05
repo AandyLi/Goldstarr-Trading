@@ -43,11 +43,10 @@ namespace GoldstarrTrading
             ObsMerch = new ObservableCollection<MerchandiseModel>();
             CustomerList = new ObservableCollection<CustomerModel>();
             Order = new ObservableCollection<OrderModel>();
-
-            AddEventsForObsCollections();
         }
 
-        private void AddEventsForObsCollections()
+
+        public void AllowCollectionChangedEvents()
         {
             ObsMerch.CollectionChanged += ObsMerch_CollectionChanged;
             CustomerList.CollectionChanged += CustomerList_CollectionChanged;

@@ -132,6 +132,7 @@ namespace GoldstarrTrading
 
         private void ConfirmOrderButton_Click(object sender, RoutedEventArgs e)
         {
+            
             OrderModel newOrder = new OrderModel();
             CustomerModel tmpCustModel = CustomerCombo.SelectedItem as CustomerModel;
 
@@ -147,6 +148,7 @@ namespace GoldstarrTrading
 
             UpdateAmountDropDown(tmpMerchModel);
             UpdateMerchCombo(tmpMerchModel);
+
         }
     }
 }
