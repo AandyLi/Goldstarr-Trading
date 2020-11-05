@@ -175,6 +175,7 @@ namespace GoldstarrTrading
             await inputError.ShowAsync();
         }
 
+        /* SUPPLIERLIST SORTING EVENTS */
 
         private void Supplier_Sorting(object sender, DataGridColumnEventArgs e)
         {
