@@ -126,11 +126,13 @@
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Text="Customer" Width="200" HorizontalAlignment="Stretch"  Style="{ThemeResource CaptionTextBlockStyle}"/>
                             <TextBlock Grid.Column="1" Width="200" HorizontalAlignment="Stretch"  Text="Merchandise" Style="{ThemeResource CaptionTextBlockStyle}"/>
                             <TextBlock Grid.Column="2" Width="80"  HorizontalAlignment="Stretch"  Text="Amount" Style="{ThemeResource CaptionTextBlockStyle}"/>
                             <TextBlock Grid.Column="3" Width="200" HorizontalAlignment="Stretch"  Text="Order date" Style="{ThemeResource CaptionTextBlockStyle}"/>
+                            <TextBlock Grid.Column="4" Width="80" HorizontalAlignment="Stretch"  Text="Confirm" FontWeight="Bold" Style="{ThemeResource CaptionTextBlockStyle}"/>
                         </Grid>
                     </DataTemplate>
                 </ListView.HeaderTemplate>
@@ -149,6 +151,7 @@
                             <TextBlock Text="{Binding Merch.ProductName}" Width="200" HorizontalAlignment="Stretch"  FontWeight="Bold" Grid.Row="0" Grid.Column="2"/>
                             <TextBlock Text="{Binding OrderedAmount}" Width="80"      HorizontalAlignment="Stretch"  FontWeight="Bold" Foreground="Red" Grid.Row="0" Grid.Column="3"/>
                             <TextBlock Text="{Binding OrderDate}" Width="200"         HorizontalAlignment="Stretch"  FontWeight="Bold" Grid.Row="0" Grid.Column="4"/>
+                            
                         </Grid>
                     </DataTemplate>
                 </ListView.ItemTemplate>
@@ -189,6 +192,7 @@
 
                 <TextBlock Text="Amount" FontSize="20" Grid.Row="2" VerticalAlignment="Center" Margin="5"/>
                 <ComboBox x:Name="AmountDropDown" Grid.Row="2" Grid.Column="2" PlaceholderText="Amount" VerticalAlignment="Center" Width="auto" SelectionChanged="AmountDropDown_SelectionChanged" />
+                <TextBox x:Name="AmountTextBox" Grid.Row="2" Grid.Column="2" PlaceholderText="Manual amount" VerticalAlignment="Center" Width="auto" Visibility="Collapsed" />
 
                 <Button x:Name="ConfirmOrderButton" Content="Create Order" Grid.Row="3" Grid.Column="0" IsEnabled="False" Opacity="0.5" Click="ConfirmOrderButton_Click" >
                 
@@ -236,6 +240,8 @@
                             <TextBlock Text="{Binding Merch.ProductName}" Width="200" HorizontalAlignment="Stretch"  FontWeight="Bold" Grid.Row="0" Grid.Column="2"/>
                             <TextBlock Text="{Binding OrderedAmount}" Width="80"      HorizontalAlignment="Stretch"  FontWeight="Bold" Grid.Row="0" Grid.Column="3"/>
                             <TextBlock Text="{Binding OrderDate}" Width="200"         HorizontalAlignment="Stretch"  FontWeight="Bold" Grid.Row="0" Grid.Column="4"/>
+                            <Button x:Name="ConfirmPendingOrderButton" Content="Confirm pending order" Grid.Row="3" Grid.Column="0" IsEnabled="False" Opacity="0.5" Click="ConfirmPendingOrder_Click" />
+
                         </Grid>
                     </DataTemplate>
                 </ListView.ItemTemplate>

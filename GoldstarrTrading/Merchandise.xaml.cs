@@ -42,7 +42,7 @@ namespace GoldstarrTrading
             merchandiseList.ItemsSource = ((ViewModel)e.Parameter).ObsMerch;
         }
 
-        private void AddProductsButton_Click(object sender, RoutedEventArgs e)
+        private async void AddProductsButton_Click(object sender, RoutedEventArgs e)
         {
             var message = string.Empty;
             MessageDialog messageDialog = new MessageDialog(message,"New product has been added");
@@ -54,7 +54,7 @@ namespace GoldstarrTrading
             {
                 message = "Data is missing";
                 messageDialog = new MessageDialog(message, "Information");
-                messageDialog.ShowAsync();
+                await messageDialog.ShowAsync();
                 return;
             }
 
@@ -65,7 +65,7 @@ namespace GoldstarrTrading
             {
                 message = "Invalid supplier data";
                 messageDialog = new MessageDialog(message, "Information");
-                messageDialog.ShowAsync();
+                await messageDialog.ShowAsync();
                 SupplierNameTextBox.Text = string.Empty;
                 return;
             }
@@ -75,13 +75,13 @@ namespace GoldstarrTrading
             {
                 message = "Invalid product data";
                 messageDialog = new MessageDialog(message, "Information");
-                messageDialog.ShowAsync();
+                await messageDialog.ShowAsync();
                 ProductNameTextBox.Text = string.Empty;
                 return;
             }
             
             vm.ObsMerch.Add(new MerchandiseModel() { Supplier = supplier, ProductName = product });
-            messageDialog.ShowAsync();
+            await messageDialog.ShowAsync();
             SupplierNameTextBox.Text = string.Empty;
             ProductNameTextBox.Text = string.Empty;
         }

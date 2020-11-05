@@ -29,6 +29,7 @@ namespace GoldstarrTrading
     {
         private ViewModel vm { get; set; }
         private ObservableCollection<MerchandiseModel> localMerchandise;
+        private bool isOrderPending;
         public CreateOrderView()
         {
             this.InitializeComponent();
@@ -48,9 +49,7 @@ namespace GoldstarrTrading
             {
                 localMerchandise.Add(item);
             }
-
             
-
         }
 
 
@@ -74,15 +73,18 @@ namespace GoldstarrTrading
                 }
             }
 
-            //TO DO: se till att Amoun-ComboBoxen populatas även om stock är 0 för nu är den bara blank som en flintskalle
-
             var message = string.Empty;
             MessageDialog messageDialog = new MessageDialog(message, "Product has been added to order");
             if (tmpMerchModel.Amount <= 0)
             {
-                message = "This product is not currently in stock! Click ok to proceed with the order anyway (order will be added to pending order queue).";
+                message = "This product is not currently in stock! If you proceed with the order, it will be added to the pending order queue.";
                 messageDialog = new MessageDialog(message, "Warning!");
                 await messageDialog.ShowAsync();
+                
+                AmountDropDown.IsEnabled = false;
+                AmountDropDown.Visibility = Visibility.Collapsed;
+                AmountTextBox.Visibility = Visibility.Visible;
+                isOrderPending = true;
                 return;
             }
 
@@ -156,6 +158,7 @@ namespace GoldstarrTrading
             MerchandiseModel tmpMerchModel = GetMerchModel(MerchCombo);
 
             int orderedAmount = orderedAmount = Int32.Parse(AmountDropDown.SelectedItem.ToString());
+
             tmpMerchModel.RemoveStock(orderedAmount);
             ClearAmountDropDown();
 
@@ -165,6 +168,16 @@ namespace GoldstarrTrading
 
             UpdateAmountDropDown(tmpMerchModel);
             UpdateMerchCombo(tmpMerchModel);
+        }
+
+        private async void ConfirmPendingOrder_Click(object sender, RoutedEventArgs e)
+        {
+            var parent = (sender as Button).Parent;
+
+            var message = string.Empty;
+            MessageDialog messageDialog = new MessageDialog(message, "Pending order will be forwarded to warehouse and saved in Order History.");
+            await messageDialog.ShowAsync();
+
         }
     }
     
