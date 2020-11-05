@@ -80,7 +80,7 @@ namespace GoldstarrTrading
             MessageDialog messageDialog = new MessageDialog(message, "Product has been added to order");
             if (tmpMerchModel.Amount <= 0)
             {
-                message = "This product is not currently in stock! Click ok to proceed with the order anyway.";
+                message = "This product is not currently in stock! Click ok to proceed with the order anyway (order will be added to pending order queue).";
                 messageDialog = new MessageDialog(message, "Warning!");
                 await messageDialog.ShowAsync();
                 return;
