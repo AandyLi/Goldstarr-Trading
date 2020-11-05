@@ -198,14 +198,14 @@ namespace GoldstarrTrading.Classes
                         Header nextHeader;
                         long oldPos = fs.Position;
                         // Advance position and look for next header
-                        fs.Position = firstHeader.size * firstHeader.amount;
+                        fs.Position += firstHeader.size * firstHeader.amount;
                         nextHeader = FindNextHeader(fs);
 
                         // New header was found
                         if (nextHeader.size > 0 && !eof)
                         {
                             // save remaining data
-                            int remainingSize = (int)(fs.Length - fs.Position - Marshal.SizeOf(h));
+                            int remainingSize = (int)(fs.Length - fs.Position + Marshal.SizeOf(h));
                             byte[] remainingData = new byte[remainingSize];
 
                             fs.Position -= Marshal.SizeOf(h);
@@ -320,7 +320,7 @@ namespace GoldstarrTrading.Classes
 
                     Type type = Type.GetType(h.Name);
 
-                    while (fs.Position < fs.Length)
+                    while (fs.Position < fs.Length - 668)
                     {
                         switch (h.Name)
                         {
