@@ -61,9 +61,14 @@ namespace GoldstarrTrading
                 }
             }
 
-           EmptyAllTextboxes();
-           stockList.ItemsSource = ViewModel.Supplier;
+            EmptyAllTextboxes();
+            ResetStockListItemsSource();
 
+        }
+
+        private void ResetStockListItemsSource()
+        {
+            stockList.ItemsSource = ViewModel.Supplier;
         }
 
         private void EmptyAllTextboxes()
