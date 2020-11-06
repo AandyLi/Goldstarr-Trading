@@ -38,11 +38,13 @@ namespace GoldstarrTrading
             this.InitializeComponent();
         }
 
-
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             vm = ((ViewModel)e.Parameter);
+            
             merchandiseList.ItemsSource = ((ViewModel)e.Parameter).ObsMerch;
+            SupplierNameListComboBox.ItemsSource = ((ViewModel)e.Parameter).Supplier;
+           
         }
 
         private async void AddProductsButton_Click(object sender, RoutedEventArgs e)
@@ -54,17 +56,14 @@ namespace GoldstarrTrading
             var supplier = string.Empty;
             var product = string.Empty;
 
-            supplier = SupplierNameTextBox.Text;
-            product = ProductNameTextBox.Text;
-
-            if (string.IsNullOrEmpty(SupplierNameTextBox.Text) && string.IsNullOrEmpty(ProductNameTextBox.Text))
+            if ((SupplierNameListComboBox.SelectedValue == null) && string.IsNullOrEmpty(ProductNameTextBox.Text))
             {
                 message = "Data is missing";
                 messageDialog = new MessageDialog(message, "Information");
                 await messageDialog.ShowAsync();
                 return;
             }
-            if (string.IsNullOrEmpty(SupplierNameTextBox.Text))
+            if (SupplierNameListComboBox.SelectedValue == null)
             {
                 message = "Supplier information is missing";
                 messageDialog = new MessageDialog(message, "Information");
@@ -78,43 +77,21 @@ namespace GoldstarrTrading
                 await messageDialog.ShowAsync();
                 return;
             }
-            char x = supplier.ToCharArray().ElementAt(0);
-            if (char.IsNumber(x))
-            {
-                message = "Invalid Supplier data";
-                messageDialog = new MessageDialog(message, "Information");
-                await messageDialog.ShowAsync();
-                return;
-            }
-            if(vm.ObsMerch.Any(v => v.ProductName.ToLower().Trim() == product.ToLower().Trim()) 
-                && vm.ObsMerch.Any(v => v.Supplier.ToLower().Trim() == supplier.ToLower().Trim()))
-            {
-                message = "The product and the supplier already exists";
-                messageDialog = new MessageDialog(message, "Information");
-                await messageDialog.ShowAsync();
-                SupplierNameTextBox.Text = string.Empty;
-                ProductNameTextBox.Text = string.Empty;
-                return;
-            }
+            
+            supplier = SupplierNameListComboBox.SelectedValue.ToString();
+            product = ProductNameTextBox.Text;
             if (vm.ObsMerch.Any(v => v.ProductName.ToLower().Trim() == product.ToLower().Trim()))
             {
                 message = "The product already exists";
                 messageDialog = new MessageDialog(message, "Information");
-                await messageDialog.ShowAsync(); 
+                await messageDialog.ShowAsync();
                 ProductNameTextBox.Text = string.Empty;
                 return;
             }
-            if (vm.ObsMerch.Any(v => v.Supplier.ToLower().Trim() == supplier.ToLower().Trim()))
-            {
-                message = "The supplier already exists";
-                messageDialog = new MessageDialog(message, "Information");
-                await messageDialog.ShowAsync();
-                SupplierNameTextBox.Text = string.Empty;
-                return;
-            }
+
             vm.ObsMerch.Add(new MerchandiseModel() { Supplier = supplier, ProductName = product });
             await messageDialog.ShowAsync();
-            SupplierNameTextBox.Text = string.Empty;
+            SupplierNameListComboBox.SelectedIndex = -1;
             ProductNameTextBox.Text = string.Empty;
         }
     }
