@@ -7,6 +7,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Security.Cryptography;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Popups;
@@ -33,13 +34,25 @@ namespace GoldstarrTrading
         public CreateOrderView()
         {
             this.InitializeComponent();
-
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             vm = (ViewModel)e.Parameter;
             PopulateAvailableMerchandise();
+        }
+
+        public void UpdateStockForPendingOrders()
+        {
+            foreach (var pendingOrder in vm.PendingOrder)
+            {
+                MerchandiseModel tmpMerch = vm.ObsMerch.First(x => x.ProductName == pendingOrder.Merch.ProductName);
+                
+                if (tmpMerch.Amount > pendingOrder.OrderedAmount)
+                {
+
+                }
+            }
         }
 
         private void PopulateAvailableMerchandise()
@@ -49,7 +62,7 @@ namespace GoldstarrTrading
             {
                 localMerchandise.Add(item);
             }
-            
+
         }
 
 
@@ -73,22 +86,26 @@ namespace GoldstarrTrading
                 }
             }
 
+            AmountDropDown.Visibility = Visibility.Visible;
+            AmountDropDown.IsEnabled = true;
+            AmountTextBox.Visibility = Visibility.Collapsed;
+
             var message = string.Empty;
             MessageDialog messageDialog = new MessageDialog(message, "Product has been added to order");
-            
+
             if (tmpMerchModel.Amount <= 0)
             {
                 message = "This product is not currently in stock! If you proceed with the order, it will be added to the pending order queue.";
                 messageDialog = new MessageDialog(message, "Warning!");
                 await messageDialog.ShowAsync();
-                
+
                 AmountDropDown.IsEnabled = false;
                 AmountDropDown.Visibility = Visibility.Collapsed;
                 AmountTextBox.Visibility = Visibility.Visible;
                 isOrderPending = true;
                 return;
             }
-            
+
             // Always reset button when we change merchandise
             ResetAddOrderButton();
         }
@@ -142,6 +159,15 @@ namespace GoldstarrTrading
             }
         }
 
+        private void AmountTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (AmountTextBox.Text != "" && Int32.TryParse(AmountTextBox.Text, out int orderedAmount))
+            {
+                ConfirmOrderButton.IsEnabled = true;
+                ConfirmOrderButton.Opacity = 1.0;
+            }
+        }
+
         private void CustomerCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (AmountDropDown.Items.Count > 0)
@@ -154,33 +180,57 @@ namespace GoldstarrTrading
         private void ConfirmOrderButton_Click(object sender, RoutedEventArgs e)
         {
             OrderModel newOrder = new OrderModel();
+            OrderModel pendingOrder = new OrderModel();
             CustomerModel tmpCustModel = CustomerCombo.SelectedItem as CustomerModel;
 
             MerchandiseModel tmpMerchModel = GetMerchModel(MerchCombo);
 
-            int orderedAmount = orderedAmount = Int32.Parse(AmountDropDown.SelectedItem.ToString());
 
-            tmpMerchModel.RemoveStock(orderedAmount);
-            ClearAmountDropDown();
+            int orderedAmount;
 
-            newOrder.CreateOrder(tmpCustModel.Name, tmpMerchModel, orderedAmount);
+            if (isOrderPending)
+            {
+                orderedAmount = Int32.Parse(AmountTextBox.Text);
+                pendingOrder.CreateOrder(tmpCustModel.Name, tmpMerchModel, orderedAmount);
 
-            vm.Order.Insert(0, newOrder);
+                vm.PendingOrder.Insert(0, pendingOrder);
 
+                ResetAddOrderButton();
+                ClearAmountDropDown();
+            }
+
+            else
+            {
+                orderedAmount = Int32.Parse(AmountDropDown.SelectedItem.ToString());
+                tmpMerchModel.RemoveStock(orderedAmount);
+                ClearAmountDropDown();
+
+                newOrder.CreateOrder(tmpCustModel.Name, tmpMerchModel, orderedAmount);
+
+                vm.Order.Insert(0, newOrder);
+
+            }
             UpdateAmountDropDown(tmpMerchModel);
             UpdateMerchCombo(tmpMerchModel);
+
         }
 
-        private async void ConfirmPendingOrder_Click(object sender, RoutedEventArgs e)
+        private async void ConfirmPendingOrderButton_Click(object sender, RoutedEventArgs e) //this is for each ConfirmPendingOrderButton, not for when creating new orders
         {
             var parent = (sender as Button).Parent;
+            Grid grid = (Grid)parent;
+            OrderModel tmpPendingOrder = grid.DataContext as OrderModel;
 
             var message = string.Empty;
             MessageDialog messageDialog = new MessageDialog(message, "Pending order will be forwarded to warehouse and saved in Order History.");
             await messageDialog.ShowAsync();
 
+
+
         }
+
+
     }
-    
-    
+
+
 }
