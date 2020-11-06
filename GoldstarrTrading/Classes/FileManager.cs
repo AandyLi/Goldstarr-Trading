@@ -265,7 +265,10 @@ namespace GoldstarrTrading.Classes
                             {
                                 fs.Position = fs.Length;
                             }
-                            fs.Position = oldPos - Marshal.SizeOf(h);
+                            else
+                            {
+                                fs.Position = oldPos - Marshal.SizeOf(h);
+                            }
                             // Continue with normal write operation
                             WriteHeaderAndStructToFile(fs, h, obj);
                             break;
@@ -275,7 +278,7 @@ namespace GoldstarrTrading.Classes
                     {
                         fs.Position = (firstHeader.size * firstHeader.amount) + Marshal.SizeOf(h);
                         firstHeader = FindNextHeader(fs);
-                        if (fs.Position == fs.Length)
+                        if (fs.Position >= fs.Length)
                         {
                             eof = true;
                         }
