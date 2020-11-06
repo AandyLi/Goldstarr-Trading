@@ -16,7 +16,6 @@ using GoldstarrTrading.Classes;
 using System.Diagnostics;
 using System.ComponentModel;
 using System.Collections.ObjectModel;
-using Windows.UI.Popups;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -87,39 +86,6 @@ namespace GoldstarrTrading
             };
 
             await inputError.ShowAsync();
-                if (ViewModel.ObsMerch[i].ProductName == SelectedProductName)
-                {
-                    ViewModel.ObsMerch[i].AddStock(DeliveryQuantity);
-                }
-            }
-        }
-
-        private int CheckDeliveryQuantity()
-        {
-            int deliveryQuantity = 0;
-
-            try
-            {
-                deliveryQuantity = Int32.Parse(deliveryTextBox.Text);
-            }
-            catch (FormatException fex)
-            {
-                var messageDialog = new MessageDialog(fex.Message);
-                deliveryQuantity = 0;
-                return deliveryQuantity;
-            }
-            catch (ArgumentOutOfRangeException)
-            {
-                deliveryQuantity = 0;
-                return deliveryQuantity;
-            }
-            catch (Exception)
-            {
-                deliveryQuantity = 0;
-                return deliveryQuantity;
-            }
-
-            return deliveryQuantity;
         }
 
         private async void DisplayInputError(string Message)
