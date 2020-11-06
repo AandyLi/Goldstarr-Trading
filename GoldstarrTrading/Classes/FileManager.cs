@@ -68,6 +68,20 @@ namespace GoldstarrTrading.Classes
         public string Supplier;
     }
 
+    [StructLayout(LayoutKind.Sequential)]
+    struct CustomerStruct
+    {
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 20)]
+        public string Name;
+
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 30)]
+        public string Address;
+
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 20)]
+        public string Phone;
+    }
+
+
     static class FileManager
     {
         static StorageFolder storageFolder = ApplicationData.Current.LocalFolder;
@@ -101,6 +115,9 @@ namespace GoldstarrTrading.Classes
                 case "MerchandiseModel":
                     HandleMerchandiseModel(collection as ObservableCollection<MerchandiseModel>);
                     break;
+                case "CustomerModel":
+                    HandleCustomerModel(collection as ObservableCollection<CustomerModel>);
+                    break;
             }
 
             await GetFileSaveStatus(); 
@@ -118,6 +135,28 @@ namespace GoldstarrTrading.Classes
             {
                 Debug.WriteLine("File " + file.Name + " could not be saved.");
             }
+        }
+
+
+        private static void HandleCustomerModel(ObservableCollection<CustomerModel> cust)
+        {
+            CustomerStruct[] custStruct = new CustomerStruct[cust.Count];
+            for (int i = 0; i < cust.Count; i++)
+            {
+                custStruct[i].Name = cust[i].Name;
+                custStruct[i].Address = cust[i].Address;
+                custStruct[i].Phone = cust[i].Phone;
+
+            }
+
+            Header h = new Header
+            {
+                Name = typeof(MerchandiseStruct).Name,
+                size = Marshal.SizeOf(typeof(MerchandiseStruct)),
+                amount = cust.Count
+            };
+
+            ObjectToByteArray(custStruct, h);
         }
 
         private static void HandleMerchandiseModel(ObservableCollection<MerchandiseModel> merch)
@@ -275,7 +314,6 @@ namespace GoldstarrTrading.Classes
             BinaryReader br = new BinaryReader(fs, Encoding.UTF8);
             h = GetHeader(br);
 
-
             return h;
         }
 
@@ -314,8 +352,6 @@ namespace GoldstarrTrading.Classes
                 {
                     BinaryReader br = new BinaryReader(fs, Encoding.UTF8);
 
-
-
                     while (fs.Position < fs.Length)
                     {
                         // Always get header first
@@ -327,6 +363,9 @@ namespace GoldstarrTrading.Classes
                                 break;
                             case "MerchandiseStruct":
                                 ReadMerchandiseStruct(br, h, vm);
+                                break;
+                            case "CustomerStruct":
+                                ReadCustomerStruct(br, h, vm);
                                 break;
                         }
                     }
@@ -362,6 +401,30 @@ namespace GoldstarrTrading.Classes
             return h;
         }
 
+        private static void ReadCustomerStruct(BinaryReader br, Header h, ViewModel vm)
+        {
+            CustomerStruct[] cs = new CustomerStruct[h.amount];
+            for (int i = 0; i < h.amount; i++)
+            {
+                cs[i] = ReadStructData<CustomerStruct>(br, h);
+            }
+            AddCustomerStructToList(cs, vm);
+        }
+
+        private static void AddCustomerStructToList(CustomerStruct[] cs, ViewModel vm)
+        {
+            for (int i = 0; i < cs.Length; i++)
+            {
+                CustomerModel cm = new CustomerModel
+                {
+                    Name = cs[i].Name,
+                    Address = cs[i].Address,
+                    Phone = cs[i].Phone
+                };
+
+                vm.CustomerList.Add(cm);
+            }
+        }
 
         private static void ReadMerchandiseStruct(BinaryReader br, Header h, ViewModel vm)
         {
@@ -424,8 +487,6 @@ namespace GoldstarrTrading.Classes
 
         private static T ReadStructData<T>(BinaryReader br, Header h )
         {
-            //T os = default(T);
-
             int structSize = h.size;
             byte[] bytes = new byte[structSize];
 
@@ -442,20 +503,3 @@ namespace GoldstarrTrading.Classes
 
     }
 }
-/*
-                   //MemoryStream ms = new MemoryStream(headerChar);
-
-                   //h = (Header)bf.Deserialize(ms);
-
-
-                   //int len = Marshal.SizeOf(obj);
-
-                   //IntPtr i = Marshal.AllocHGlobal(len);
-
-                   //Marshal.Copy(bytearray, 0, i, len);
-
-                   //obj = Marshal.PtrToStructure(i, obj.GetType());
-
-                   //Marshal.FreeHGlobal(i);
-
-                    */
