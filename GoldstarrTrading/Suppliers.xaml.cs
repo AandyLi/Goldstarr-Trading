@@ -70,13 +70,13 @@ namespace GoldstarrTrading
         {
             stockList.ItemsSource = ViewModel.Supplier;
         }
-
-        private void EmptyAllTextboxes()
+private void EmptyAllTextboxes()
         {
             SupplierNameTextBox.Text = string.Empty;
             SupplierAddressTextBox.Text = string.Empty;
             SupplierPhoneTextBox.Text = string.Empty;
         }
+        
 
         private bool CheckDuplicateSupplierEntry()
         {

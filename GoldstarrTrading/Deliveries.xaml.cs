@@ -59,6 +59,38 @@ namespace GoldstarrTrading
         private void Add_Click(object sender, RoutedEventArgs e)
         {
             AddDeliveryToStock();
+            EmptyAllTextboxes();
+            AddDeliveryButtonVisible(false);
+        }
+        private void AddDeliveryButtonVisible(bool state)
+        {
+            if (state == true)
+            {
+                deliveryButton.Opacity = 1;
+            }
+            else
+            {
+                deliveryButton.Opacity = 0.5;
+            }
+
+            deliveryButton.IsEnabled = state;
+        }
+
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (deliveryTextBox.Text.Length > 0)
+            {
+                AddDeliveryButtonVisible(true);
+            }
+            else
+            {
+                AddDeliveryButtonVisible(false);
+            }
+        }
+
+        private void EmptyAllTextboxes()
+        {
+            deliveryTextBox.Text = string.Empty;
         }
 
         private void AddDeliveryToStock()
@@ -67,12 +99,17 @@ namespace GoldstarrTrading
 
             DeliveryQuantity = CheckDeliveryQuantity(); //Exception and error handling for texbox input
 
-            for (int i = 0; i < ViewModel.ObsMerch.Count; ++i) //Adds product textbox quantity to ObsMerch collection
+            if (DeliveryQuantity > 0)
             {
-                if (ViewModel.ObsMerch[i].ProductName == SelectedProductName)
+
+                for (int i = 0; i < ViewModel.ObsMerch.Count; ++i) //Adds product textbox quantity to ObsMerch collection
                 {
-                    ViewModel.ObsMerch[i].AddStock(DeliveryQuantity);
+                    if (ViewModel.ObsMerch[i].ProductName == SelectedProductName)
+                    {
+                        ViewModel.ObsMerch[i].AddStock(DeliveryQuantity);
+                    }
                 }
+                DeliveryAddedDialog();
             }
         }
 
@@ -94,6 +131,17 @@ namespace GoldstarrTrading
             {
                 Title = "Input Error",
                 Content = $"{Message}",
+                CloseButtonText = "OK"
+            };
+
+            await inputError.ShowAsync();
+        }
+        private async void DeliveryAddedDialog()
+        {
+            ContentDialog inputError = new ContentDialog()
+            {
+                Title = "Delivery Added",
+                Content = $"Delivery of {DeliveryQuantity} pcs {SelectedProductName} successfully added to stock.",
                 CloseButtonText = "OK"
             };
 
@@ -134,7 +182,6 @@ namespace GoldstarrTrading
                 deliveryQuantity = 0;
                 return deliveryQuantity;
             }
-
             return deliveryQuantity;
         }
     }
