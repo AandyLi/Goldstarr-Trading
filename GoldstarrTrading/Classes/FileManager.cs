@@ -18,7 +18,6 @@ using Windows.UI.Xaml.Input;
 namespace GoldstarrTrading.Classes
 {
 
-    //Todo: Try to read file content, both header and orderstruct
 
     [StructLayout(LayoutKind.Sequential)]
     struct Header
@@ -227,6 +226,7 @@ namespace GoldstarrTrading.Classes
                             {
                                 fs.Position = fs.Length;
                             }
+                            fs.Position = oldPos - Marshal.SizeOf(h);
                             // Continue with normal write operation
                             WriteHeaderAndStructToFile(fs, h, obj);
                             break;
@@ -314,18 +314,19 @@ namespace GoldstarrTrading.Classes
                 {
                     BinaryReader br = new BinaryReader(fs, Encoding.UTF8);
 
-                    // Always get header first
-                    Header h = GetHeader(br);
 
 
-                    Type type = Type.GetType(h.Name);
-
-                    while (fs.Position < fs.Length - 668)
+                    while (fs.Position < fs.Length)
                     {
+                        // Always get header first
+                        Header h = GetHeader(br);
                         switch (h.Name)
                         {
                             case "OrderStruct":
                                 ReadOrderStruct(br, h, vm);
+                                break;
+                            case "MerchandiseStruct":
+                                ReadMerchandiseStruct(br, h, vm);
                                 break;
                         }
                     }
@@ -359,6 +360,32 @@ namespace GoldstarrTrading.Classes
                 handle.Free();
             }
             return h;
+        }
+
+
+        private static void ReadMerchandiseStruct(BinaryReader br, Header h, ViewModel vm)
+        {
+            MerchandiseStruct[] ms = new MerchandiseStruct[h.amount];
+            for (int i = 0; i < h.amount; i++)
+            {
+                ms[i] = ReadStructData<MerchandiseStruct>(br, h);
+            }
+            AddMerchandiseStructToList(ms, vm);
+        }
+
+        private static void AddMerchandiseStructToList(MerchandiseStruct[] ms, ViewModel vm)
+        {
+            for (int i = 0; i < ms.Length; i++)
+            {
+                MerchandiseModel mm = new MerchandiseModel
+                {
+                    ProductName = ms[i].ProductName,
+                    Amount = ms[i].Amount,
+                    Supplier = ms[i].Supplier
+                };
+               
+                vm.ObsMerch.Add(mm);
+            }
         }
 
         private static void ReadOrderStruct(BinaryReader br, Header h, ViewModel vm)

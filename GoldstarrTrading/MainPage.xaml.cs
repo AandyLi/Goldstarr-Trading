@@ -49,10 +49,10 @@ namespace GoldstarrTrading
         {
             viewModel.ObsMerch = new ObservableCollection<MerchandiseModel>()
             {
-                new MerchandiseModel {ProductName = "Airscoop", Supplier = "Acne AB", Amount = 0 },
-                new MerchandiseModel {ProductName = "Hyper-transceiver", Supplier = "Corelian Inc", Amount = 0 },
-                new MerchandiseModel {ProductName = "Nanosporoid", Supplier = "Corelian Inc", Amount = 8},
-                new MerchandiseModel {ProductName = "Boarding-spike", Supplier = "Joruba Consortium", Amount = 1000}
+                //new MerchandiseModel {ProductName = "Airscoop", Supplier = "Acne AB", Amount = 0 },
+                //new MerchandiseModel {ProductName = "Hyper-transceiver", Supplier = "Corelian Inc", Amount = 0 },
+                //new MerchandiseModel {ProductName = "Nanosporoid", Supplier = "Corelian Inc", Amount = 8},
+                //new MerchandiseModel {ProductName = "Boarding-spike", Supplier = "Joruba Consortium", Amount = 1000}
             };
             viewModel.ObsMerch = viewModel.ObsMerch;
             //viewModel.UpdateList();

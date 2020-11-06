@@ -149,6 +149,7 @@ namespace GoldstarrTrading
             UpdateAmountDropDown(tmpMerchModel);
             UpdateMerchCombo(tmpMerchModel);
 
+            FileManager.SaveToFile(vm.ObsMerch);
         }
     }
 }
