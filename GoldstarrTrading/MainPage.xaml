@@ -22,6 +22,7 @@
                     <NavigationViewItem Content="Customer Orders" x:Name="Orders" />
                     <NavigationViewItem Content="Stock" x:Name="Stock" />
                     <NavigationViewItem Content="Deliveries" x:Name="Deliveries" />
+                    <NavigationViewItem Content="Suppliers" x:Name="Suppliers" />
                 </NavigationView.MenuItems>
             </NavigationView>
 

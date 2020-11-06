@@ -27,9 +27,9 @@ namespace GoldstarrTrading
     /// </summary>
     public sealed partial class Deliveries : Page
     {
-        private ViewModel ViewModel { get; set; }
-        private string SelectedProductName{get;set;}
-        private int DeliveryQuantity { get; set; }
+        private ViewModel ViewModel;
+        private string SelectedProductName;
+        private int DeliveryQuantity;
 
 
         public Deliveries()
@@ -64,12 +64,29 @@ namespace GoldstarrTrading
 
         private void AddDeliveryToStock()
         {
-            SelectedProductName = deliveryComboBox.SelectedValue.ToString();
+            SelectedProductName = deliveryComboBox.SelectedValue.ToString(); //Gets selected product from ComboBox
 
-            DeliveryQuantity = CheckDeliveryQuantity();
+            DeliveryQuantity = CheckDeliveryQuantity(); //Exception and error handling for texbox input
 
-            for (int i = 0; i < ViewModel.ObsMerch.Count; ++i)
+            for (int i = 0; i < ViewModel.ObsMerch.Count; ++i) //Adds product textbox quantity to ObsMerch collection
             {
+                if (ViewModel.ObsMerch[i].ProductName == SelectedProductName)
+                {
+                    ViewModel.ObsMerch[i].AddStock(DeliveryQuantity);
+                }
+            }
+        }
+
+        private async void DisplayInputError(Exception exception)
+        {
+            ContentDialog inputError = new ContentDialog()
+            {
+                Title = "Input Error",
+                Content = exception.Message,
+                CloseButtonText = "OK"
+            };
+
+            await inputError.ShowAsync();
                 if (ViewModel.ObsMerch[i].ProductName == SelectedProductName)
                 {
                     ViewModel.ObsMerch[i].AddStock(DeliveryQuantity);
@@ -105,8 +122,54 @@ namespace GoldstarrTrading
             return deliveryQuantity;
         }
 
-        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        private async void DisplayInputError(string Message)
         {
+            ContentDialog inputError = new ContentDialog()
+            {
+                Title = "Input Error",
+                Content = $"{Message}",
+                CloseButtonText = "OK"
+            };
+
+            await inputError.ShowAsync();
+        }
+
+        private int CheckDeliveryQuantity()
+        {
+            int deliveryQuantity = 0;
+
+            try
+            {
+                deliveryQuantity = Int32.Parse(deliveryTextBox.Text);
+
+                if (deliveryQuantity < 0)
+                {
+                    DisplayInputError("Negative values not allowed.");
+                    deliveryQuantity = 0;
+                    return deliveryQuantity;
+                }
+
+            }
+            catch (FormatException fex)
+            {
+                DisplayInputError(fex);
+                deliveryQuantity = 0;
+                return deliveryQuantity;
+            }
+            catch (ArgumentOutOfRangeException aex)
+            {
+                DisplayInputError(aex);
+                deliveryQuantity = 0;
+                return deliveryQuantity;
+            }
+            catch (Exception e)
+            {
+                DisplayInputError(e);
+                deliveryQuantity = 0;
+                return deliveryQuantity;
+            }
+
+            return deliveryQuantity;
         }
     }
 }

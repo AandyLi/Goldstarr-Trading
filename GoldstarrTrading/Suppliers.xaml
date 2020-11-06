@@ -1,0 +1,98 @@
+﻿<Page
+    x:Class="GoldstarrTrading.Suppliers"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:GoldstarrTrading"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    mc:Ignorable="d"
+    Background="{ThemeResource SystemColorInactiveCaptionBrush}">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60" />
+            <RowDefinition Height="400*" />
+            <RowDefinition Height="40" />
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="40" />
+            <ColumnDefinition Width="450" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="40" />
+        </Grid.ColumnDefinitions>
+        <TextBlock Text="Supplier Management" Grid.Column="1" Grid.Row="0" FontSize="40"/>
+
+        <Grid Grid.Row="1" Grid.Column="1" BorderBrush="AliceBlue" BorderThickness="2" Margin="5">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50" />
+                <RowDefinition Height="300" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <TextBlock Text="Add Supplier" Grid.Column="0" Grid.Row="0" FontSize="30" Margin="5"/>
+
+            <Grid Grid.Row="1" BorderBrush="AliceBlue" BorderThickness="1" Margin="15">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50" />
+                    <RowDefinition Height="50" />
+                    <RowDefinition Height="50" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="150" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Text="Supplier Name:" FontSize="20" Grid.Row="0" VerticalAlignment="Center" Margin="5"/>
+                <TextBox x:Name="SupplierNameTextBox" Grid.Row="0" Grid.Column="2" PlaceholderText="Name" VerticalAlignment="Center" HorizontalAlignment="Left" Width="160" TextChanged="TextBox_TextChanged">
+                </TextBox>
+
+                <TextBlock Text="Address:" FontSize="20" Grid.Row="1" VerticalAlignment="Center" Margin="5"/>
+
+                <TextBox x:Name="SupplierAddressTextBox" Grid.Row="1" Grid.Column="2" PlaceholderText="Street, Zip, City" VerticalAlignment="Center" HorizontalAlignment="Left" Width="160" TextChanged="TextBox_TextChanged">
+                </TextBox>
+
+                <TextBlock Text="Phone Number:" FontSize="20" Grid.Row="2" VerticalAlignment="Center" Margin="5"/>
+                <TextBox x:Name="SupplierPhoneTextBox" Grid.Row="2" Grid.Column="2" PlaceholderText="8-10 digits" VerticalAlignment="Center" HorizontalAlignment="Left" Width="160" TextChanged="TextBox_TextChanged" >
+                </TextBox>
+
+                <Button x:Name="AddSupplierButton" Content="Add Supplier" Grid.Row="3" Grid.Column="1" IsEnabled="False" VerticalAlignment="Top" Margin="5" Opacity="0.5" Click="AddSupplierButton_Click" >
+
+                </Button>
+            </Grid>
+        </Grid>
+
+        <Grid Grid.Row="1" Grid.Column="2" BorderBrush="AliceBlue" BorderThickness="2" Margin="5">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Text="Supplier Directory" Grid.Column="0" Grid.Row="0" FontSize="30" Margin="5"/>
+
+            <controls:DataGrid x:Name="stockList"
+                             ItemsSource="{x:Bind ViewModel.Supplier}"
+                             Grid.Column="1" Grid.Row="1"
+                             HorizontalAlignment="Stretch"
+                             VerticalAlignment="Stretch"
+                             GridLinesVisibility="All"
+                             AutoGenerateColumns="False"
+                             CanUserSortColumns="True"
+                               Sorting="Supplier_Sorting"
+                             IsHitTestVisible="True"
+                             AlternatingRowBackground="WhiteSmoke">
+
+                <controls:DataGrid.Columns>
+                    <controls:DataGridTextColumn Header="Supplier Name" Binding="{Binding Name}" CanUserSort="True" Tag="Name"/>
+                    <controls:DataGridTextColumn Header="Address" Binding="{Binding Address}" CanUserSort="True" Tag="Address"/>
+                    <controls:DataGridTextColumn Header="Phone Number" Binding="{Binding Phone}" CanUserSort="True" Tag="Phone"/>
+                </controls:DataGrid.Columns>
+            </controls:DataGrid>
+        </Grid>
+
+    </Grid>
+</Page>
