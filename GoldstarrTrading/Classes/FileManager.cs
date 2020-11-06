@@ -17,8 +17,6 @@ using Windows.UI.Xaml.Input;
 
 namespace GoldstarrTrading.Classes
 {
-
-
     [StructLayout(LayoutKind.Sequential)]
     struct Header
     {
@@ -38,21 +36,14 @@ namespace GoldstarrTrading.Classes
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 20)]
         public string OrderDate;
 
-
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 20)]
         public string CustomerName;
-
-
-
-        // Merch
 
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 20)]
         public string ProductName;
 
-
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 20)]
         public string Supplier;
-
 
     }
 
@@ -81,13 +72,10 @@ namespace GoldstarrTrading.Classes
         public string Phone;
     }
 
-
     static class FileManager
     {
         static StorageFolder storageFolder = ApplicationData.Current.LocalFolder;
         static StorageFile file;
-
-
 
         const string FileName = "Data.group4";
 
@@ -103,9 +91,7 @@ namespace GoldstarrTrading.Classes
 
             }
 
-
             CachedFileManager.DeferUpdates(file);
-
 
             switch (typeof(T).Name)
             {
@@ -121,7 +107,6 @@ namespace GoldstarrTrading.Classes
             }
 
             await GetFileSaveStatus(); 
-
         }
 
         private static async Task GetFileSaveStatus()
@@ -137,7 +122,6 @@ namespace GoldstarrTrading.Classes
             }
         }
 
-
         private static void HandleCustomerModel(ObservableCollection<CustomerModel> cust)
         {
             CustomerStruct[] custStruct = new CustomerStruct[cust.Count];
@@ -146,7 +130,6 @@ namespace GoldstarrTrading.Classes
                 custStruct[i].Name = cust[i].Name;
                 custStruct[i].Address = cust[i].Address;
                 custStruct[i].Phone = cust[i].Phone;
-
             }
 
             Header h = new Header
@@ -179,7 +162,6 @@ namespace GoldstarrTrading.Classes
 
             ObjectToByteArray(merchStruct, h);
         }
-
 
         private static void HandleOrderModel(ObservableCollection<OrderModel> order)
         {
@@ -224,13 +206,10 @@ namespace GoldstarrTrading.Classes
 
 
                 // Find a header
-
-
                 Header firstHeader = FindNextHeader(fs);
                 bool eof = false;
                 while (true)
                 {
-
                     if (firstHeader.Name == ((Header)h).Name || eof )
                     {
                         Header nextHeader;
@@ -284,7 +263,6 @@ namespace GoldstarrTrading.Classes
                         }
                     }
                 }
-
             }
         }
 
@@ -379,7 +357,6 @@ namespace GoldstarrTrading.Classes
             }
             catch (Exception)
             {
-
                 throw;
             }
         }
@@ -486,7 +463,6 @@ namespace GoldstarrTrading.Classes
                 vm.Order.Add(om);
             }
         }
-
 
         private static T ReadStructData<T>(BinaryReader br, Header h )
         {
