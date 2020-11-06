@@ -47,11 +47,15 @@ namespace GoldstarrTrading
 
         private async void AddProductsButton_Click(object sender, RoutedEventArgs e)
         {
+            
             var message = string.Empty;
             MessageDialog messageDialog = new MessageDialog(message, "New product has been added");
-            
+
             var supplier = string.Empty;
             var product = string.Empty;
+
+            supplier = SupplierNameTextBox.Text;
+            product = ProductNameTextBox.Text;
 
             if (string.IsNullOrEmpty(SupplierNameTextBox.Text) && string.IsNullOrEmpty(ProductNameTextBox.Text))
             {
@@ -74,29 +78,40 @@ namespace GoldstarrTrading
                 await messageDialog.ShowAsync();
                 return;
             }
-
-            if (SupplierNameTextBox.Text.All(char.IsLetter))
-                supplier = SupplierNameTextBox.Text;
-
-            else
+            char x = supplier.ToCharArray().ElementAt(0);
+            if (char.IsNumber(x))
             {
-                message = "Invalid supplier data";
+                message = "Invalid Supplier data";
+                messageDialog = new MessageDialog(message, "Information");
+                await messageDialog.ShowAsync();
+                return;
+            }
+            if(vm.ObsMerch.Any(v => v.ProductName.ToLower().Trim() == product.ToLower().Trim()) 
+                && vm.ObsMerch.Any(v => v.Supplier.ToLower().Trim() == supplier.ToLower().Trim()))
+            {
+                message = "The product and the supplier already exists";
+                messageDialog = new MessageDialog(message, "Information");
+                await messageDialog.ShowAsync();
+                SupplierNameTextBox.Text = string.Empty;
+                ProductNameTextBox.Text = string.Empty;
+                return;
+            }
+            if (vm.ObsMerch.Any(v => v.ProductName.ToLower().Trim() == product.ToLower().Trim()))
+            {
+                message = "The product already exists";
+                messageDialog = new MessageDialog(message, "Information");
+                await messageDialog.ShowAsync(); 
+                ProductNameTextBox.Text = string.Empty;
+                return;
+            }
+            if (vm.ObsMerch.Any(v => v.Supplier.ToLower().Trim() == supplier.ToLower().Trim()))
+            {
+                message = "The supplier already exists";
                 messageDialog = new MessageDialog(message, "Information");
                 await messageDialog.ShowAsync();
                 SupplierNameTextBox.Text = string.Empty;
                 return;
             }
-            if (ProductNameTextBox.Text.All(char.IsLetter))
-                product = ProductNameTextBox.Text;
-            else
-            {
-                message = "Invalid product data";
-                messageDialog = new MessageDialog(message, "Information");
-                await messageDialog.ShowAsync();
-                ProductNameTextBox.Text = string.Empty;
-                return;
-            }
-
             vm.ObsMerch.Add(new MerchandiseModel() { Supplier = supplier, ProductName = product });
             await messageDialog.ShowAsync();
             SupplierNameTextBox.Text = string.Empty;
