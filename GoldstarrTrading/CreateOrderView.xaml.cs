@@ -10,6 +10,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using System.Security.Cryptography;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -17,6 +18,7 @@ using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
@@ -40,21 +42,10 @@ namespace GoldstarrTrading
         {
             vm = (ViewModel)e.Parameter;
             PopulateAvailableMerchandise();
+            //ButtonBlink.Stop();
         }
 
-        public void UpdateStockForPendingOrders()
-        {
-            foreach (var pendingOrder in vm.PendingOrder)
-            {
-                MerchandiseModel tmpMerch = vm.ObsMerch.First(x => x.ProductName == pendingOrder.Merch.ProductName);
-                
-                if (tmpMerch.Amount > pendingOrder.OrderedAmount)
-                {
-
-                }
-            }
-        }
-
+       
         private void PopulateAvailableMerchandise()
         {
             localMerchandise = new ObservableCollection<MerchandiseModel>();
@@ -127,7 +118,6 @@ namespace GoldstarrTrading
             {
                 localMerchandise.Add(merch);
             }
-
         }
 
         private void ResetAddOrderButton()
@@ -210,6 +200,7 @@ namespace GoldstarrTrading
                 vm.Order.Insert(0, newOrder);
 
             }
+            
             UpdateAmountDropDown(tmpMerchModel);
             UpdateMerchCombo(tmpMerchModel);
 
@@ -221,16 +212,32 @@ namespace GoldstarrTrading
             Grid grid = (Grid)parent;
             OrderModel tmpPendingOrder = grid.DataContext as OrderModel;
 
-            var message = string.Empty;
-            MessageDialog messageDialog = new MessageDialog(message, "Pending order will be forwarded to warehouse and saved in Order History.");
+            var message = "Pending order will be forwarded to warehouse and saved in Order History.";
+            MessageDialog messageDialog = new MessageDialog(message, "Forwarding pending order");
             await messageDialog.ShowAsync();
 
+            vm.PendingOrder.Remove(tmpPendingOrder);
+            vm.Order.Insert(0, tmpPendingOrder);
+        }
 
+        private void PendingOrdersList_Loaded(object sender, RoutedEventArgs e)
+        {
+            var parent = (sender as Button).Parent;
+            Grid grid = (Grid)parent;
+            OrderModel tmpPendingOrder = grid.DataContext as OrderModel;
 
+            MerchandiseModel tmpMerch = vm.ObsMerch.First(x => x.ProductName == tmpPendingOrder.Merch.ProductName);
+
+            if (tmpMerch.Amount >= tmpPendingOrder.OrderedAmount)
+            {
+                (sender as Button).IsEnabled = true;
+            }
         }
 
 
     }
+
+    
 
 
 }

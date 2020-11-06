@@ -8,7 +8,9 @@
     mc:Ignorable="d"
     Background="{ThemeResource SystemColorInactiveCaptionBrush}">
 
-        <Grid>
+
+
+    <Grid>
         <Grid.Resources>
             <Style TargetType="ListView" x:Name="FixedHeaderListViewStyle">
                 <Setter Property="IsTabStop" Value="False" />
@@ -117,7 +119,7 @@
             <TextBlock Text="Create Order" Grid.Column="0" Grid.Row="0" FontSize="30" Margin="5"/>
             <TextBlock Text="Pending Orders" Grid.Column="0" Grid.Row="2" FontSize="30" Margin="5"/>
 
-            <ListView  x:Name="PendingOrders" Grid.Row="3" Grid.Column="0" HorizontalAlignment="Stretch" ItemsSource="{x:Bind vm.PendingOrder}" >
+            <ListView  x:Name="PendingOrdersList" Grid.Row="3" Grid.Column="0" HorizontalAlignment="Stretch" ItemsSource="{x:Bind vm.PendingOrder}" >
                 <ListView.HeaderTemplate>
                     <DataTemplate>
                         <Grid Padding="12" Background="{ThemeResource SystemBaseLowColor}" HorizontalAlignment="Stretch" >
@@ -133,7 +135,7 @@
                             <TextBlock Grid.Column="2" Width="80"  HorizontalAlignment="Stretch"  Text="Amount" Style="{ThemeResource CaptionTextBlockStyle}"/>
                             <TextBlock Grid.Column="3" Width="200" HorizontalAlignment="Stretch"  Text="Order date" Style="{ThemeResource CaptionTextBlockStyle}"/>
                             <TextBlock Grid.Column="4" Width="80" HorizontalAlignment="Stretch"  Text="Confirm" FontWeight="Bold" Style="{ThemeResource CaptionTextBlockStyle}"/>
-                            
+
                         </Grid>
                     </DataTemplate>
                 </ListView.HeaderTemplate>
@@ -151,9 +153,10 @@
                             </Grid.ColumnDefinitions>
                             <TextBlock Text="{Binding CustomerName}" Width="200"      HorizontalAlignment="Stretch"  FontWeight="Bold" Grid.Row="0" Grid.Column="1"  />
                             <TextBlock Text="{Binding Merch.ProductName}" Width="200" HorizontalAlignment="Stretch"  FontWeight="Bold" Grid.Row="0" Grid.Column="2"/>
-                            <TextBlock Text="{Binding OrderedAmount}" Width="80"      HorizontalAlignment="Stretch"  FontWeight="Bold" Foreground="Red" Grid.Row="0" Grid.Column="3"/>
+                            <TextBlock Text="{Binding OrderedAmount}" Width="80"      HorizontalAlignment="Stretch"  FontWeight="Bold" Grid.Row="0" Grid.Column="3"/>
                             <TextBlock Text="{Binding OrderDate}" Width="200"         HorizontalAlignment="Stretch"  FontWeight="Bold" Grid.Row="0" Grid.Column="4"/>
-                            <Button x:Name="ConfirmPendingOrderButton" FontWeight="Bold" Foreground="Red" Content="Confirm pending order" HorizontalAlignment="Stretch" Grid.Row="0" Grid.Column="5" IsEnabled="True" Click="ConfirmPendingOrderButton_Click" />
+                            <Button x:Name="ConfirmPendingOrderButton" FontWeight="Bold" Foreground="Black" Background="Red" Content="Confirm pending order" HorizontalAlignment="Stretch" Grid.Row="0" Grid.Column="5" Click="ConfirmPendingOrderButton_Click" Loaded="PendingOrdersList_Loaded" IsEnabled="False" >
+                            </Button>
 
                         </Grid>
                     </DataTemplate>
@@ -196,10 +199,10 @@
                 <TextBlock Text="Amount" FontSize="20" Grid.Row="2" VerticalAlignment="Center" Margin="5"/>
                 <ComboBox x:Name="AmountDropDown" Grid.Row="2" Grid.Column="2" PlaceholderText="Amount" VerticalAlignment="Center" Width="auto" SelectionChanged="AmountDropDown_SelectionChanged" />
                 <TextBox x:Name="AmountTextBox" Grid.Row="2" Grid.Column="2" PlaceholderText="Enter the amount manually here" VerticalAlignment="Center" Width="auto" Visibility="Collapsed" TextChanged="AmountTextBox_TextChanged" />
-                
+
 
                 <Button x:Name="ConfirmOrderButton" Content="Create Order" Grid.Row="3" Grid.Column="0" IsEnabled="False" Opacity="0.5" Click="ConfirmOrderButton_Click" >
-                
+
                 </Button>
             </Grid>
         </Grid>
