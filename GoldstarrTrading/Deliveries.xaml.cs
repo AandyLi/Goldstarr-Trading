@@ -141,7 +141,7 @@ namespace GoldstarrTrading
             ContentDialog inputError = new ContentDialog()
             {
                 Title = "Delivery Added",
-                Content = $"Delivery of {DeliveryQuantity} pcs {SelectedProductName} successfully added to stock.",
+                Content = $"Delivery of {DeliveryQuantity} pcs {SelectedProductName} was successfully added to stock.",
                 CloseButtonText = "OK"
             };
 

@@ -62,13 +62,13 @@ namespace GoldstarrTrading
             }
 
             EmptyAllTextboxes();
-            ResetStockListItemsSource();
+            ResetsupplierListItemsSource();
 
         }
 
-        private void ResetStockListItemsSource()
+        private void ResetsupplierListItemsSource()
         {
-            stockList.ItemsSource = ViewModel.Supplier;
+            supplierList.ItemsSource = ViewModel.Supplier;
         }
 private void EmptyAllTextboxes()
         {
@@ -200,7 +200,7 @@ private void EmptyAllTextboxes()
                 //Implement sort on the column using LINQ
                 if (e.Column.SortDirection == null)
                 {
-                    stockList.ItemsSource = new ObservableCollection<SupplierModel>(from item in ViewModel.Supplier
+                    supplierList.ItemsSource = new ObservableCollection<SupplierModel>(from item in ViewModel.Supplier
                                                                         orderby item.Name ascending
                                                                         select item);
 
@@ -208,7 +208,7 @@ private void EmptyAllTextboxes()
                 }
                 else if (e.Column.SortDirection == DataGridSortDirection.Ascending)
                 {
-                    stockList.ItemsSource = new ObservableCollection<SupplierModel>(from item in ViewModel.Supplier
+                    supplierList.ItemsSource = new ObservableCollection<SupplierModel>(from item in ViewModel.Supplier
                                                                         orderby item.Name descending
                                                                         select item);
 
@@ -216,7 +216,7 @@ private void EmptyAllTextboxes()
                 }
                 else
                 {
-                    stockList.ItemsSource = ViewModel.Supplier;
+                    supplierList.ItemsSource = ViewModel.Supplier;
                     e.Column.SortDirection = null;
                 }
             }
@@ -225,7 +225,7 @@ private void EmptyAllTextboxes()
             {
                 if (e.Column.SortDirection == null)
                 {
-                    stockList.ItemsSource = new ObservableCollection<SupplierModel>(from item in ViewModel.Supplier
+                    supplierList.ItemsSource = new ObservableCollection<SupplierModel>(from item in ViewModel.Supplier
                                                                                     orderby item.Address ascending
                                                                                     select item);
 
@@ -233,7 +233,7 @@ private void EmptyAllTextboxes()
                 }
                 else if (e.Column.SortDirection == DataGridSortDirection.Ascending)
                 {
-                    stockList.ItemsSource = new ObservableCollection<SupplierModel>(from item in ViewModel.Supplier
+                    supplierList.ItemsSource = new ObservableCollection<SupplierModel>(from item in ViewModel.Supplier
                                                                                     orderby item.Address descending
                                                                                     select item);
 
@@ -241,7 +241,7 @@ private void EmptyAllTextboxes()
                 }
                 else
                 {
-                    stockList.ItemsSource = ViewModel.Supplier;
+                    supplierList.ItemsSource = ViewModel.Supplier;
                     e.Column.SortDirection = null;
                 }
             }
@@ -250,7 +250,7 @@ private void EmptyAllTextboxes()
             {
                 if (e.Column.SortDirection == null)
                 {
-                    stockList.ItemsSource = new ObservableCollection<SupplierModel>(from item in ViewModel.Supplier
+                    supplierList.ItemsSource = new ObservableCollection<SupplierModel>(from item in ViewModel.Supplier
                                                                                     orderby item.Phone ascending
                                                                                     select item);
 
@@ -258,7 +258,7 @@ private void EmptyAllTextboxes()
                 }
                 else if (e.Column.SortDirection == DataGridSortDirection.Ascending)
                 {
-                    stockList.ItemsSource = new ObservableCollection<SupplierModel>(from item in ViewModel.Supplier
+                    supplierList.ItemsSource = new ObservableCollection<SupplierModel>(from item in ViewModel.Supplier
                                                                                     orderby item.Phone descending
                                                                                     select item);
 
@@ -266,14 +266,14 @@ private void EmptyAllTextboxes()
                 }
                 else
                 {
-                    stockList.ItemsSource = ViewModel.Supplier;
+                    supplierList.ItemsSource = ViewModel.Supplier;
                     e.Column.SortDirection = null;
                 }
             }
             // add code to handle sorting by other columns as required
 
             // Remove sorting indicators from other columns
-            foreach (var dgColumn in stockList.Columns)
+            foreach (var dgColumn in supplierList.Columns)
             {
                 if (dgColumn.Tag.ToString() != e.Column.Tag.ToString())
                 {

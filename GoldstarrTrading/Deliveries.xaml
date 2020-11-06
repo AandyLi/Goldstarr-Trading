@@ -46,7 +46,7 @@
             <TextBlock Grid.Row="1" Grid.Column="2" Text="Quantity" FontWeight="SemiBold" HorizontalAlignment="Left" VerticalAlignment="Center"/>
 
             <ComboBox x:Name="deliveryComboBox" Grid.Column="1" Grid.Row="2" Width="Auto" HorizontalAlignment="Left" VerticalAlignment="Center" SelectedIndex="0" />
-            <TextBox x:Name="deliveryTextBox" Grid.Column="2" Grid.Row="2" TextWrapping="Wrap" HorizontalAlignment="Left" VerticalAlignment="Center" TextChanged="TextBox_TextChanged"/>
+            <TextBox x:Name="deliveryTextBox" Grid.Column="2" Grid.Row="2" TextWrapping="Wrap" PlaceholderText="Qty" HorizontalAlignment="Left" VerticalAlignment="Center" TextChanged="TextBox_TextChanged"/>
             <Button x:Name="deliveryButton" Content="Add Stock" Grid.Column="3" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center"  Click="Add_Click" IsEnabled="False"/>
 
         </Grid>
