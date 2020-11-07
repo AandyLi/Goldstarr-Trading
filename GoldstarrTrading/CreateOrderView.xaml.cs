@@ -44,7 +44,6 @@ namespace GoldstarrTrading
             PopulateAvailableMerchandise();
         }
 
-       
         private void PopulateAvailableMerchandise()
         {
             localMerchandise = new ObservableCollection<MerchandiseModel>();
@@ -52,9 +51,7 @@ namespace GoldstarrTrading
             {
                 localMerchandise.Add(item);
             }
-
         }
-
 
         private async void MerchCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -73,6 +70,7 @@ namespace GoldstarrTrading
             AmountDropDown.Visibility = Visibility.Visible;
             AmountDropDown.IsEnabled = true;
             AmountTextBox.Visibility = Visibility.Collapsed;
+            ClearAmountTextBox();
 
             var message = "Product has been added to order";
             MessageDialog messageDialog = new MessageDialog(message);
@@ -86,7 +84,6 @@ namespace GoldstarrTrading
                 AmountDropDown.IsEnabled = false;
                 AmountDropDown.Visibility = Visibility.Collapsed;
                 AmountTextBox.Visibility = Visibility.Visible;
-                isOrderPending = true;
                 return;
             }
 
@@ -104,15 +101,7 @@ namespace GoldstarrTrading
             }
             AmountDropDown.SelectedIndex = 0;
         }
-
-        private void UpdateMerchCombo(MerchandiseModel merch)
-        {
-            if (merch.Amount > 0)
-            {
-                localMerchandise.Add(merch);
-            }
-        }
-
+        
         private void ResetAddOrderButton()
         {
             ConfirmOrderButton.IsEnabled = false;
@@ -149,10 +138,17 @@ namespace GoldstarrTrading
 
         private void AmountTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (AmountTextBox.Text != "" && Int32.TryParse(AmountTextBox.Text, out int orderedAmount) && Math.Sign(orderedAmount) != -1)
+            if (AmountTextBox.Text != "" && UInt32.TryParse(AmountTextBox.Text, out uint orderedAmount) && orderedAmount > 0)
             {
                 ConfirmOrderButton.IsEnabled = true;
                 ConfirmOrderButton.Opacity = 1.0;
+                isOrderPending = true;
+            }
+            else
+            {
+                ConfirmOrderButton.IsEnabled = false;
+                ConfirmOrderButton.Opacity = 0.5;
+                isOrderPending = false;
             }
         }
 
@@ -172,7 +168,6 @@ namespace GoldstarrTrading
             CustomerModel tmpCustModel = CustomerCombo.SelectedItem as CustomerModel;
 
             MerchandiseModel tmpMerchModel = GetMerchModel(MerchCombo);
-
 
             int orderedAmount;
 
@@ -197,10 +192,8 @@ namespace GoldstarrTrading
                 vm.Order.Insert(0, newOrder);
 
                 ClearAmountDropDown();
+                UpdateAmountDropDown(tmpMerchModel);
             }
-            
-            UpdateAmountDropDown(tmpMerchModel);
-            UpdateMerchCombo(tmpMerchModel);
 
         }
 
@@ -232,10 +225,9 @@ namespace GoldstarrTrading
             }
         }
 
-
     }
 
-    
+
 
 
 }
