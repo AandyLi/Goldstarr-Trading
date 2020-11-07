@@ -23,7 +23,7 @@
 
         <TextBlock Grid.Column="1" Grid.Row="0" HorizontalAlignment="Left" Text="Customers" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="40"/>
 
-        <ListView ItemsSource="{x:Bind vm.CustomerList}" Grid.Row="1" Grid.Column="1" x:Name="TestListView" HorizontalAlignment="Stretch" BorderBrush="AliceBlue" BorderThickness="5">
+        <ListView ItemsSource="{x:Bind vm.CustomerList}" Grid.Row="1" Grid.Column="1" x:Name="TestListView" BorderBrush="AliceBlue" BorderThickness="5" Margin="450,0,0,0">
             <ListView.HeaderTemplate>
                 <DataTemplate>
                     <Grid Padding="12" Background="{ThemeResource SystemBaseLowColor}">
@@ -43,12 +43,49 @@
                         </Grid.ColumnDefinitions>
 
                         <TextBlock Text="{Binding Name}" FontWeight="Light" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" />
-                        
+
                     </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>
 
         </ListView>
+       
+        <Grid Grid.Row="1" Grid.Column="1" BorderBrush="AliceBlue" BorderThickness="2" Margin="5,5,975,5">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50" />
+                <RowDefinition Height="300" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <TextBlock Text="Add customer" Grid.Column="0" Grid.Row="0" FontSize="30" Margin="5"/>
+
+            <Grid Grid.Row="1" BorderBrush="AliceBlue" BorderThickness="1" Margin="15">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50" />
+                    <RowDefinition Height="50" />
+                    <RowDefinition Height="50" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="150" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Text="Customer Name:" FontSize="20" Grid.Row="0" VerticalAlignment="Center" Margin="5"/>
+                <TextBox x:Name="SupplierNameTextBox" Grid.Row="0" Grid.Column="2" PlaceholderText="Name" VerticalAlignment="Center" HorizontalAlignment="Left" Width="160" TextChanged="TextBox_TextChanged"/>
+
+                <TextBlock Text="Address:" FontSize="20" Grid.Row="1" VerticalAlignment="Center" Margin="5"/>
+
+                <TextBox x:Name="SupplierAddressTextBox" Grid.Row="1" Grid.Column="2" PlaceholderText="Street, Zip, City" VerticalAlignment="Center" HorizontalAlignment="Left" Width="160" TextChanged="TextBox_TextChanged"/>
+
+                <TextBlock Text="Phone Number:" FontSize="20" Grid.Row="2" VerticalAlignment="Center" Margin="5"/>
+                <TextBox x:Name="SupplierPhoneTextBox" Grid.Row="2" Grid.Column="2" PlaceholderText="8-10 digits" VerticalAlignment="Center" HorizontalAlignment="Left" Width="160" TextChanged="TextBox_TextChanged" />
+
+                <Button x:Name="AddSupplierButton" Content="Add Supplier" Grid.Row="3" Grid.Column="1" IsEnabled="False" VerticalAlignment="Top" Margin="5" Opacity="0.5" Click="AddSupplierButton_Click" />
+            </Grid>
+        </Grid>
 
     </Grid>
 </Page>
