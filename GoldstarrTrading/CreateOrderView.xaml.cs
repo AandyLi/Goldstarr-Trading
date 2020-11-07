@@ -42,7 +42,6 @@ namespace GoldstarrTrading
         {
             vm = (ViewModel)e.Parameter;
             PopulateAvailableMerchandise();
-            //ButtonBlink.Stop();
         }
 
        
@@ -55,12 +54,6 @@ namespace GoldstarrTrading
             }
 
         }
-
-
-        //public static ObservableCollection<MerchandiseModel> Filter(ObservableCollection<MerchandiseModel> merch)
-
-        //    => (ObservableCollection<MerchandiseModel>)merch.Where(x => x.Amount > 0);
-
 
 
         private async void MerchCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -81,8 +74,8 @@ namespace GoldstarrTrading
             AmountDropDown.IsEnabled = true;
             AmountTextBox.Visibility = Visibility.Collapsed;
 
-            var message = string.Empty;
-            MessageDialog messageDialog = new MessageDialog(message, "Product has been added to order");
+            var message = "Product has been added to order";
+            MessageDialog messageDialog = new MessageDialog(message);
 
             if (tmpMerchModel.Amount <= 0)
             {
@@ -131,6 +124,11 @@ namespace GoldstarrTrading
             AmountDropDown.Items.Clear();
         }
 
+        private void ClearAmountTextBox()
+        {
+            AmountTextBox.Text = string.Empty;
+        }
+
         private MerchandiseModel GetMerchModel(object obj)
         {
             var container = obj as ComboBox;
@@ -151,7 +149,7 @@ namespace GoldstarrTrading
 
         private void AmountTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (AmountTextBox.Text != "" && Int32.TryParse(AmountTextBox.Text, out int orderedAmount))
+            if (AmountTextBox.Text != "" && Int32.TryParse(AmountTextBox.Text, out int orderedAmount) && Math.Sign(orderedAmount) != -1)
             {
                 ConfirmOrderButton.IsEnabled = true;
                 ConfirmOrderButton.Opacity = 1.0;
@@ -186,19 +184,19 @@ namespace GoldstarrTrading
                 vm.PendingOrder.Insert(0, pendingOrder);
 
                 ResetAddOrderButton();
-                ClearAmountDropDown();
+                ClearAmountTextBox();
             }
 
             else
             {
                 orderedAmount = Int32.Parse(AmountDropDown.SelectedItem.ToString());
                 tmpMerchModel.RemoveStock(orderedAmount);
-                ClearAmountDropDown();
 
                 newOrder.CreateOrder(tmpCustModel.Name, tmpMerchModel, orderedAmount);
 
                 vm.Order.Insert(0, newOrder);
 
+                ClearAmountDropDown();
             }
             
             UpdateAmountDropDown(tmpMerchModel);
@@ -206,7 +204,7 @@ namespace GoldstarrTrading
 
         }
 
-        private async void ConfirmPendingOrderButton_Click(object sender, RoutedEventArgs e) //this is for each ConfirmPendingOrderButton, not for when creating new orders
+        private async void ConfirmPendingOrderButton_Click(object sender, RoutedEventArgs e) //this is for each ConfirmPendingOrderButton child
         {
             var parent = (sender as Button).Parent;
             Grid grid = (Grid)parent;
