@@ -43,9 +43,72 @@ namespace GoldstarrTrading
 
         }
 
+        private void Stock_Sorting(object sender, DataGridColumnEventArgs e)
+        {
+            //Use the Tag property to pass the bound column name for the sorting implementation
+
+            if (e.Column.Tag.ToString() == "Name")
+            {
+                //Implement sort on the column using LINQ
+                if (e.Column.SortDirection == null)
+                {
+                    stockList.ItemsSource = new ObservableCollection<MerchandiseModel>(from item in vm.ObsMerch
+                                                                                       orderby item.ProductName ascending
+                                                                                       select item);
+
+                    e.Column.SortDirection = DataGridSortDirection.Ascending;
+                }
+                else if (e.Column.SortDirection == DataGridSortDirection.Ascending)
+                {
+                    stockList.ItemsSource = new ObservableCollection<MerchandiseModel>(from item in vm.ObsMerch
+                                                                                       orderby item.ProductName descending
+                                                                                       select item);
+
+                    e.Column.SortDirection = DataGridSortDirection.Descending;
+                }
+                else
+                {
+                    stockList.ItemsSource = vm.ObsMerch;
+                    e.Column.SortDirection = null;
+                }
+            }
+
+            if (e.Column.Tag.ToString() == "Amount")
+            {
+                if (e.Column.SortDirection == null)
+                {
+                    stockList.ItemsSource = new ObservableCollection<MerchandiseModel>(from item in vm.ObsMerch
+                                                                                       orderby item.Amount ascending
+                                                                                       select item);
+
+                    e.Column.SortDirection = DataGridSortDirection.Ascending;
+                }
+                else if (e.Column.SortDirection == DataGridSortDirection.Ascending)
+                {
+                    stockList.ItemsSource = new ObservableCollection<MerchandiseModel>(from item in vm.ObsMerch
+                                                                                       orderby item.Amount descending
+                                                                                       select item);
+
+                    e.Column.SortDirection = DataGridSortDirection.Descending;
+                }
+                else
+                {
+                    stockList.ItemsSource = vm.ObsMerch;
+                    e.Column.SortDirection = null;
+                }
+            }
+
+            // add code to handle sorting by other columns as required
+
+            // Remove sorting indicators from other columns
+            foreach (var dgColumn in stockList.Columns)
+            {
+                if (dgColumn.Tag.ToString() != e.Column.Tag.ToString())
+                {
+                    dgColumn.SortDirection = null;
+                }
+            }
+        }
+
     }
-
-   
-
-
 }
