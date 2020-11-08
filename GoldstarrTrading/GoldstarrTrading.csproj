@@ -121,6 +121,7 @@
     </Compile>
     <Compile Include="Classes\AssociateModel.cs" />
     <Compile Include="Classes\CustomerModel.cs" />
+    <Compile Include="Classes\FileManager.cs" />
     <Compile Include="Classes\IAddToListView.cs" />
     <Compile Include="Classes\SupplierModel.cs" />
     <Compile Include="CreateOrderView.xaml.cs">

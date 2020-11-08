@@ -15,6 +15,8 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using GoldstarrTrading.Classes;
 using System.Collections.ObjectModel;
+using System.Threading;
+using System.Threading.Tasks;
 
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
@@ -37,16 +39,21 @@ namespace GoldstarrTrading
             CreateMerchandisesList();
             CreateCustomers();
             CreateSuppliers();
+
+            FileManager.LoadAllDataFromFile(viewModel);
+            // Delay the collection changed events so that they do not trigger when adding stuff from the file to the observable collections
+            Task.Delay(3000).ContinueWith(t => viewModel.AllowCollectionChangedEvents());
+
         }
 
         private void CreateMerchandisesList()
         {
             viewModel.ObsMerch = new ObservableCollection<MerchandiseModel>()
             {
-                new MerchandiseModel {ProductName = "Airscoop", Supplier = "Acne AB", Amount = 0 },
-                new MerchandiseModel {ProductName = "Hyper-transceiver", Supplier = "Corelian Inc", Amount = 0 },
-                new MerchandiseModel {ProductName = "Nanosporoid", Supplier = "Corelian Inc", Amount = 8},
-                new MerchandiseModel {ProductName = "Boarding-spike", Supplier = "Joruba Consortium", Amount = 1000}
+                //new MerchandiseModel {ProductName = "Airscoop", Supplier = "Acne AB", Amount = 0 },
+                //new MerchandiseModel {ProductName = "Hyper-transceiver", Supplier = "Corelian Inc", Amount = 0 },
+                //new MerchandiseModel {ProductName = "Nanosporoid", Supplier = "Corelian Inc", Amount = 8},
+                //new MerchandiseModel {ProductName = "Boarding-spike", Supplier = "Joruba Consortium", Amount = 1000}
             };
             viewModel.ObsMerch = viewModel.ObsMerch;
             //viewModel.UpdateList();

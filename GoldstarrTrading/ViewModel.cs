@@ -39,6 +39,28 @@ namespace GoldstarrTrading
             }
         }
 
+        public void AllowCollectionChangedEvents()
+        {
+            ObsMerch.CollectionChanged += ObsMerch_CollectionChanged;
+            CustomerList.CollectionChanged += CustomerList_CollectionChanged;
+            Order.CollectionChanged += Order_CollectionChanged;
+        }
+
+        private void Order_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            FileManager.SaveToFile(Order);
+        }
+
+        private void CustomerList_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            FileManager.SaveToFile(CustomerList);
+        }
+
+        private void ObsMerch_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            FileManager.SaveToFile(ObsMerch);
+        }
+
         public ObservableCollection<CustomerModel> CustomerList
         {
             get { return _customerList; }

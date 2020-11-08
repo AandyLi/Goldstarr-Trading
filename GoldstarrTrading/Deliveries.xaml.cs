@@ -111,6 +111,8 @@ namespace GoldstarrTrading
                 }
                 DeliveryAddedDialog();
             }
+
+            FileManager.SaveToFile(ViewModel.ObsMerch);
         }
 
         private async void DisplayInputError(Exception exception)
