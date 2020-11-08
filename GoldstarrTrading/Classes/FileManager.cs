@@ -72,6 +72,32 @@ namespace GoldstarrTrading.Classes
         public string Phone;
     }
 
+    [StructLayout(LayoutKind.Sequential)]
+    struct SupplierStruct
+    {
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 20)]
+        public string Name;
+
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 30)]
+        public string Address;
+
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 20)]
+        public string Phone;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    struct AssociateStruct
+    {
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 20)]
+        public string Name;
+
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 30)]
+        public string Address;
+
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 20)]
+        public string Phone;
+    }
+
     static class FileManager
     {
         static StorageFolder storageFolder = ApplicationData.Current.LocalFolder;
@@ -102,7 +128,10 @@ namespace GoldstarrTrading.Classes
                     HandleMerchandiseModel(collection as ObservableCollection<MerchandiseModel>);
                     break;
                 case "CustomerModel":
-                    HandleCustomerModel(collection as ObservableCollection<CustomerModel>);
+                    HandleAssociateModel(collection as ObservableCollection<CustomerModel>);
+                    break;
+                case "SupplierModel":
+                    HandleAssociateModel(collection as ObservableCollection<SupplierModel>);
                     break;
             }
 
@@ -120,6 +149,47 @@ namespace GoldstarrTrading.Classes
             {
                 Debug.WriteLine("File " + file.Name + " could not be saved.");
             }
+        }
+
+        private static void HandleAssociateModel<T>(ObservableCollection<T> associateCollection) where T : AssociateModel
+        {
+            AssociateStruct[] assStruct = new AssociateStruct[associateCollection.Count];
+            for (int i = 0; i < associateCollection.Count; i++)
+            {
+                assStruct[i].Name = associateCollection[i].Name;
+                assStruct[i].Address = associateCollection[i].Address;
+                assStruct[i].Phone = associateCollection[i].Phone;
+            }
+
+            Header h = new Header
+            {
+                Name = typeof(T).Name,
+                size = Marshal.SizeOf(typeof(AssociateStruct)),
+                amount = associateCollection.Count
+            };
+
+            ObjectToByteArray(assStruct, h);
+        }
+
+        /* Not used right now
+        private static void HandleSupplierModel(ObservableCollection<SupplierModel> supp)
+        {
+            SupplierStruct[] suppStruct = new SupplierStruct[supp.Count];
+            for (int i = 0; i < supp.Count; i++)
+            {
+                suppStruct[i].Name = supp[i].Name;
+                suppStruct[i].Address = supp[i].Address;
+                suppStruct[i].Phone = supp[i].Phone;
+            }
+
+            Header h = new Header
+            {
+                Name = typeof(MerchandiseStruct).Name,
+                size = Marshal.SizeOf(typeof(MerchandiseStruct)),
+                amount = supp.Count
+            };
+
+            ObjectToByteArray(suppStruct, h);
         }
 
         private static void HandleCustomerModel(ObservableCollection<CustomerModel> cust)
@@ -141,6 +211,7 @@ namespace GoldstarrTrading.Classes
 
             ObjectToByteArray(custStruct, h);
         }
+         */
 
         private static void HandleMerchandiseModel(ObservableCollection<MerchandiseModel> merch)
         {
@@ -253,9 +324,9 @@ namespace GoldstarrTrading.Classes
                             break;
                         }
                     }
-                    else
+                    else // Matching header not found, keep looking
                     {
-                        fs.Position = (firstHeader.size * firstHeader.amount) + Marshal.SizeOf(h);
+                        fs.Position += (firstHeader.size * firstHeader.amount);
                         firstHeader = FindNextHeader(fs);
                         if (fs.Position >= fs.Length)
                         {
@@ -345,8 +416,11 @@ namespace GoldstarrTrading.Classes
                             case "MerchandiseStruct":
                                 ReadMerchandiseStruct(br, h, vm);
                                 break;
-                            case "CustomerStruct":
-                                ReadCustomerStruct(br, h, vm);
+                            case "CustomerModel":
+                                ReadAssociateStruct(br, h, vm);
+                                break;
+                            case "SupplierModel":
+                                ReadAssociateStruct(br, h, vm);
                                 break;
                         }
                     }
@@ -381,6 +455,36 @@ namespace GoldstarrTrading.Classes
             return h;
         }
 
+        private static void ReadAssociateStruct(BinaryReader br, Header h, ViewModel vm) 
+        {
+            AssociateStruct[] asc = new AssociateStruct[h.amount];
+            for (int i = 0; i < h.amount; i++)
+            {
+                asc[i] = ReadStructData<AssociateStruct>(br, h);
+            }
+
+            if (h.Name == "CustomerModel")
+                AddAssociateStructToList<CustomerModel>(asc, vm.CustomerList);
+            else if (h.Name == "SupplierModel")
+                AddAssociateStructToList<SupplierModel>(asc, vm.Supplier);
+        }
+
+        private static void AddAssociateStructToList<T>(AssociateStruct[] cs, ObservableCollection<T> vmList) where T : AssociateModel
+        {
+            for (int i = 0; i < cs.Length; i++)
+            {
+                T cm = (T)Activator.CreateInstance(typeof(T));
+
+                cm.Name = cs[i].Name;
+                cm.Address = cs[i].Address;
+                cm.Phone = cs[i].Phone;
+
+                vmList.Add(cm);
+            }
+        }
+
+
+        /* Not used for now
         private static void ReadCustomerStruct(BinaryReader br, Header h, ViewModel vm)
         {
             CustomerStruct[] cs = new CustomerStruct[h.amount];
@@ -405,6 +509,7 @@ namespace GoldstarrTrading.Classes
                 vm.CustomerList.Add(cm);
             }
         }
+         */
 
         private static void ReadMerchandiseStruct(BinaryReader br, Header h, ViewModel vm)
         {

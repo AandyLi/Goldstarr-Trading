@@ -44,6 +44,11 @@ namespace GoldstarrTrading
             ObsMerch.CollectionChanged += ObsMerch_CollectionChanged;
             CustomerList.CollectionChanged += CustomerList_CollectionChanged;
             Order.CollectionChanged += Order_CollectionChanged;
+            Supplier.CollectionChanged += Supplier_CollectionChanged;
+        }
+        private void Supplier_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            FileManager.SaveToFile(Supplier);
         }
 
         private void Order_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
