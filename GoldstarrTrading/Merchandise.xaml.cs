@@ -29,6 +29,8 @@ namespace GoldstarrTrading
     {
         
         private ViewModel vm { get; set; }
+        string message = string.Empty;
+        MessageDialog messageDialog;
 
         /// <summary>
         /// Binding Merchandise list to merchandiseList listview
@@ -42,16 +44,16 @@ namespace GoldstarrTrading
         {
             vm = ((ViewModel)e.Parameter);
             
-            merchandiseList.ItemsSource = ((ViewModel)e.Parameter).ObsMerch;
+            merchandiseList.ItemsSource = vm.ObsMerch;
+            
             SupplierNameListComboBox.ItemsSource = ((ViewModel)e.Parameter).Supplier;
            
         }
 
         private async void AddProductsButton_Click(object sender, RoutedEventArgs e)
         {
-            
-            var message = string.Empty;
-            MessageDialog messageDialog = new MessageDialog(message, "New product has been added");
+            message = "New product has been added";
+            messageDialog = new MessageDialog("Information",message);
 
             var supplier = string.Empty;
             var product = string.Empty;
@@ -93,6 +95,64 @@ namespace GoldstarrTrading
             await messageDialog.ShowAsync();
             SupplierNameListComboBox.SelectedIndex = -1;
             ProductNameTextBox.Text = string.Empty;
+        }
+
+        private async void SortListButton_Click(object sender, RoutedEventArgs e)
+        {
+            
+             
+            if (OrderBy.SelectionBoxItem == null && SortBy.SelectionBoxItem == null)
+            {
+                message = "Selection is missing";
+                messageDialog = new MessageDialog(message, "Information");
+                await messageDialog.ShowAsync();
+                return;
+            }
+            if(OrderBy.SelectionBoxItem == null)
+            {
+                message = "Selection Order by is missing";
+                messageDialog = new MessageDialog(message, "Information");
+                await messageDialog.ShowAsync();
+                return;
+            }
+            if(SortBy.SelectionBoxItem == null)
+            {
+                message = "Selection Sort by is missing";
+                messageDialog = new MessageDialog(message, "Information");
+                await messageDialog.ShowAsync();
+                return;
+            }
+            var orderBy = OrderBy.SelectionBoxItem.ToString();
+            var sortBy = SortBy.SelectionBoxItem.ToString();
+            switch (sortBy.ToLower())
+            {
+                case "product":
+                    {
+                        if (orderBy.ToLower() == "ascending")
+                        {
+                            vm.ObsMerch = new ObservableCollection<MerchandiseModel>(vm.ObsMerch.OrderBy(v => v.ProductName));
+                        }
+                        else 
+                        {
+                            vm.ObsMerch = new ObservableCollection<MerchandiseModel>(vm.ObsMerch.OrderByDescending(v => v.ProductName));
+                        }
+                        merchandiseList.ItemsSource = vm.ObsMerch;
+                        break;
+                    }
+                case "supplier":
+                    {
+                        if (orderBy.ToLower() == "ascending")
+                        {
+                            vm.ObsMerch = new ObservableCollection<MerchandiseModel>(vm.ObsMerch.OrderBy(v => v.Supplier));
+                        }
+                        else
+                        {
+                            vm.ObsMerch = new ObservableCollection<MerchandiseModel>(vm.ObsMerch.OrderByDescending(v => v.Supplier));
+                        }
+                        merchandiseList.ItemsSource = vm.ObsMerch;
+                        break;
+                    }
+            }
         }
     }
 }
