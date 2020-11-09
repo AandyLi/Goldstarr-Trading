@@ -206,15 +206,10 @@ namespace GoldstarrTrading
                     dgColumn.SortDirection = null;
                 }
             }
-        }
+        
 
-        private void AddCustomerButton_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
+       
+        
 
         }
     }
