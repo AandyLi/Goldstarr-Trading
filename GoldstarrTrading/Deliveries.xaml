@@ -11,8 +11,6 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="60"/>
-            <RowDefinition Height="150"/>
-            <RowDefinition Height="10"/>
             <RowDefinition Height="10*"/>
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
@@ -25,31 +23,44 @@
 
         <TextBlock Grid.Column="1" Grid.Row="0" HorizontalAlignment="Left" Text="Deliveries" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="40"/>
 
-        <Grid Grid.Row="1" Grid.Column="1" BorderThickness="5" BorderBrush="AliceBlue">
+
+        <Grid Grid.Column="1" Grid.Row="1" BorderThickness="5" BorderBrush="AliceBlue">
 
             <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="25"/>
-
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="150"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="385"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Text="Receive Delivery" Grid.Column="0" Grid.Row="0" FontSize="30" Margin="5"/>
+
+            <Grid Grid.Column="0" Grid.Row="1" BorderBrush="AliceBlue" BorderThickness="1" Margin="15">
+
+                <Grid.RowDefinitions>
+                <RowDefinition Height="25"/>
+                <RowDefinition Height="25"/>
+                <RowDefinition Height="40"/>
+                </Grid.RowDefinitions>
 
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="20"/>
                 <ColumnDefinition Width="155"/>
                 <ColumnDefinition Width="70"/>
-                <ColumnDefinition Width="90"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
+                 <ColumnDefinition Width="90"/>
+                </Grid.ColumnDefinitions>
 
-            <TextBlock Text="Receive Delivery" Grid.Column="1" Grid.Row="0" FontSize="30" Grid.ColumnSpan="2"/>
             <TextBlock Grid.Row="1" Grid.Column="1" Text="Product" FontWeight="SemiBold" HorizontalAlignment="Left" VerticalAlignment="Center"/>
             <TextBlock Grid.Row="1" Grid.Column="2" Text="Quantity" FontWeight="SemiBold" HorizontalAlignment="Left" VerticalAlignment="Center"/>
 
             <ComboBox x:Name="deliveryComboBox" Grid.Column="1" Grid.Row="2" Width="Auto" HorizontalAlignment="Left" VerticalAlignment="Center" SelectedIndex="0" />
             <TextBox x:Name="deliveryTextBox" Grid.Column="2" Grid.Row="2" TextWrapping="Wrap" PlaceholderText="Qty" HorizontalAlignment="Left" VerticalAlignment="Center" TextChanged="TextBox_TextChanged"/>
             <Button x:Name="deliveryButton" Content="Add Stock" Grid.Column="3" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center"  Click="Add_Click" IsEnabled="False"/>
-
+            </Grid>
         </Grid>
     </Grid>
 </Page>
