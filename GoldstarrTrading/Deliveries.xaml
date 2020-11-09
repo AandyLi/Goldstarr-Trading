@@ -30,7 +30,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="25"/>
-                <RowDefinition Height="45"/>
+
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
@@ -42,6 +42,7 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
+            <TextBlock Text="Receive Delivery" Grid.Column="1" Grid.Row="0" FontSize="30" Grid.ColumnSpan="2"/>
             <TextBlock Grid.Row="1" Grid.Column="1" Text="Product" FontWeight="SemiBold" HorizontalAlignment="Left" VerticalAlignment="Center"/>
             <TextBlock Grid.Row="1" Grid.Column="2" Text="Quantity" FontWeight="SemiBold" HorizontalAlignment="Left" VerticalAlignment="Center"/>
 
@@ -50,39 +51,5 @@
             <Button x:Name="deliveryButton" Content="Add Stock" Grid.Column="3" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center"  Click="Add_Click" IsEnabled="False"/>
 
         </Grid>
-
-        <ListView x:Name="deliveriesList" Grid.Row ="3" Grid.Column="1"  HorizontalContentAlignment="Stretch"  VerticalAlignment="Stretch" BorderBrush="AliceBlue" BorderThickness="5">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <Grid BorderThickness="1" BorderBrush="AliceBlue" Margin="10" HorizontalAlignment="Stretch">
-
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
-
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-
-                        <StackPanel x:Name="addStackPanel" Orientation="Vertical" Margin="5" Width="300">
-
-                            <TextBlock Grid.Column="0" Grid.Row="0" Margin="0,5,0,0">
-                                           <Run Text="Product Name: " FontSize="16" FontWeight="SemiBold"/>
-                                           <Run Text="{Binding ProductName}" FontSize="16"/>
-                            </TextBlock>
-                            <TextBlock Grid.Column="0" Grid.Row="0">
-                                           <Run Text="Supplier: " FontSize="16" FontWeight="SemiBold"/>
-                                           <Run Text="{Binding Supplier}" FontSize="16"/>
-                            </TextBlock>
-                            <TextBox x:Name="stackTextBox" Grid.Column="0" Grid.Row="1" Width="120" PlaceholderText="Enter amount..." HorizontalAlignment="Left" Margin="10"/>
-                            <Button x:Name="stackButton" Grid.Column="1" Grid.Row="1" Width="120" Content="Add Stock" Margin="10"/>
-
-                        </StackPanel>
-                    </Grid>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
     </Grid>
 </Page>
