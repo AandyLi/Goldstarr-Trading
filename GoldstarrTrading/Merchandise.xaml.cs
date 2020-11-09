@@ -52,8 +52,8 @@ namespace GoldstarrTrading
 
         private async void AddProductsButton_Click(object sender, RoutedEventArgs e)
         {
-            
-            messageDialog = new MessageDialog(message,"New product has been added");
+            message = "New product has been added";
+            messageDialog = new MessageDialog(message, "Information");
 
             var supplier = string.Empty;
             var product = string.Empty;
