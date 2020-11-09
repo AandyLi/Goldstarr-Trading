@@ -207,7 +207,9 @@ namespace GoldstarrTrading
             MessageDialog messageDialog = new MessageDialog(message, "Forwarding pending order");
             await messageDialog.ShowAsync();
 
+            
             vm.PendingOrder.Remove(tmpPendingOrder);
+            
             vm.Order.Insert(0, tmpPendingOrder);
         }
 
