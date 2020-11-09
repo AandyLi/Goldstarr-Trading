@@ -78,7 +78,7 @@
                              GridLinesVisibility="All"
                              AutoGenerateColumns="False"
                              CanUserSortColumns="True"
-                               Sorting="Supplier_Sorting"
+                             Sorting="Supplier_Sorting"
                              IsHitTestVisible="True"
                              AlternatingRowBackground="WhiteSmoke">
 

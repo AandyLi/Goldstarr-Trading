@@ -1,4 +1,5 @@
 ﻿using GoldstarrTrading.Classes;
+using Microsoft.Toolkit.Uwp.UI.Controls;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -229,6 +230,124 @@ namespace GoldstarrTrading
             }
         }
 
+        private void Order_Sorting(object sender, DataGridColumnEventArgs e)
+        {
+            //Use the Tag property to pass the bound column name for the sorting implementation
+
+            if (e.Column.Tag.ToString() == "Customer")
+            {
+                //Implement sort on the column using LINQ
+                if (e.Column.SortDirection == null)
+                {
+                    OrderHistory.ItemsSource = new ObservableCollection<OrderModel>(from item in vm.Order
+                                                                                       orderby item.CustomerName ascending
+                                                                                       select item);
+
+                    e.Column.SortDirection = DataGridSortDirection.Ascending;
+                }
+                else if (e.Column.SortDirection == DataGridSortDirection.Ascending)
+                {
+                    OrderHistory.ItemsSource = new ObservableCollection<OrderModel>(from item in vm.Order
+                                                                                       orderby item.CustomerName descending
+                                                                                       select item);
+
+                    e.Column.SortDirection = DataGridSortDirection.Descending;
+                }
+                else
+                {
+                    OrderHistory.ItemsSource = vm.Order;
+                    e.Column.SortDirection = null;
+                }
+            }
+
+            if (e.Column.Tag.ToString() == "Merchandise")
+            {
+                if (e.Column.SortDirection == null)
+                {
+                    OrderHistory.ItemsSource = new ObservableCollection<OrderModel>(from item in vm.Order
+                                                                                       orderby item.Merch.ProductName ascending
+                                                                                       select item);
+
+                    e.Column.SortDirection = DataGridSortDirection.Ascending;
+                }
+                else if (e.Column.SortDirection == DataGridSortDirection.Ascending)
+                {
+                    OrderHistory.ItemsSource = new ObservableCollection<OrderModel>(from item in vm.Order
+                                                                                       orderby item.Merch.ProductName descending
+                                                                                       select item);
+
+                    e.Column.SortDirection = DataGridSortDirection.Descending;
+                }
+                else
+                {
+                    OrderHistory.ItemsSource = vm.Order;
+                    e.Column.SortDirection = null;
+                }
+            }
+
+            if (e.Column.Tag.ToString() == "Amount")
+            {
+                if (e.Column.SortDirection == null)
+                {
+                    OrderHistory.ItemsSource = new ObservableCollection<OrderModel>(from item in vm.Order
+                                                                                       orderby item.OrderedAmount ascending
+                                                                                       select item);
+
+                    e.Column.SortDirection = DataGridSortDirection.Ascending;
+                }
+                else if (e.Column.SortDirection == DataGridSortDirection.Ascending)
+                {
+                    OrderHistory.ItemsSource = new ObservableCollection<OrderModel>(from item in vm.Order
+                                                                                       orderby item.OrderedAmount descending
+                                                                                       select item);
+
+                    e.Column.SortDirection = DataGridSortDirection.Descending;
+                }
+                else
+                {
+                    OrderHistory.ItemsSource = vm.Order;
+                    e.Column.SortDirection = null;
+                }
+            }
+
+            if (e.Column.Tag.ToString() == "Date")
+            {
+                if (e.Column.SortDirection == null)
+                {
+                    OrderHistory.ItemsSource = new ObservableCollection<OrderModel>(from item in vm.Order
+                                                                                       orderby item.OrderDate ascending
+                                                                                       select item);
+
+                    e.Column.SortDirection = DataGridSortDirection.Ascending;
+                }
+                else if (e.Column.SortDirection == DataGridSortDirection.Ascending)
+                {
+                    OrderHistory.ItemsSource = new ObservableCollection<OrderModel>(from item in vm.Order
+                                                                                       orderby item.OrderDate descending
+                                                                                       select item);
+
+                    e.Column.SortDirection = DataGridSortDirection.Descending;
+                }
+                else
+                {
+                    OrderHistory.ItemsSource = vm.Order;
+                    e.Column.SortDirection = null;
+                }
+            }
+
+
+
+            // add code to handle sorting by other columns as required
+
+            // Remove sorting indicators from other columns
+            foreach (var dgColumn in OrderHistory.Columns)
+            {
+                if (dgColumn.Tag.ToString() != e.Column.Tag.ToString())
+                {
+                    dgColumn.SortDirection = null;
+                }
+            }
+        }
     }
 
 

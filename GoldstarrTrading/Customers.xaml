@@ -5,50 +5,88 @@
     xmlns:local="using:GoldstarrTrading"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     mc:Ignorable="d"
     Background="{ThemeResource SystemColorInactiveCaptionBrush}">
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="60"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="40"/>
+            <RowDefinition Height="60" />
+            <RowDefinition Height="400*" />
+            <RowDefinition Height="40" />
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="40"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="40"/>
+            <ColumnDefinition Width="40" />
+            <ColumnDefinition Width="450" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="40" />
         </Grid.ColumnDefinitions>
+        <TextBlock Text="Customer Management" Grid.Column="1" Grid.Row="0" FontSize="40"/>
 
-        <TextBlock Grid.Column="1" Grid.Row="0" HorizontalAlignment="Left" Text="Customers" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="40"/>
+        <Grid Grid.Row="1" Grid.Column="1" BorderBrush="AliceBlue" BorderThickness="2" Margin="5">
 
-        <ListView ItemsSource="{x:Bind vm.CustomerList}" Grid.Row="1" Grid.Column="1" x:Name="TestListView" HorizontalAlignment="Stretch" BorderBrush="AliceBlue" BorderThickness="5">
-            <ListView.HeaderTemplate>
-                <DataTemplate>
-                    <Grid Padding="12" Background="{ThemeResource SystemBaseLowColor}">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Text="Customer Name" FontWeight="SemiBold" Style="{ThemeResource CaptionTextBlockStyle}"/>
-                    </Grid>
-                </DataTemplate>
-            </ListView.HeaderTemplate>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50" />
+                <RowDefinition Height="300" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
 
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
+            <TextBlock Text="Add Customer" Grid.Column="0" Grid.Row="0" FontSize="30" Margin="5"/>
 
-                        <TextBlock Text="{Binding Name}" FontWeight="Light" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" />
-                        
-                    </Grid>
-                </DataTemplate>
-            </ListView.ItemTemplate>
+            <Grid Grid.Row="1" BorderBrush="AliceBlue" BorderThickness="1" Margin="15">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50" />
+                    <RowDefinition Height="50" />
+                    <RowDefinition Height="50" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
 
-        </ListView>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="160" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Text="Customer Name:" FontSize="20" Grid.Row="0" VerticalAlignment="Center" Margin="5"/>
+                <TextBox x:Name="CustomerNameTextBox" Grid.Row="0" Grid.Column="2" PlaceholderText="Name" VerticalAlignment="Center" HorizontalAlignment="Left" Width="160" TextChanged="TextBox_TextChanged">
+                </TextBox>
+
+                <TextBlock Text="Address:" FontSize="20" Grid.Row="1" VerticalAlignment="Center" Margin="5"/>
+
+                <TextBox x:Name="CustomerAddressTextBox" Grid.Row="1" Grid.Column="2" PlaceholderText="Street, Zip, City" VerticalAlignment="Center" HorizontalAlignment="Left" Width="160" TextChanged="TextBox_TextChanged"/>
+
+                <TextBlock Text="Phone Number:" FontSize="20" Grid.Row="2" VerticalAlignment="Center" Margin="5"/>
+                <TextBox x:Name="CustomerPhoneTextBox" Grid.Row="2" Grid.Column="2" PlaceholderText="8-10 digits" VerticalAlignment="Center" HorizontalAlignment="Left" Width="160" TextChanged="TextBox_TextChanged" />
+
+                <Button x:Name="AddCustomerButton" Content="Add Customer" Grid.Row="3" Grid.Column="1" IsEnabled="False" VerticalAlignment="Top" Margin="5" Opacity="0.5" Click="AddCustomerButton_Click" />
+            </Grid>
+        </Grid>
+
+        <Grid Grid.Row="1" Grid.Column="2" BorderBrush="AliceBlue" BorderThickness="2" Margin="5">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Text="Customer Directory" Grid.Column="0" Grid.Row="0" FontSize="30" Margin="5"/>
+
+            <controls:DataGrid x:Name="customerList"
+                             ItemsSource="{x:Bind vm.CustomerList}"
+                             Grid.Column="1" Grid.Row="1"
+                             HorizontalAlignment="Stretch"
+                             VerticalAlignment="Stretch"
+                             GridLinesVisibility="All"
+                             AutoGenerateColumns="False"
+                             CanUserSortColumns="True"
+                             Sorting="Customer_Sorting"
+                             IsHitTestVisible="True"
+                             AlternatingRowBackground="WhiteSmoke">
+
+                <controls:DataGrid.Columns>
+                    <controls:DataGridTextColumn Header="Customer Name" Binding="{Binding Name}" CanUserSort="True" Tag="Name"/>
+                </controls:DataGrid.Columns>
+            </controls:DataGrid>
+        </Grid>
 
     </Grid>
 </Page>

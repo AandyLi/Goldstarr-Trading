@@ -4,7 +4,7 @@
     xmlns:local="using:GoldstarrTrading"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:Custom="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     x:Class="GoldstarrTrading.Stock"
     mc:Ignorable="d"
     Background="{ThemeResource SystemColorInactiveCaptionBrush}">
@@ -28,22 +28,24 @@
 
         <Grid Grid.Row="1" Grid.Column="1" BorderThickness="5" BorderBrush="AliceBlue">
 
-            <Custom:DataGrid x:Name="stockList"
+            <controls:DataGrid x:Name="stockList"
                              ItemsSource="{x:Bind vm.ObsMerch}"
                              Grid.Column="1" Grid.Row="1"
                              HorizontalAlignment="Stretch"
                              VerticalAlignment="Stretch"
                              GridLinesVisibility="All"
                              AutoGenerateColumns="False"
-                             IsHitTestVisible="False"
+                             CanUserSortColumns="True"
+                             Sorting="Stock_Sorting"
+                             IsHitTestVisible="True"
                              AlternatingRowBackground="WhiteSmoke">
 
-                <Custom:DataGrid.Columns>
-                    <Custom:DataGridTextColumn Header="Product Name" Binding="{Binding ProductName}"/>
-                    <Custom:DataGridTextColumn Header="Amount" Binding="{Binding Amount}"/>
-                </Custom:DataGrid.Columns>
+                <controls:DataGrid.Columns>
+                    <controls:DataGridTextColumn Header="Product Name" Binding="{Binding ProductName}" Tag="Name"/>
+                    <controls:DataGridTextColumn Header="Amount" Binding="{Binding Amount}" Tag="Amount"/>
+                </controls:DataGrid.Columns>
                 
-            </Custom:DataGrid>
+            </controls:DataGrid>
         </Grid>
 
     </Grid>
