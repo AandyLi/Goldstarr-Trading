@@ -51,7 +51,6 @@ namespace GoldstarrTrading
                 RaisePropertyChanged("PendingOrder");
             }
         }
-        public ViewModel()
 
         public void AllowCollectionChangedEvents()
         {
@@ -106,6 +105,7 @@ namespace GoldstarrTrading
             ObsMerch = new ObservableCollection<MerchandiseModel>();
             CustomerList = new ObservableCollection<CustomerModel>();
             Order = new ObservableCollection<OrderModel>();
+            PendingOrder = new ObservableCollection<OrderModel>();
             Supplier = new ObservableCollection<SupplierModel>();
         }
 

@@ -161,7 +161,7 @@ namespace GoldstarrTrading
             }
         }
 
-        private void ConfirmOrderButton_Click(object sender, RoutedEventArgs e)
+        private void ConfirmOrderButton_Click(object sender, RoutedEventArgs e) //lägg till skriva till fil (i båda satser)
         {
             
             OrderModel newOrder = new OrderModel();
@@ -212,6 +212,7 @@ namespace GoldstarrTrading
             vm.PendingOrder.Remove(tmpPendingOrder);
             
             vm.Order.Insert(0, tmpPendingOrder);
+
         }
 
         private void PendingOrdersList_Loaded(object sender, RoutedEventArgs e)
