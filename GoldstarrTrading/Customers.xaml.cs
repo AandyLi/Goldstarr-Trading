@@ -42,30 +42,30 @@ namespace GoldstarrTrading
         }
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if ((SupplierNameTextBox.Text.Length > 0) && (SupplierAddressTextBox.Text.Length > 0) && (SupplierPhoneTextBox.Text.Length > 0))
+            if ((CustomerNameTextBox.Text.Length > 0) && (CustomerAddressTextBox.Text.Length > 0) && (CustomerPhoneTextBox.Text.Length > 0))
             {
-                AddSupplierButtonVisible(true);
+                AddCustomerButtonVisible(true);
             }
             else
             {
-                AddSupplierButtonVisible(false);
+                AddCustomerButtonVisible(false);
             }
         }
 
-        private void AddSupplierButtonVisible(bool value)
+        private void AddCustomerButtonVisible(bool value)
         {
             if (value)
             {
-                AddSupplierButton.Opacity = 1;
+                AddCustomerButton.Opacity = 1;
             }
             else
             {
-                AddSupplierButton.Opacity = 0.5;
+                AddCustomerButton.Opacity = 0.5;
             }
 
-            AddSupplierButton.IsEnabled = value;
+            AddCustomerButton.IsEnabled = value;
         }
-        private bool CheckDuplicateSupplierEntry()
+        private bool CheckDuplicateCustomerEntry()
         {
 
             foreach (var supplier in vm.CustomerList)
@@ -89,9 +89,9 @@ namespace GoldstarrTrading
 
             try
             {
-                newCustomerName = SupplierNameTextBox.Text;
-                newCustomerAddress = SupplierAddressTextBox.Text;
-                newCustomerPhone = SupplierPhoneTextBox.Text;
+                newCustomerName = CustomerNameTextBox.Text;
+                newCustomerAddress = CustomerAddressTextBox.Text;
+                newCustomerPhone = CustomerPhoneTextBox.Text;
 
                 if (!IsPhoneNumber(newCustomerPhone))
                 {
@@ -115,12 +115,12 @@ namespace GoldstarrTrading
             //}
             return true;
         }
-        private async void SupplierAddedDialog()
+        private async void CustomerAddedDialog()
         {
             ContentDialog inputError = new ContentDialog()
             {
-                Title = "Supplier Added",
-                Content = $"New supplier {newCustomerName} was successfully added to the Supplier Directory.",
+                Title = "Customer Added",
+                Content = $"New customer {newCustomerName} was successfully added to the Customer Directory.",
                 CloseButtonText = "OK"
             };
 
@@ -131,8 +131,8 @@ namespace GoldstarrTrading
         {
             ContentDialog inputError = new ContentDialog()
             {
-                Title = "Duplicate Supplier",
-                Content = $"Supplier is already in the Supplier Directory.",
+                Title = "Duplicate Customer",
+                Content = $"Customer is already in the Customer Directory.",
                 CloseButtonText = "OK"
             };
 
@@ -141,19 +141,19 @@ namespace GoldstarrTrading
        
         private void EmptyAllTextboxes()
         {
-            SupplierNameTextBox.Text = string.Empty;
-            SupplierAddressTextBox.Text = string.Empty;
-            SupplierPhoneTextBox.Text = string.Empty;
+            CustomerNameTextBox.Text = string.Empty;
+            CustomerAddressTextBox.Text = string.Empty;
+            CustomerPhoneTextBox.Text = string.Empty;
         }
-        private void AddSupplierButton_Click(object sender, RoutedEventArgs e)
+        private void AddCustomerButton_Click(object sender, RoutedEventArgs e)
         {
             if (CheckTextBoxFormat() == true)
             {
-                if (CheckDuplicateSupplierEntry() == false)
+                if (CheckDuplicateCustomerEntry() == false)
                 {
                     vm.CustomerList.Add(new CustomerModel() { Name = newCustomerName, Address = newCustomerAddress, Phone = newCustomerPhone });
 
-                    SupplierAddedDialog();
+                    CustomerAddedDialog();
                 }
                 else
                 {

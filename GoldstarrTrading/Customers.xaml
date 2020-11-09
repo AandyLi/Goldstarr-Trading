@@ -74,16 +74,16 @@
                 </Grid.ColumnDefinitions>
 
                 <TextBlock Text="Customer Name:" FontSize="20" Grid.Row="0" VerticalAlignment="Center" Margin="5"/>
-                <TextBox x:Name="SupplierNameTextBox" Grid.Row="0" Grid.Column="2" PlaceholderText="Name" VerticalAlignment="Center" HorizontalAlignment="Left" Width="160" TextChanged="TextBox_TextChanged"/>
+                <TextBox x:Name="CustomerNameTextBox" Grid.Row="0" Grid.Column="2" PlaceholderText="Name" VerticalAlignment="Center" HorizontalAlignment="Left" Width="160" TextChanged="TextBox_TextChanged"/>
 
                 <TextBlock Text="Address:" FontSize="20" Grid.Row="1" VerticalAlignment="Center" Margin="5"/>
 
-                <TextBox x:Name="SupplierAddressTextBox" Grid.Row="1" Grid.Column="2" PlaceholderText="Street, Zip, City" VerticalAlignment="Center" HorizontalAlignment="Left" Width="160" TextChanged="TextBox_TextChanged"/>
+                <TextBox x:Name="CustomerAddressTextBox" Grid.Row="1" Grid.Column="2" PlaceholderText="Street, Zip, City" VerticalAlignment="Center" HorizontalAlignment="Left" Width="160" TextChanged="TextBox_TextChanged"/>
 
                 <TextBlock Text="Phone Number:" FontSize="20" Grid.Row="2" VerticalAlignment="Center" Margin="5"/>
-                <TextBox x:Name="SupplierPhoneTextBox" Grid.Row="2" Grid.Column="2" PlaceholderText="8-10 digits" VerticalAlignment="Center" HorizontalAlignment="Left" Width="160" TextChanged="TextBox_TextChanged" />
+                <TextBox x:Name="CustomerPhoneTextBox" Grid.Row="2" Grid.Column="2" PlaceholderText="8-10 digits" VerticalAlignment="Center" HorizontalAlignment="Left" Width="160" TextChanged="TextBox_TextChanged" />
 
-                <Button x:Name="AddSupplierButton" Content="Add Supplier" Grid.Row="3" Grid.Column="1" IsEnabled="False" VerticalAlignment="Top" Margin="5" Opacity="0.5" Click="AddSupplierButton_Click" />
+                <Button x:Name="AddCustomerButton" Content="Add Customer" Grid.Row="3" Grid.Column="1" IsEnabled="False" VerticalAlignment="Top" Margin="5" Opacity="0.5" Click="AddCustomerButton_Click" />
             </Grid>
         </Grid>
 
