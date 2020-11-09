@@ -29,6 +29,8 @@ namespace GoldstarrTrading
     {
         
         private ViewModel vm { get; set; }
+        string message = string.Empty;
+        MessageDialog messageDialog;
 
         /// <summary>
         /// Binding Merchandise list to merchandiseList listview
@@ -38,29 +40,32 @@ namespace GoldstarrTrading
             this.InitializeComponent();
         }
 
-
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             vm = ((ViewModel)e.Parameter);
-            merchandiseList.ItemsSource = ((ViewModel)e.Parameter).ObsMerch;
+            
+            merchandiseList.ItemsSource = vm.ObsMerch;
+            
+            SupplierNameListComboBox.ItemsSource = ((ViewModel)e.Parameter).Supplier;
+           
         }
 
         private async void AddProductsButton_Click(object sender, RoutedEventArgs e)
         {
-            var message = string.Empty;
-            MessageDialog messageDialog = new MessageDialog(message, "New product has been added");
             
+            messageDialog = new MessageDialog(message,"New product has been added");
+
             var supplier = string.Empty;
             var product = string.Empty;
 
-            if (string.IsNullOrEmpty(SupplierNameTextBox.Text) && string.IsNullOrEmpty(ProductNameTextBox.Text))
+            if ((SupplierNameListComboBox.SelectedValue == null) && string.IsNullOrEmpty(ProductNameTextBox.Text))
             {
                 message = "Data is missing";
                 messageDialog = new MessageDialog(message, "Information");
                 await messageDialog.ShowAsync();
                 return;
             }
-            if (string.IsNullOrEmpty(SupplierNameTextBox.Text))
+            if (SupplierNameListComboBox.SelectedValue == null)
             {
                 message = "Supplier information is missing";
                 messageDialog = new MessageDialog(message, "Information");
@@ -74,23 +79,12 @@ namespace GoldstarrTrading
                 await messageDialog.ShowAsync();
                 return;
             }
-
-            if (SupplierNameTextBox.Text.All(char.IsLetter))
-                supplier = SupplierNameTextBox.Text;
-
-            else
+            
+            supplier = SupplierNameListComboBox.SelectedValue.ToString();
+            product = ProductNameTextBox.Text;
+            if (vm.ObsMerch.Any(v => v.ProductName.ToLower().Trim() == product.ToLower().Trim()))
             {
-                message = "Invalid supplier data";
-                messageDialog = new MessageDialog(message, "Information");
-                await messageDialog.ShowAsync();
-                SupplierNameTextBox.Text = string.Empty;
-                return;
-            }
-            if (ProductNameTextBox.Text.All(char.IsLetter))
-                product = ProductNameTextBox.Text;
-            else
-            {
-                message = "Invalid product data";
+                message = "The product already exists";
                 messageDialog = new MessageDialog(message, "Information");
                 await messageDialog.ShowAsync();
                 ProductNameTextBox.Text = string.Empty;
@@ -99,8 +93,66 @@ namespace GoldstarrTrading
 
             vm.ObsMerch.Add(new MerchandiseModel() { Supplier = supplier, ProductName = product });
             await messageDialog.ShowAsync();
-            SupplierNameTextBox.Text = string.Empty;
+            SupplierNameListComboBox.SelectedIndex = -1;
             ProductNameTextBox.Text = string.Empty;
+        }
+
+        private async void SortListButton_Click(object sender, RoutedEventArgs e)
+        {
+            
+             
+            if (OrderBy.SelectionBoxItem == null && SortBy.SelectionBoxItem == null)
+            {
+                message = "Selection is missing";
+                messageDialog = new MessageDialog(message, "Information");
+                await messageDialog.ShowAsync();
+                return;
+            }
+            if(OrderBy.SelectionBoxItem == null)
+            {
+                message = "Selection Order by is missing";
+                messageDialog = new MessageDialog(message, "Information");
+                await messageDialog.ShowAsync();
+                return;
+            }
+            if(SortBy.SelectionBoxItem == null)
+            {
+                message = "Selection Sort by is missing";
+                messageDialog = new MessageDialog(message, "Information");
+                await messageDialog.ShowAsync();
+                return;
+            }
+            var orderBy = OrderBy.SelectionBoxItem.ToString();
+            var sortBy = SortBy.SelectionBoxItem.ToString();
+            switch (sortBy.ToLower())
+            {
+                case "product":
+                    {
+                        if (orderBy.ToLower() == "ascending")
+                        {
+                            vm.ObsMerch = new ObservableCollection<MerchandiseModel>(vm.ObsMerch.OrderBy(v => v.ProductName));
+                        }
+                        else 
+                        {
+                            vm.ObsMerch = new ObservableCollection<MerchandiseModel>(vm.ObsMerch.OrderByDescending(v => v.ProductName));
+                        }
+                        merchandiseList.ItemsSource = vm.ObsMerch;
+                        break;
+                    }
+                case "supplier":
+                    {
+                        if (orderBy.ToLower() == "ascending")
+                        {
+                            vm.ObsMerch = new ObservableCollection<MerchandiseModel>(vm.ObsMerch.OrderBy(v => v.Supplier));
+                        }
+                        else
+                        {
+                            vm.ObsMerch = new ObservableCollection<MerchandiseModel>(vm.ObsMerch.OrderByDescending(v => v.Supplier));
+                        }
+                        merchandiseList.ItemsSource = vm.ObsMerch;
+                        break;
+                    }
+            }
         }
     }
 }

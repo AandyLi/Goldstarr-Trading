@@ -11,8 +11,9 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="60"/>
-            <RowDefinition/>
-            <RowDefinition Height="145.6"/>
+            <RowDefinition Height="398.4"/>
+            <RowDefinition Height="164"/>
+            <RowDefinition Height="188.8"/>
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
@@ -20,19 +21,50 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="40"/>
         </Grid.ColumnDefinitions>
+        <Grid Grid.Row="2" BorderBrush="AliceBlue" BorderThickness="5" Margin="885,7,1,32" Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="85" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
 
+            <Grid.ColumnDefinitions>
+
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <ComboBox x:Name="OrderBy" Margin="10,73,0,0" Width="158" Height="37" Grid.RowSpan="2" RenderTransformOrigin="0.468,-0.276">
+                <ComboBoxItem Content="Ascending"/>
+                <ComboBoxItem Content="Descending"/>
+            </ComboBox>
+            <ComboBox x:Name="SortBy" Margin="188,73,0,0" Width="158" Height="37" Grid.RowSpan="2">
+                <ComboBoxItem Content="Product"/>
+                <ComboBoxItem Content="Supplier"/>
+            </ComboBox>
+            <TextBlock HorizontalAlignment="Left" Margin="15,0,0,0" Text="Sort merchandise" TextWrapping="Wrap" VerticalAlignment="Top" Height="26" Width="122" FontWeight="Bold"/>
+            <TextBlock HorizontalAlignment="Left" Margin="45,43,0,0" Text="Sort Order" TextWrapping="Wrap" VerticalAlignment="Top" Height="26" Width="70" />
+            <TextBlock HorizontalAlignment="Left" Margin="240,42,0,0" Text="Sort By" TextWrapping="Wrap" VerticalAlignment="Top" Height="26" Width="50" />
+        </Grid>
+
+        <Grid Grid.Row="2" BorderBrush="AliceBlue" BorderThickness="5" Margin="0,7,886,32" Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="85" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+        </Grid>
+
+        <Button x:Name="SortListButton" Click="SortListButton_Click" Content="Sort" Grid.Column="1" Margin="1254,82,0,0" Height="37" Width="134" Background="#33000000" Grid.Row="2" FontSize="14" VerticalAlignment="Top"/>
         <TextBlock Grid.Column="1" Grid.Row="0" HorizontalAlignment="Left" Text="Merchandise" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="40" Width="246" Height="55" Margin="10,0,0,0"/>
-        <Button Content="Add Product" x:Name="AddProductsButton"  Grid.Row ="2"  Grid.Column="1" Click="AddProductsButton_Click" Height="35" Margin="378,92,0,19" Width="120" VerticalAlignment="Stretch" />
-        <TextBox Grid.Column="1" HorizontalAlignment="Left" x:Name="ProductNameTextBox"  Margin="192,92,0,19" Grid.Row="2" Text="" TextWrapping="Wrap" Height="35" Width="158" TextAlignment="Left" FontSize="14" HorizontalContentAlignment="Center" VerticalContentAlignment="Top" RenderTransformOrigin="-0.061,0.331"/>
-        <TextBox Grid.Column="1" HorizontalAlignment="Left" x:Name="SupplierNameTextBox"  Margin="10,92,0,19" Grid.Row="2" Text="" TextWrapping="Wrap" Height="35" Width="158" TextAlignment="Left" FontSize="14" VerticalContentAlignment="Center" HorizontalContentAlignment="Left"/>
-        <TextBlock Grid.Column="1" HorizontalAlignment="Left" Margin="247,55,0,0" Grid.Row="2" Text="Product" TextWrapping="Wrap" VerticalAlignment="Top"/>
-        <TextBlock Grid.Column="1" HorizontalAlignment="Left" Margin="64,54,0,0" Grid.Row="2" Text="Supplier" TextWrapping="Wrap" VerticalAlignment="Top"/>
+        <Button Content="Add Product" x:Name="AddProductsButton"  Grid.Row ="2" Grid.Column="1" Click="AddProductsButton_Click" Margin="382,81,0,0" Width="120" VerticalAlignment="Top" Height="37" RenderTransformOrigin="0.429,0.684" />
+        <TextBox Grid.Column="1" HorizontalAlignment="Left" x:Name="ProductNameTextBox"  Margin="193,81,0,0" Grid.Row="2" Text="" TextWrapping="Wrap" Width="158" TextAlignment="Left" FontSize="14" HorizontalContentAlignment="Center" VerticalContentAlignment="Top" RenderTransformOrigin="-0.061,0.331" Height="37" VerticalAlignment="Top"/>
+        <ComboBox DisplayMemberPath="Name" Grid.Column="1" x:Name="SupplierNameListComboBox"  Margin="10,81,0,0" Grid.Row="2" Width="158"  FontSize="14" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" SelectedValuePath="Name" RenderTransformOrigin="0.501,0.466" Height="37"/>
+        <TextBlock Grid.Column="1" HorizontalAlignment="Left" Margin="248,50,0,0" Grid.Row="2" Text="Product" TextWrapping="Wrap" VerticalAlignment="Top" Height="19" Width="51"/>
+        <TextBlock Grid.Column="1" HorizontalAlignment="Left" Margin="64,50,0,0" Grid.Row="2" Text="Supplier" TextWrapping="Wrap" VerticalAlignment="Top" Height="19" Width="51"/>
 
-
-
-
-
-        <GridView x:Name="merchandiseList" Grid.Row ="1" Grid.Column="1" BorderBrush="AliceBlue" BorderThickness="5" Margin="0,0,0,88">
+        <GridView x:Name="merchandiseList" Grid.Row ="1" Grid.Column="1" BorderBrush="AliceBlue" BorderThickness="5" Height="379" VerticalAlignment="Top">
             <GridView.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Vertical" Margin="5" Width="250">
@@ -49,13 +81,9 @@
                 </DataTemplate>
             </GridView.ItemTemplate>
 
-
         </GridView>
-
-
-
+        <TextBlock Grid.Column="1" HorizontalAlignment="Left" Margin="32,10,0,0" Grid.Row="2" Text="Add product" TextWrapping="Wrap" VerticalAlignment="Top" Height="24" Width="100" FontWeight="Bold"/>
 
     </Grid>
-
 
 </Page>
