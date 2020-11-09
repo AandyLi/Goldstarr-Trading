@@ -33,7 +33,7 @@ namespace GoldstarrTrading.Classes
     {
         public int OrderedAmount;
 
-        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 20)]
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 30)]
         public string OrderDate;
 
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 20)]

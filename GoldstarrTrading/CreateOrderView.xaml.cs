@@ -102,7 +102,7 @@ namespace GoldstarrTrading
             }
             AmountDropDown.SelectedIndex = 0;
         }
-        
+
         private void ResetAddOrderButton()
         {
             ConfirmOrderButton.IsEnabled = false;
@@ -164,7 +164,7 @@ namespace GoldstarrTrading
 
         private void ConfirmOrderButton_Click(object sender, RoutedEventArgs e) //lägg till skriva till fil (i båda satser)
         {
-            
+
             OrderModel newOrder = new OrderModel();
             OrderModel pendingOrder = new OrderModel();
             CustomerModel tmpCustModel = CustomerCombo.SelectedItem as CustomerModel;
@@ -205,13 +205,14 @@ namespace GoldstarrTrading
             Grid grid = (Grid)parent;
             OrderModel tmpPendingOrder = grid.DataContext as OrderModel;
 
+
             var message = "Pending order will be forwarded to warehouse and saved in Order History.";
             MessageDialog messageDialog = new MessageDialog(message, "Forwarding pending order");
             await messageDialog.ShowAsync();
 
-            
+
+            tmpPendingOrder.Merch.RemoveStock(tmpPendingOrder.OrderedAmount);
             vm.PendingOrder.Remove(tmpPendingOrder);
-            
             vm.Order.Insert(0, tmpPendingOrder);
 
         }
@@ -240,16 +241,16 @@ namespace GoldstarrTrading
                 if (e.Column.SortDirection == null)
                 {
                     OrderHistory.ItemsSource = new ObservableCollection<OrderModel>(from item in vm.Order
-                                                                                       orderby item.CustomerName ascending
-                                                                                       select item);
+                                                                                    orderby item.CustomerName ascending
+                                                                                    select item);
 
                     e.Column.SortDirection = DataGridSortDirection.Ascending;
                 }
                 else if (e.Column.SortDirection == DataGridSortDirection.Ascending)
                 {
                     OrderHistory.ItemsSource = new ObservableCollection<OrderModel>(from item in vm.Order
-                                                                                       orderby item.CustomerName descending
-                                                                                       select item);
+                                                                                    orderby item.CustomerName descending
+                                                                                    select item);
 
                     e.Column.SortDirection = DataGridSortDirection.Descending;
                 }
@@ -265,16 +266,16 @@ namespace GoldstarrTrading
                 if (e.Column.SortDirection == null)
                 {
                     OrderHistory.ItemsSource = new ObservableCollection<OrderModel>(from item in vm.Order
-                                                                                       orderby item.Merch.ProductName ascending
-                                                                                       select item);
+                                                                                    orderby item.Merch.ProductName ascending
+                                                                                    select item);
 
                     e.Column.SortDirection = DataGridSortDirection.Ascending;
                 }
                 else if (e.Column.SortDirection == DataGridSortDirection.Ascending)
                 {
                     OrderHistory.ItemsSource = new ObservableCollection<OrderModel>(from item in vm.Order
-                                                                                       orderby item.Merch.ProductName descending
-                                                                                       select item);
+                                                                                    orderby item.Merch.ProductName descending
+                                                                                    select item);
 
                     e.Column.SortDirection = DataGridSortDirection.Descending;
                 }
@@ -290,16 +291,16 @@ namespace GoldstarrTrading
                 if (e.Column.SortDirection == null)
                 {
                     OrderHistory.ItemsSource = new ObservableCollection<OrderModel>(from item in vm.Order
-                                                                                       orderby item.OrderedAmount ascending
-                                                                                       select item);
+                                                                                    orderby item.OrderedAmount ascending
+                                                                                    select item);
 
                     e.Column.SortDirection = DataGridSortDirection.Ascending;
                 }
                 else if (e.Column.SortDirection == DataGridSortDirection.Ascending)
                 {
                     OrderHistory.ItemsSource = new ObservableCollection<OrderModel>(from item in vm.Order
-                                                                                       orderby item.OrderedAmount descending
-                                                                                       select item);
+                                                                                    orderby item.OrderedAmount descending
+                                                                                    select item);
 
                     e.Column.SortDirection = DataGridSortDirection.Descending;
                 }
@@ -315,16 +316,16 @@ namespace GoldstarrTrading
                 if (e.Column.SortDirection == null)
                 {
                     OrderHistory.ItemsSource = new ObservableCollection<OrderModel>(from item in vm.Order
-                                                                                       orderby item.OrderDate ascending
-                                                                                       select item);
+                                                                                    orderby item.OrderDate ascending
+                                                                                    select item);
 
                     e.Column.SortDirection = DataGridSortDirection.Ascending;
                 }
                 else if (e.Column.SortDirection == DataGridSortDirection.Ascending)
                 {
                     OrderHistory.ItemsSource = new ObservableCollection<OrderModel>(from item in vm.Order
-                                                                                       orderby item.OrderDate descending
-                                                                                       select item);
+                                                                                    orderby item.OrderDate descending
+                                                                                    select item);
 
                     e.Column.SortDirection = DataGridSortDirection.Descending;
                 }
