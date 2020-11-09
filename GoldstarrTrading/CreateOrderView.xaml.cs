@@ -3,17 +3,22 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Security.Cryptography;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
@@ -27,10 +32,10 @@ namespace GoldstarrTrading
     {
         private ViewModel vm { get; set; }
         private ObservableCollection<MerchandiseModel> localMerchandise;
+        private bool isOrderPending;
         public CreateOrderView()
         {
             this.InitializeComponent();
-
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -42,20 +47,13 @@ namespace GoldstarrTrading
         private void PopulateAvailableMerchandise()
         {
             localMerchandise = new ObservableCollection<MerchandiseModel>();
-            foreach (var item in vm.ObsMerch.Where(x => x.Amount > 0))
+            foreach (var item in vm.ObsMerch)
             {
                 localMerchandise.Add(item);
             }
         }
 
-       
-        public static ObservableCollection<MerchandiseModel> Filter(ObservableCollection<MerchandiseModel> merch)
-
-            => (ObservableCollection<MerchandiseModel>)merch.Where(x => x.Amount > 0);
-            
-        
-
-        private void MerchCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private async void MerchCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             MerchandiseModel tmpMerchModel = GetMerchModel(sender);
 
@@ -67,6 +65,26 @@ namespace GoldstarrTrading
                 {
                     AmountDropDown.Items.Add(i + 1);
                 }
+            }
+
+            AmountDropDown.Visibility = Visibility.Visible;
+            AmountDropDown.IsEnabled = true;
+            AmountTextBox.Visibility = Visibility.Collapsed;
+            ClearAmountTextBox();
+
+            var message = "Product has been added to order";
+            MessageDialog messageDialog = new MessageDialog(message);
+
+            if (tmpMerchModel.Amount <= 0)
+            {
+                message = "This product is not currently in stock! If you proceed with the order, it will be added to the pending order queue.";
+                messageDialog = new MessageDialog(message, "Warning!");
+                await messageDialog.ShowAsync();
+
+                AmountDropDown.IsEnabled = false;
+                AmountDropDown.Visibility = Visibility.Collapsed;
+                AmountTextBox.Visibility = Visibility.Visible;
+                return;
             }
 
             // Always reset button when we change merchandise
@@ -83,15 +101,7 @@ namespace GoldstarrTrading
             }
             AmountDropDown.SelectedIndex = 0;
         }
-
-        private void UpdateMerchCombo(MerchandiseModel merch)
-        {
-            if (merch.Amount == 0)
-            {
-                localMerchandise.Remove(merch);
-            }
-        }
-
+        
         private void ResetAddOrderButton()
         {
             ConfirmOrderButton.IsEnabled = false;
@@ -101,6 +111,11 @@ namespace GoldstarrTrading
         private void ClearAmountDropDown()
         {
             AmountDropDown.Items.Clear();
+        }
+
+        private void ClearAmountTextBox()
+        {
+            AmountTextBox.Text = string.Empty;
         }
 
         private MerchandiseModel GetMerchModel(object obj)
@@ -113,11 +128,27 @@ namespace GoldstarrTrading
 
         private void AmountDropDown_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (CustomerCombo.SelectedValue?.ToString() != "" 
+            if (CustomerCombo.SelectedValue?.ToString() != ""
                 && CustomerCombo.SelectedValue != null)
             {
                 ConfirmOrderButton.IsEnabled = true;
                 ConfirmOrderButton.Opacity = 1.0;
+            }
+        }
+
+        private void AmountTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (AmountTextBox.Text != "" && UInt32.TryParse(AmountTextBox.Text, out uint orderedAmount) && orderedAmount > 0)
+            {
+                ConfirmOrderButton.IsEnabled = true;
+                ConfirmOrderButton.Opacity = 1.0;
+                isOrderPending = true;
+            }
+            else
+            {
+                ConfirmOrderButton.IsEnabled = false;
+                ConfirmOrderButton.Opacity = 0.5;
+                isOrderPending = false;
             }
         }
 
@@ -134,22 +165,72 @@ namespace GoldstarrTrading
         {
             
             OrderModel newOrder = new OrderModel();
+            OrderModel pendingOrder = new OrderModel();
             CustomerModel tmpCustModel = CustomerCombo.SelectedItem as CustomerModel;
 
             MerchandiseModel tmpMerchModel = GetMerchModel(MerchCombo);
 
-            int orderedAmount = orderedAmount = Int32.Parse(AmountDropDown.SelectedItem.ToString());
-            tmpMerchModel.RemoveStock(orderedAmount);
-            ClearAmountDropDown();
+            int orderedAmount;
 
-            newOrder.CreateOrder(tmpCustModel.Name, tmpMerchModel, orderedAmount);
+            if (isOrderPending)
+            {
+                orderedAmount = Int32.Parse(AmountTextBox.Text);
+                pendingOrder.CreateOrder(tmpCustModel.Name, tmpMerchModel, orderedAmount);
 
-            vm.Order.Insert(0, newOrder);
+                vm.PendingOrder.Insert(0, pendingOrder);
 
-            UpdateAmountDropDown(tmpMerchModel);
-            UpdateMerchCombo(tmpMerchModel);
+                ResetAddOrderButton();
+                ClearAmountTextBox();
+            }
 
-            FileManager.SaveToFile(vm.ObsMerch);
+            else
+            {
+                orderedAmount = Int32.Parse(AmountDropDown.SelectedItem.ToString());
+                tmpMerchModel.RemoveStock(orderedAmount);
+
+                newOrder.CreateOrder(tmpCustModel.Name, tmpMerchModel, orderedAmount);
+
+                vm.Order.Insert(0, newOrder);
+
+                ClearAmountDropDown();
+                UpdateAmountDropDown(tmpMerchModel);
+            }
+
         }
+
+        private async void ConfirmPendingOrderButton_Click(object sender, RoutedEventArgs e) //this is for each ConfirmPendingOrderButton child
+        {
+            var parent = (sender as Button).Parent;
+            Grid grid = (Grid)parent;
+            OrderModel tmpPendingOrder = grid.DataContext as OrderModel;
+
+            var message = "Pending order will be forwarded to warehouse and saved in Order History.";
+            MessageDialog messageDialog = new MessageDialog(message, "Forwarding pending order");
+            await messageDialog.ShowAsync();
+
+            
+            vm.PendingOrder.Remove(tmpPendingOrder);
+            
+            vm.Order.Insert(0, tmpPendingOrder);
+        }
+
+        private void PendingOrdersList_Loaded(object sender, RoutedEventArgs e)
+        {
+            var parent = (sender as Button).Parent;
+            Grid grid = (Grid)parent;
+            OrderModel tmpPendingOrder = grid.DataContext as OrderModel;
+
+            MerchandiseModel tmpMerch = vm.ObsMerch.First(x => x.ProductName == tmpPendingOrder.Merch.ProductName);
+
+            if (tmpMerch.Amount >= tmpPendingOrder.OrderedAmount)
+            {
+                (sender as Button).IsEnabled = true;
+            }
+        }
+
     }
+
+
+
+
 }

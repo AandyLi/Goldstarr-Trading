@@ -20,6 +20,5 @@ namespace GoldstarrTrading
             this.Merch = merchandise;
             this.OrderedAmount = orderedAmount;
         }
-
     }
 }
