@@ -148,7 +148,7 @@
                     <controls:DataGridTextColumn Header="Customer" Binding="{Binding CustomerName}" CanUserSort="True" Tag="Customer"/>
                     <controls:DataGridTextColumn Header="Merchandise" Binding="{Binding Merch.ProductName}" CanUserSort="True" Tag="Merchandise"/>
                     <controls:DataGridTextColumn Header="Order Amount" Binding="{Binding OrderedAmount}" CanUserSort="True" Tag="Amount"/>
-                    <controls:DataGridTextColumn Header="Order Date" Binding="{Binding OrderedAmount}" CanUserSort="True" Tag="Date"/>
+                    <controls:DataGridTextColumn Header="Order Date" Binding="{Binding OrderDate}" CanUserSort="True" Tag="Date"/>
                 </controls:DataGrid.Columns>
             </controls:DataGrid>
         </Grid>
