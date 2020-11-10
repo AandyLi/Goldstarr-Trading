@@ -53,7 +53,7 @@ namespace GoldstarrTrading
         private async void AddProductsButton_Click(object sender, RoutedEventArgs e)
         {
             message = "New product has been added";
-            messageDialog = new MessageDialog(message, "Information");
+            messageDialog = new MessageDialog(message, "Confirmation");
 
             var supplier = string.Empty;
             var product = string.Empty;
@@ -61,21 +61,21 @@ namespace GoldstarrTrading
             if ((SupplierNameListComboBox.SelectedValue == null) && string.IsNullOrEmpty(ProductNameTextBox.Text))
             {
                 message = "Data is missing";
-                messageDialog = new MessageDialog(message, "Information");
+                messageDialog = new MessageDialog(message, "Warning");
                 await messageDialog.ShowAsync();
                 return;
             }
             if (SupplierNameListComboBox.SelectedValue == null)
             {
                 message = "Supplier information is missing";
-                messageDialog = new MessageDialog(message, "Information");
+                messageDialog = new MessageDialog(message, "Warning");
                 await messageDialog.ShowAsync();
                 return;
             }
             if (string.IsNullOrEmpty(ProductNameTextBox.Text))
             {
                 message = "Product information is missing";
-                messageDialog = new MessageDialog(message, "Information");
+                messageDialog = new MessageDialog(message, "Warning");
                 await messageDialog.ShowAsync();
                 return;
             }
@@ -85,7 +85,7 @@ namespace GoldstarrTrading
             if (vm.ObsMerch.Any(v => v.ProductName.ToLower().Trim() == product.ToLower().Trim()))
             {
                 message = "The product already exists";
-                messageDialog = new MessageDialog(message, "Information");
+                messageDialog = new MessageDialog(message, "Warning");
                 await messageDialog.ShowAsync();
                 ProductNameTextBox.Text = string.Empty;
                 return;
@@ -104,21 +104,21 @@ namespace GoldstarrTrading
             if (OrderBy.SelectionBoxItem == null && SortBy.SelectionBoxItem == null)
             {
                 message = "Selection is missing";
-                messageDialog = new MessageDialog(message, "Information");
+                messageDialog = new MessageDialog(message, "Warning");
                 await messageDialog.ShowAsync();
                 return;
             }
             if(OrderBy.SelectionBoxItem == null)
             {
                 message = "Selection Order by is missing";
-                messageDialog = new MessageDialog(message, "Information");
+                messageDialog = new MessageDialog(message, "Warning");
                 await messageDialog.ShowAsync();
                 return;
             }
             if(SortBy.SelectionBoxItem == null)
             {
                 message = "Selection Sort by is missing";
-                messageDialog = new MessageDialog(message, "Information");
+                messageDialog = new MessageDialog(message, "Warning");
                 await messageDialog.ShowAsync();
                 return;
             }
