@@ -37,13 +37,7 @@ namespace GoldstarrTrading
         }
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            FillDeliveriesList(e);
             FillDeliveryComboBox(e);
-        }
-
-        private void FillDeliveriesList(NavigationEventArgs e)
-        {
-            deliveriesList.ItemsSource = ((ViewModel)e.Parameter).ObsMerch;
         }
 
         private void FillDeliveryComboBox(NavigationEventArgs e)
