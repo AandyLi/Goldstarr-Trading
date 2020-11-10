@@ -85,7 +85,6 @@ namespace GoldstarrTrading
             return Regex.Match(number, @"^[0-9]{8,10}$").Success;
 
         }
-
         private bool CheckTextBoxFormat()
         {
 
@@ -102,21 +101,34 @@ namespace GoldstarrTrading
             }
             catch (FormatException fex)
             {
-               // DisplayInputError(fex);
+                DisplayInputError(fex);
                 return false;
             }
-            //catch (ArgumentOutOfRangeException aex)
-            //{
-            //    DisplayInputError(aex);
-            //    return false;
-            //}
-            //catch (Exception e)
-            //{
-            //    DisplayInputError(e);
-            //    return false;
-            //}
+            catch (ArgumentOutOfRangeException aex)
+            {
+                DisplayInputError(aex);
+                return false;
+            }
+            catch (Exception e)
+            {
+                DisplayInputError(e);
+                return false;
+            }
             return true;
         }
+       
+
+        private async void DisplayInputError(Exception exception)
+        {
+            ContentDialog inputError = new ContentDialog()
+            {
+                Title = "Input Error",
+                Content = exception.Message,
+                CloseButtonText = "OK"
+            };
+            await inputError.ShowAsync();
+        }
+
         private async void CustomerAddedDialog()
         {
             ContentDialog inputError = new ContentDialog()
