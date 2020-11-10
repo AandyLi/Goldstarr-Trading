@@ -176,6 +176,12 @@ namespace GoldstarrTrading
             }
 
             EmptyAllTextboxes();
+            ResetCustomerListItemsSource();
+        }
+
+        private void ResetCustomerListItemsSource()
+        {
+            customerList.ItemsSource = vm.CustomerList;
         }
 
         private void Customer_Sorting(object sender, DataGridColumnEventArgs e)

@@ -196,6 +196,7 @@ namespace GoldstarrTrading
                 ClearAmountDropDown();
                 UpdateAmountDropDown(tmpMerchModel);
                 FileManager.SaveToFile(vm.ObsMerch);
+                ResetOrderHistoryItemsSource();
             }
 
 
@@ -232,6 +233,13 @@ namespace GoldstarrTrading
                 (sender as Button).IsEnabled = true;
             }
         }
+
+        private void ResetOrderHistoryItemsSource()
+        {
+            OrderHistory.ItemsSource = vm.Order;
+        }
+
+
 
         private void Order_Sorting(object sender, DataGridColumnEventArgs e)
         {
