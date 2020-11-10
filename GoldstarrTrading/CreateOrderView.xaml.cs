@@ -199,6 +199,7 @@ namespace GoldstarrTrading
                 Task.Delay(1000).ContinueWith(t => FileManager.SaveToFile(vm.ObsMerch));
 
                 FileManager.SaveToFile(vm.ObsMerch);
+                ResetOrderHistoryItemsSource();
             }
 
 
@@ -251,6 +252,13 @@ namespace GoldstarrTrading
                 }
             }
         }
+
+        private void ResetOrderHistoryItemsSource()
+        {
+            OrderHistory.ItemsSource = vm.Order;
+        }
+
+
 
         private void Order_Sorting(object sender, DataGridColumnEventArgs e)
         {

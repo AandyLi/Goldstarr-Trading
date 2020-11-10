@@ -24,7 +24,7 @@
         </Grid.ColumnDefinitions>
         <TextBlock Text="Customer Management" Grid.Column="1" Grid.Row="0" FontSize="40"/>
 
-        <Grid Grid.Row="1" Grid.Column="1" BorderBrush="AliceBlue" BorderThickness="2" Margin="5">
+        <Grid Grid.Row="1" Grid.Column="1" BorderThickness="2" Margin="5">
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="50" />
@@ -34,7 +34,7 @@
 
             <TextBlock Text="Add Customer" Grid.Column="0" Grid.Row="0" FontSize="30" Margin="5"/>
 
-            <Grid Grid.Row="1" BorderBrush="AliceBlue" BorderThickness="1" Margin="15">
+            <Grid Grid.Row="1" BorderBrush="AliceBlue" Margin="15">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="50" />
                     <RowDefinition Height="50" />
