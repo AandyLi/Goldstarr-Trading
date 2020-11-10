@@ -21,7 +21,7 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="40"/>
         </Grid.ColumnDefinitions>
-        <Grid Grid.Row="2" BorderBrush="AliceBlue" BorderThickness="5" Margin="885,7,1,32" Grid.Column="1">
+        <Grid Grid.Row="2" BorderBrush="AliceBlue" BorderThickness="5" Margin="885,7,0,0" Grid.Column="1" Height="125" VerticalAlignment="Top" HorizontalAlignment="Left" Width="534">
             <Grid.RowDefinitions>
                 <RowDefinition Height="85" />
                 <RowDefinition Height="*" />
@@ -44,7 +44,7 @@
             <TextBlock HorizontalAlignment="Left" Margin="240,42,0,0" Text="Sort By" TextWrapping="Wrap" VerticalAlignment="Top" Height="26" Width="50" />
         </Grid>
 
-        <Grid Grid.Row="2" BorderBrush="AliceBlue" BorderThickness="5" Margin="0,7,886,32" Grid.Column="1">
+        <Grid Grid.Row="2" BorderBrush="AliceBlue" BorderThickness="5" Margin="0,7,0,0" Grid.Column="1" HorizontalAlignment="Left" Width="534" Height="125" VerticalAlignment="Top">
             <Grid.RowDefinitions>
                 <RowDefinition Height="85" />
                 <RowDefinition Height="*" />
