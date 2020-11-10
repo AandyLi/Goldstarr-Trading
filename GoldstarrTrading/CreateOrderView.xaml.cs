@@ -195,7 +195,9 @@ namespace GoldstarrTrading
 
                 ClearAmountDropDown();
                 UpdateAmountDropDown(tmpMerchModel);
+                FileManager.SaveToFile(vm.ObsMerch);
             }
+
 
         }
 
@@ -214,7 +216,7 @@ namespace GoldstarrTrading
             tmpPendingOrder.Merch.RemoveStock(tmpPendingOrder.OrderedAmount);
             vm.PendingOrder.Remove(tmpPendingOrder);
             vm.Order.Insert(0, tmpPendingOrder);
-
+            FileManager.SaveToFile(vm.ObsMerch);
         }
 
         private void PendingOrdersList_Loaded(object sender, RoutedEventArgs e)
