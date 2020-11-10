@@ -73,7 +73,7 @@
                             <TextBlock Text="{Binding Merch.ProductName}" Width="200" HorizontalAlignment="Stretch"  FontWeight="Bold" Grid.Row="0" Grid.Column="2"/>
                             <TextBlock Text="{Binding OrderedAmount}" Width="80"      HorizontalAlignment="Stretch"  FontWeight="Bold" Grid.Row="0" Grid.Column="3"/>
                             <TextBlock Text="{Binding OrderDate}" Width="200"         HorizontalAlignment="Stretch"  FontWeight="Bold" Grid.Row="0" Grid.Column="4"/>
-                            <Button x:Name="ConfirmPendingOrderButton" FontWeight="Bold" Foreground="Black" Background="Red" Content="Confirm pending order" HorizontalAlignment="Stretch" Grid.Row="0" Grid.Column="5" Click="ConfirmPendingOrderButton_Click" Loaded="PendingOrdersList_Loaded" IsEnabled="False" >
+                            <Button x:Name="ConfirmPendingOrderButton" FontWeight="Bold" Foreground="White" Background="DarkRed" Content="Confirm pending order" HorizontalAlignment="Stretch" Grid.Row="0" Grid.Column="5" Click="ConfirmPendingOrderButton_Click" Loaded="PendingOrdersList_Loaded" IsEnabled="False" >
                             </Button>
 
                         </Grid>
@@ -81,7 +81,7 @@
                 </ListView.ItemTemplate>
             </ListView>
 
-            <Grid Grid.Row="1" BorderBrush="AliceBlue" BorderThickness="1" Margin="15">
+            <Grid Grid.Row="1" Margin="15">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="50" />
                     <RowDefinition Height="50" />
@@ -115,7 +115,7 @@
 
                 <TextBlock Text="Amount" FontSize="20" Grid.Row="2" VerticalAlignment="Center" Margin="5"/>
                 <ComboBox x:Name="AmountDropDown" Grid.Row="2" Grid.Column="2" PlaceholderText="Amount" VerticalAlignment="Center" Width="auto" SelectionChanged="AmountDropDown_SelectionChanged" />
-                <TextBox x:Name="AmountTextBox" Grid.Row="2" Grid.Column="2" PlaceholderText="Enter the amount manually here (only postive whole numbers)" VerticalAlignment="Center" Width="auto" Visibility="Collapsed" TextChanged="AmountTextBox_TextChanged" />
+                <TextBox x:Name="AmountTextBox" Grid.Row="2" Grid.Column="2" PlaceholderText="Enter amount here (only postive whole numbers)" VerticalAlignment="Center" Width="auto" Visibility="Collapsed" HorizontalAlignment="Left" TextChanged="AmountTextBox_TextChanged" />
 
 
                 <Button x:Name="ConfirmOrderButton" Content="Create Order" Grid.Row="3" Grid.Column="0" IsEnabled="False" Opacity="0.5" Click="ConfirmOrderButton_Click" >
