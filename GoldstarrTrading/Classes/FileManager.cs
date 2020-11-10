@@ -101,9 +101,12 @@ namespace GoldstarrTrading.Classes
     static class FileManager
     {
         static StorageFolder storageFolder = ApplicationData.Current.LocalFolder;
+        static StorageFolder storageFolder2 = ApplicationData.Current.LocalFolder;
         static StorageFile file;
+        static StorageFile tmpFile;
 
         const string FileName = "Data.group4";
+        const string FileName2 = "Data2.group4";
 
         public static async void SaveToFile<T>(ObservableCollection<T> collection)
         {
@@ -114,10 +117,19 @@ namespace GoldstarrTrading.Classes
             catch (FileNotFoundException)
             {
                 file = await storageFolder.CreateFileAsync(FileName);
+            }
 
+            try
+            {
+                tmpFile = await storageFolder2.GetFileAsync(FileName2);
+            }
+            catch (FileNotFoundException)
+            {
+                tmpFile = await storageFolder2.CreateFileAsync(FileName2);
             }
 
             CachedFileManager.DeferUpdates(file);
+            CachedFileManager.DeferUpdates(tmpFile);
 
             switch (typeof(T).Name)
             {
@@ -135,6 +147,8 @@ namespace GoldstarrTrading.Classes
                     break;
             }
 
+
+
             await GetFileSaveStatus(); 
         }
 
@@ -148,6 +162,15 @@ namespace GoldstarrTrading.Classes
             else
             {
                 Debug.WriteLine("File " + file.Name + " could not be saved.");
+            }
+            Windows.Storage.Provider.FileUpdateStatus status2 = await CachedFileManager.CompleteUpdatesAsync(tmpFile);
+            if (status2 == Windows.Storage.Provider.FileUpdateStatus.Complete)
+            {
+                Debug.WriteLine("File " + tmpFile.Name + " was saved.");
+            }
+            else
+            {
+                Debug.WriteLine("File " + tmpFile.Name + " could not be saved.");
             }
         }
 
@@ -238,6 +261,7 @@ namespace GoldstarrTrading.Classes
         {
             OrderStruct[] orderStruct = new OrderStruct[order.Count];
             MerchandiseModel tmpMerch;
+            string pending = "";
             for (int i = 0; i < order.Count; i++)
             {
                 tmpMerch = order[i].Merch;
@@ -247,12 +271,19 @@ namespace GoldstarrTrading.Classes
                 orderStruct[i].OrderDate = DateTime.Now.ToString();
                 orderStruct[i].ProductName = tmpMerch.ProductName;
                 orderStruct[i].Supplier = tmpMerch.Supplier;
-
+                if (order[0].IsPendingOrder)
+                {
+                    pending = "Pending";
+                }
+            }
+            if (order.Count == 0)
+            {
+                pending = "Pending";
             }
 
             Header h = new Header
             {
-                Name = typeof(OrderStruct).Name,
+                Name = typeof(OrderStruct).Name + pending,
                 size = Marshal.SizeOf(typeof(OrderStruct)),
                 amount = order.Count
             };
@@ -260,8 +291,9 @@ namespace GoldstarrTrading.Classes
             ObjectToByteArray(orderStruct, h);
         }
 
-        public static void ObjectToByteArray<T>(T[] obj, object h) where T : struct
+        public static async void ObjectToByteArray<T>(T[] obj, object h) where T : struct
         {
+            bool remove = false;
             using (var fs = new FileStream(file.Path, FileMode.Open, FileAccess.ReadWrite))
             {
 
@@ -275,12 +307,27 @@ namespace GoldstarrTrading.Classes
                 Write the rest of the already existing data we saved
                  */
 
-
                 // Find a header
                 Header firstHeader = FindNextHeader(fs);
                 bool eof = false;
                 while (true)
                 {
+                    if (((Header)h).Name == "OrderStructPending")
+                    {
+                        if (((Header)h).amount == 0)
+                        {
+                            await tmpFile.DeleteAsync();
+                        }
+                        else
+                        {
+                            using (var fs2 = new FileStream(tmpFile.Path, FileMode.Truncate, FileAccess.ReadWrite))
+                            {
+                                // Write all data
+                                WriteHeaderAndStructToFile(fs2, h, obj);
+                            }
+                        }
+                        break;
+                    }
                     if (firstHeader.Name == ((Header)h).Name || eof )
                     {
                         Header nextHeader;
@@ -302,8 +349,12 @@ namespace GoldstarrTrading.Classes
                             // Revert fs.position to old position with negative offset for the header
                             fs.Position = oldPos - Marshal.SizeOf(h);
 
-                            // Continue with normal write operation
-                            WriteHeaderAndStructToFile(fs, h, obj);
+                            if (((Header)h).amount != 0)
+                            {
+                                // Continue with normal write operation
+                                WriteHeaderAndStructToFile(fs, h, obj);
+
+                            }
 
                             // Write remaning data
                             fs.Write(remainingData, 0, remainingSize);
@@ -319,9 +370,14 @@ namespace GoldstarrTrading.Classes
                             {
                                 fs.Position = oldPos - Marshal.SizeOf(h);
                             }
-                            // Continue with normal write operation
-                            WriteHeaderAndStructToFile(fs, h, obj);
-                            break;
+
+                            if (((Header)h).Name != "OrderStructPending")
+                            {
+                                // Continue with normal write operation
+                                WriteHeaderAndStructToFile(fs, h, obj);
+                                break;
+
+                            }
                         }
                     }
                     else // Matching header not found, keep looking
@@ -397,6 +453,15 @@ namespace GoldstarrTrading.Classes
                 file = await storageFolder.CreateFileAsync(FileName);
 
             }
+            try
+            {
+                tmpFile = await storageFolder.GetFileAsync(FileName2);
+            }
+            catch (FileNotFoundException)
+            {
+                tmpFile = await storageFolder.CreateFileAsync(FileName2);
+
+            }
 
             try
             {
@@ -411,7 +476,7 @@ namespace GoldstarrTrading.Classes
                         switch (h.Name)
                         {
                             case "OrderStruct":
-                                ReadOrderStruct(br, h, vm);
+                                ReadOrderStruct(br, h, vm, false);
                                 break;
                             case "MerchandiseStruct":
                                 ReadMerchandiseStruct(br, h, vm);
@@ -428,6 +493,17 @@ namespace GoldstarrTrading.Classes
                     Debug.WriteLine("Loading Successfull");
 
                 }
+
+                using (var fs2 = new FileStream(tmpFile.Path, FileMode.Open, FileAccess.Read))
+                {
+                    BinaryReader br = new BinaryReader(fs2, Encoding.UTF8);
+                    Header h = GetHeader(br);
+                    if ( h.Name == "OrderStructPending")
+                    {
+                        ReadOrderStruct(br, h, vm, true);
+                    }
+                }
+
             }
             catch (Exception)
             {
@@ -536,7 +612,7 @@ namespace GoldstarrTrading.Classes
             }
         }
 
-        private static void ReadOrderStruct(BinaryReader br, Header h, ViewModel vm)
+        private static void ReadOrderStruct(BinaryReader br, Header h, ViewModel vm, bool pending)
         {
             OrderStruct[] os = new OrderStruct[h.amount];
             for (int i = 0; i < h.amount; i++)
@@ -544,10 +620,10 @@ namespace GoldstarrTrading.Classes
                 os[i] = ReadStructData<OrderStruct>(br, h);
             }
 
-            AddOrderStructToList(os, vm);
+            AddOrderStructToList(os, vm, pending);
         }
 
-        private static void AddOrderStructToList(OrderStruct[] os, ViewModel vm)
+        private static void AddOrderStructToList(OrderStruct[] os, ViewModel vm, bool pending)
         {
             for (int i = 0; i < os.Length; i++)
             {
@@ -565,7 +641,15 @@ namespace GoldstarrTrading.Classes
                 };
 
                 om.Merch = mm;
-                vm.Order.Add(om);
+                if (pending)
+                {
+                    om.IsPendingOrder = true;
+                    vm.PendingOrder.Add(om);
+                }
+                else
+                {
+                    vm.Order.Add(om);
+                }
             }
         }
 

@@ -58,6 +58,11 @@ namespace GoldstarrTrading
             CustomerList.CollectionChanged += CustomerList_CollectionChanged;
             Order.CollectionChanged += Order_CollectionChanged;
             Supplier.CollectionChanged += Supplier_CollectionChanged;
+            PendingOrder.CollectionChanged += PendingOrder_CollectionChanged;
+        }
+        private void PendingOrder_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            FileManager.SaveToFile(PendingOrder);
         }
         private void Supplier_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
@@ -108,18 +113,6 @@ namespace GoldstarrTrading
             PendingOrder = new ObservableCollection<OrderModel>();
             Supplier = new ObservableCollection<SupplierModel>();
         }
-
-        
-       
-
-        //public List<MerchandiseModel> MerchList { get; set; } // Skip for now
-        //public void UpdateList()
-        //{
-        //    foreach (var item in MerchList)
-        //    {
-        //        ObsMerch.Add(item);
-        //    }
-        //}
 
 
         public event PropertyChangedEventHandler PropertyChanged;

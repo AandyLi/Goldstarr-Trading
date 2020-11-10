@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Security.Cryptography;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI;
@@ -176,7 +177,7 @@ namespace GoldstarrTrading
             if (isOrderPending)
             {
                 orderedAmount = Int32.Parse(AmountTextBox.Text);
-                pendingOrder.CreateOrder(tmpCustModel.Name, tmpMerchModel, orderedAmount);
+                pendingOrder.CreateOrder(tmpCustModel.Name, tmpMerchModel, orderedAmount, true);
 
                 vm.PendingOrder.Insert(0, pendingOrder);
 
@@ -195,6 +196,8 @@ namespace GoldstarrTrading
 
                 ClearAmountDropDown();
                 UpdateAmountDropDown(tmpMerchModel);
+                Task.Delay(1000).ContinueWith(t => FileManager.SaveToFile(vm.ObsMerch));
+
                 FileManager.SaveToFile(vm.ObsMerch);
             }
 
@@ -207,6 +210,7 @@ namespace GoldstarrTrading
             Grid grid = (Grid)parent;
             OrderModel tmpPendingOrder = grid.DataContext as OrderModel;
 
+            tmpPendingOrder.Merch = vm.ObsMerch.First(x => x.ProductName == tmpPendingOrder.Merch.ProductName);
 
             var message = "Pending order will be forwarded to warehouse and saved in Order History.";
             MessageDialog messageDialog = new MessageDialog(message, "Forwarding pending order");
@@ -215,8 +219,14 @@ namespace GoldstarrTrading
 
             tmpPendingOrder.Merch.RemoveStock(tmpPendingOrder.OrderedAmount);
             vm.PendingOrder.Remove(tmpPendingOrder);
+            await Task.Delay(500);
             vm.Order.Insert(0, tmpPendingOrder);
+
+            tmpPendingOrder.IsPendingOrder = false;
+            await Task.Delay(500);
             FileManager.SaveToFile(vm.ObsMerch);
+
+            await Task.Delay(50);
         }
 
         private void PendingOrdersList_Loaded(object sender, RoutedEventArgs e)
@@ -225,11 +235,20 @@ namespace GoldstarrTrading
             Grid grid = (Grid)parent;
             OrderModel tmpPendingOrder = grid.DataContext as OrderModel;
 
-            MerchandiseModel tmpMerch = vm.ObsMerch.First(x => x.ProductName == tmpPendingOrder.Merch.ProductName);
-
-            if (tmpMerch.Amount >= tmpPendingOrder.OrderedAmount)
+            if (tmpPendingOrder != null)
             {
-                (sender as Button).IsEnabled = true;
+                try
+                {
+                    MerchandiseModel tmpMerch = vm.ObsMerch.First(x => x.ProductName == tmpPendingOrder.Merch.ProductName);
+                    if (tmpMerch.Amount >= tmpPendingOrder.OrderedAmount)
+                    {
+                        (sender as Button).IsEnabled = true;
+                    }
+                }
+                catch (Exception)
+                {
+                    Debug.WriteLine("Cant find a pending merchandise in our merchandise list");
+                }
             }
         }
 

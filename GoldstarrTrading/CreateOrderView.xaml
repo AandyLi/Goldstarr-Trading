@@ -52,30 +52,33 @@
                             <TextBlock Grid.Column="1" Width="200" HorizontalAlignment="Stretch"  Text="Merchandise" Style="{ThemeResource CaptionTextBlockStyle}"/>
                             <TextBlock Grid.Column="2" Width="80"  HorizontalAlignment="Stretch"  Text="Amount" Style="{ThemeResource CaptionTextBlockStyle}"/>
                             <TextBlock Grid.Column="3" Width="200" HorizontalAlignment="Stretch"  Text="Order date" Style="{ThemeResource CaptionTextBlockStyle}"/>
-                            <TextBlock Grid.Column="4" Width="80" HorizontalAlignment="Stretch"  Text="Confirm" FontWeight="Bold" Style="{ThemeResource CaptionTextBlockStyle}"/>
-
+                            <TextBlock Grid.Column="4" Width="80"  HorizontalAlignment="Stretch"  Text="Confirm" FontWeight="Bold" Style="{ThemeResource CaptionTextBlockStyle}"/>
                         </Grid>
                     </DataTemplate>
                 </ListView.HeaderTemplate>
+
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
+                    </Style>
+                </ListView.ItemContainerStyle>
 
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="0"/>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Text="{Binding CustomerName}" Width="200"      HorizontalAlignment="Stretch"  FontWeight="Bold" Grid.Row="0" Grid.Column="1"  />
-                            <TextBlock Text="{Binding Merch.ProductName}" Width="200" HorizontalAlignment="Stretch"  FontWeight="Bold" Grid.Row="0" Grid.Column="2"/>
-                            <TextBlock Text="{Binding OrderedAmount}" Width="80"      HorizontalAlignment="Stretch"  FontWeight="Bold" Grid.Row="0" Grid.Column="3"/>
-                            <TextBlock Text="{Binding OrderDate}" Width="200"         HorizontalAlignment="Stretch"  FontWeight="Bold" Grid.Row="0" Grid.Column="4"/>
-                            <Button x:Name="ConfirmPendingOrderButton" FontWeight="Bold" Foreground="Black" Background="Red" Content="Confirm pending order" HorizontalAlignment="Stretch" Grid.Row="0" Grid.Column="5" Click="ConfirmPendingOrderButton_Click" Loaded="PendingOrdersList_Loaded" IsEnabled="False" >
+                            <TextBlock Text="{Binding CustomerName}"      Width="200"      HorizontalAlignment="Stretch"  FontWeight="Bold" Grid.Row="0"   />
+                            <TextBlock Text="{Binding Merch.ProductName}" Width="200"      HorizontalAlignment="Stretch"  FontWeight="Bold" Grid.Row="0" Grid.Column="1"/>
+                            <TextBlock Text="{Binding OrderedAmount}"     Width="80"       HorizontalAlignment="Stretch"  FontWeight="Bold" Grid.Row="0" Grid.Column="2"/>
+                            <TextBlock Text="{Binding OrderDate}"         Width="200"      HorizontalAlignment="Stretch"  FontWeight="Bold" Grid.Row="0" Grid.Column="3"/>
+                            <Button x:Name="ConfirmPendingOrderButton"    Width="80"       HorizontalAlignment="Stretch"  FontWeight="Bold" Foreground="Black" Background="Red" Content="Confirm"  Grid.Row="0" Grid.Column="4" Click="ConfirmPendingOrderButton_Click" Loaded="PendingOrdersList_Loaded" IsEnabled="False" >
                             </Button>
-
                         </Grid>
                     </DataTemplate>
                 </ListView.ItemTemplate>
