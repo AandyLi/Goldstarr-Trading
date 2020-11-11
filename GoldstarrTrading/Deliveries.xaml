@@ -39,7 +39,7 @@
 
             <TextBlock Text="Receive Delivery" Grid.Column="0" Grid.Row="0" FontSize="30" Margin="5"/>
 
-            <Grid Grid.Column="0" Grid.Row="1" BorderBrush="AliceBlue" BorderThickness="1" Margin="15">
+            <Grid Grid.Column="0" Grid.Row="1" BorderBrush="AliceBlue" BorderThickness="1" Margin="10">
 
                 <Grid.RowDefinitions>
                 <RowDefinition Height="25"/>
