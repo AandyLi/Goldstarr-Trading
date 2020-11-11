@@ -60,28 +60,28 @@ namespace GoldstarrTrading
             Supplier.CollectionChanged += Supplier_CollectionChanged;
             PendingOrder.CollectionChanged += PendingOrder_CollectionChanged;
         }
-        private void PendingOrder_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        private async void PendingOrder_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            FileManager.SaveToFile(PendingOrder);
+            await FileManager.SaveToFile(PendingOrder);
         }
-        private void Supplier_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        private async void Supplier_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            FileManager.SaveToFile(Supplier);
-        }
-
-        private void Order_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            FileManager.SaveToFile(Order);
+            await FileManager.SaveToFile(Supplier);
         }
 
-        private void CustomerList_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        private async void Order_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            FileManager.SaveToFile(CustomerList);
+            await FileManager.SaveToFile(Order);
         }
 
-        private void ObsMerch_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        private async void CustomerList_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            FileManager.SaveToFile(ObsMerch);
+            await FileManager.SaveToFile(CustomerList);
+        }
+
+        private async void ObsMerch_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            await FileManager.SaveToFile(ObsMerch);
         }
 
         public ObservableCollection<CustomerModel> CustomerList

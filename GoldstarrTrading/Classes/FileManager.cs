@@ -108,7 +108,7 @@ namespace GoldstarrTrading.Classes
         const string FileName = "Data.group4";
         const string FileName2 = "Data2.group4";
 
-        public static async void SaveToFile<T>(ObservableCollection<T> collection)
+        public static async Task<Task> SaveToFile<T>(ObservableCollection<T> collection)
         {
             try
             {
@@ -147,9 +147,7 @@ namespace GoldstarrTrading.Classes
                     break;
             }
 
-
-
-            await GetFileSaveStatus(); 
+            return GetFileSaveStatus(); 
         }
 
         private static async Task GetFileSaveStatus()

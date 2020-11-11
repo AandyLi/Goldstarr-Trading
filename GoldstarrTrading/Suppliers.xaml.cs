@@ -70,7 +70,7 @@ namespace GoldstarrTrading
         {
             supplierList.ItemsSource = ViewModel.Supplier;
         }
-private void EmptyAllTextboxes()
+        private void EmptyAllTextboxes()
         {
             SupplierNameTextBox.Text = string.Empty;
             SupplierAddressTextBox.Text = string.Empty;
@@ -94,12 +94,10 @@ private void EmptyAllTextboxes()
         public static bool IsPhoneNumber(string number)
         {
             return Regex.Match(number, @"^[0-9]{8,10}$").Success;
-
         }
 
         private bool CheckTextBoxFormat()
         {
-
             try
             {
                 newSupplierName = SupplierNameTextBox.Text;

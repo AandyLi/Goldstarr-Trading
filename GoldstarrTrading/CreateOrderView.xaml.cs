@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI;
+using Windows.UI.Core;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -35,6 +36,7 @@ namespace GoldstarrTrading
         private ViewModel vm { get; set; }
         private ObservableCollection<MerchandiseModel> localMerchandise;
         private bool isOrderPending;
+
         public CreateOrderView()
         {
             this.InitializeComponent();
@@ -163,9 +165,9 @@ namespace GoldstarrTrading
             }
         }
 
-        private void ConfirmOrderButton_Click(object sender, RoutedEventArgs e) //lägg till skriva till fil (i båda satser)
+        private async void ConfirmOrderButton_Click(object sender, RoutedEventArgs e) //lägg till skriva till fil (i båda satser)
         {
-
+            ConfirmOrderButton.IsEnabled = false;
             OrderModel newOrder = new OrderModel();
             OrderModel pendingOrder = new OrderModel();
             CustomerModel tmpCustModel = CustomerCombo.SelectedItem as CustomerModel;
@@ -193,16 +195,15 @@ namespace GoldstarrTrading
                 newOrder.CreateOrder(tmpCustModel.Name, tmpMerchModel, orderedAmount);
 
                 vm.Order.Insert(0, newOrder);
+                await Task.Delay(500);
+
+                await FileManager.SaveToFile(vm.ObsMerch);
 
                 ClearAmountDropDown();
                 UpdateAmountDropDown(tmpMerchModel);
-                Task.Delay(1000).ContinueWith(t => FileManager.SaveToFile(vm.ObsMerch));
 
-                FileManager.SaveToFile(vm.ObsMerch);
                 ResetOrderHistoryItemsSource();
             }
-
-
         }
 
         private async void ConfirmPendingOrderButton_Click(object sender, RoutedEventArgs e) //this is for each ConfirmPendingOrderButton child
@@ -225,7 +226,7 @@ namespace GoldstarrTrading
 
             tmpPendingOrder.IsPendingOrder = false;
             await Task.Delay(500);
-            FileManager.SaveToFile(vm.ObsMerch);
+            await FileManager.SaveToFile(vm.ObsMerch);
 
             await Task.Delay(50);
         }
@@ -257,8 +258,6 @@ namespace GoldstarrTrading
         {
             OrderHistory.ItemsSource = vm.Order;
         }
-
-
 
         private void Order_Sorting(object sender, DataGridColumnEventArgs e)
         {
@@ -379,8 +378,4 @@ namespace GoldstarrTrading
             }
         }
     }
-
-
-
-
 }
