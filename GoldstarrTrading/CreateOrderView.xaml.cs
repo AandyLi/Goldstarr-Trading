@@ -151,7 +151,7 @@ namespace GoldstarrTrading
 
         private void AmountTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (AmountTextBox.Text != "" && UInt32.TryParse(AmountTextBox.Text, out uint orderedAmount) && orderedAmount > 0)
+            if (AmountTextBox.Text != "" && UInt32.TryParse(AmountTextBox.Text, out uint orderedAmount) && orderedAmount > 0 && CustomerCombo.SelectedItem != null)
             {
                 ConfirmOrderButton.IsEnabled = true;
                 ConfirmOrderButton.Opacity = 1.0;
