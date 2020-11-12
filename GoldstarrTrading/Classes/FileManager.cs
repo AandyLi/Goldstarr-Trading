@@ -574,15 +574,15 @@ namespace GoldstarrTrading.Classes
             AddSupplierStructToList(ss, vm);
         }
 
-        private static void AddSupplierStructToList(SupplierStruct[] cs, ViewModel vm)
+        private static void AddSupplierStructToList(SupplierStruct[] ss, ViewModel vm)
         {
-            for (int i = 0; i < cs.Length; i++)
+            for (int i = 0; i < ss.Length; i++)
             {
                 SupplierModel sm = new SupplierModel
                 {
-                    Name = cs[i].Name,
-                    Address = cs[i].Address,
-                    Phone = cs[i].Phone
+                    Name = ss[i].Name,
+                    Address = ss[i].Address,
+                    Phone = ss[i].Phone
                 };
 
                 vm.Supplier.Add(sm);
