@@ -55,6 +55,7 @@ namespace GoldstarrTrading
             {
                 localMerchandise.Add(item);
             }
+            MerchCombo.ItemsSource = localMerchandise;
         }
 
         private async void MerchCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -79,7 +80,7 @@ namespace GoldstarrTrading
             var message = "Product has been added to order";
             MessageDialog messageDialog = new MessageDialog(message);
 
-            if (tmpMerchModel.Amount <= 0)
+            if (tmpMerchModel != null && tmpMerchModel.Amount <= 0)
             {
                 message = "This product is not currently in stock! If you proceed with the order, it will be added to the pending order queue.";
                 messageDialog = new MessageDialog(message, "Warning!");
@@ -88,7 +89,6 @@ namespace GoldstarrTrading
                 AmountDropDown.IsEnabled = false;
                 AmountDropDown.Visibility = Visibility.Collapsed;
                 AmountTextBox.Visibility = Visibility.Visible;
-                return;
             }
 
             // Always reset button when we change merchandise
@@ -99,11 +99,20 @@ namespace GoldstarrTrading
         {
             ClearAmountDropDown();
 
-            for (int i = 0; i < merch.Amount; i++)
+            if (merch.Amount > 0 )
             {
-                AmountDropDown.Items.Add(i + 1);
+                for (int i = 0; i < merch.Amount; i++)
+                {
+                    AmountDropDown.Items.Add(i + 1);
+                }
+                AmountDropDown.SelectedIndex = 0;
             }
-            AmountDropDown.SelectedIndex = 0;
+            else // If there is no stock we can reset merch combo as well
+            {
+                localMerchandise.Clear();
+                PopulateAvailableMerchandise();
+                ConfirmOrderButton.IsEnabled = false;
+            }
         }
 
         private void ResetAddOrderButton()
@@ -199,7 +208,6 @@ namespace GoldstarrTrading
 
                 await FileManager.SaveToFile(vm.ObsMerch);
 
-                ClearAmountDropDown();
                 UpdateAmountDropDown(tmpMerchModel);
 
                 ResetOrderHistoryItemsSource();
