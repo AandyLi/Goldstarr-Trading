@@ -39,6 +39,7 @@
                     <RowDefinition Height="50" />
                     <RowDefinition Height="50" />
                     <RowDefinition Height="50" />
+                    <RowDefinition Height="50" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
@@ -58,7 +59,10 @@
                 <TextBlock Text="Phone Number:" FontSize="20" Grid.Row="2" VerticalAlignment="Center" Margin="5"/>
                 <TextBox x:Name="CustomerPhoneTextBox" Grid.Row="2" Grid.Column="2" PlaceholderText="8-10 digits" VerticalAlignment="Center" HorizontalAlignment="Left" Width="160" TextChanged="TextBox_TextChanged" />
 
-                <Button x:Name="AddCustomerButton" Content="Add Customer" Grid.Row="3" Grid.Column="1" IsEnabled="False" VerticalAlignment="Top" Margin="5" Opacity="0.5" Click="AddCustomerButton_Click" />
+                <TextBlock Text="Email:" FontSize="20" Grid.Row="3" VerticalAlignment="Center" Margin="5"/>
+                <TextBox x:Name="CustomerEmailTextBox" Grid.Row="3" Grid.Column="2" PlaceholderText="example@email.com" VerticalAlignment="Center" HorizontalAlignment="Left" Width="160" />
+
+                <Button x:Name="AddCustomerButton" Content="Add Customer" Grid.Row="4" Grid.Column="1" IsEnabled="False" VerticalAlignment="Top" Margin="5" Opacity="0.5" Click="AddCustomerButton_Click" />
             </Grid>
         </Grid>
 
@@ -84,6 +88,7 @@
 
                 <controls:DataGrid.Columns>
                     <controls:DataGridTextColumn Header="Customer Name" Binding="{Binding Name}" CanUserSort="True" Tag="Name"/>
+                    <controls:DataGridTextColumn Header="Customer Email" Binding="{Binding Email}" CanUserSort="False" Tag="Email"/>
                 </controls:DataGrid.Columns>
             </controls:DataGrid>
         </Grid>

@@ -32,6 +32,7 @@ namespace GoldstarrTrading
         private string newCustomerName;
         private string newCustomerAddress;
         private string newCustomerPhone;
+        private string newCustomerEmail;
         private ViewModel vm { get; set; }
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
@@ -93,6 +94,7 @@ namespace GoldstarrTrading
                 newCustomerName = CustomerNameTextBox.Text;
                 newCustomerAddress = CustomerAddressTextBox.Text;
                 newCustomerPhone = CustomerPhoneTextBox.Text;
+                newCustomerEmail = CustomerEmailTextBox.Text;
 
                 if (!IsPhoneNumber(newCustomerPhone))
                 {
@@ -158,6 +160,7 @@ namespace GoldstarrTrading
             CustomerNameTextBox.Text = string.Empty;
             CustomerAddressTextBox.Text = string.Empty;
             CustomerPhoneTextBox.Text = string.Empty;
+            CustomerEmailTextBox.Text = string.Empty;
         }
         private void AddCustomerButton_Click(object sender, RoutedEventArgs e)
         {
@@ -165,7 +168,7 @@ namespace GoldstarrTrading
             {
                 if (CheckDuplicateCustomerEntry() == false)
                 {
-                    vm.CustomerList.Add(new CustomerModel() { Name = newCustomerName, Address = newCustomerAddress, Phone = newCustomerPhone });
+                    vm.CustomerList.Add(new CustomerModel() { Name = newCustomerName, Address = newCustomerAddress, Phone = newCustomerPhone, Email = newCustomerEmail });
 
                     CustomerAddedDialog();
                 }

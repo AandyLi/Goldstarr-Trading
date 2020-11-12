@@ -8,7 +8,7 @@ namespace GoldstarrTrading.Classes
 {
     class CustomerModel : AssociateModel, IAddToListView
     {
-       
+       public string Email { get; set; }
         public string GetInfo()
         {
             throw new NotImplementedException();

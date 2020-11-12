@@ -70,6 +70,9 @@ namespace GoldstarrTrading.Classes
 
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 20)]
         public string Phone;
+
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 40)]
+        public string Email;
     }
 
     [StructLayout(LayoutKind.Sequential)]
@@ -140,10 +143,10 @@ namespace GoldstarrTrading.Classes
                     HandleMerchandiseModel(collection as ObservableCollection<MerchandiseModel>);
                     break;
                 case "CustomerModel":
-                    HandleAssociateModel(collection as ObservableCollection<CustomerModel>);
+                    HandleCustomerModel(collection as ObservableCollection<CustomerModel>);
                     break;
                 case "SupplierModel":
-                    HandleAssociateModel(collection as ObservableCollection<SupplierModel>);
+                    HandleSupplierModel(collection as ObservableCollection<SupplierModel>);
                     break;
             }
 
@@ -172,27 +175,27 @@ namespace GoldstarrTrading.Classes
             }
         }
 
-        private static void HandleAssociateModel<T>(ObservableCollection<T> associateCollection) where T : AssociateModel
-        {
-            AssociateStruct[] assStruct = new AssociateStruct[associateCollection.Count];
-            for (int i = 0; i < associateCollection.Count; i++)
-            {
-                assStruct[i].Name = associateCollection[i].Name;
-                assStruct[i].Address = associateCollection[i].Address;
-                assStruct[i].Phone = associateCollection[i].Phone;
-            }
+        //private static void HandleAssociateModel<T>(ObservableCollection<T> associateCollection) where T : AssociateModel
+        //{
+        //    AssociateStruct[] assStruct = new AssociateStruct[associateCollection.Count];
+        //    for (int i = 0; i < associateCollection.Count; i++)
+        //    {
+        //        assStruct[i].Name = associateCollection[i].Name;
+        //        assStruct[i].Address = associateCollection[i].Address;
+        //        assStruct[i].Phone = associateCollection[i].Phone;
+        //    }
 
-            Header h = new Header
-            {
-                Name = typeof(T).Name,
-                size = Marshal.SizeOf(typeof(AssociateStruct)),
-                amount = associateCollection.Count
-            };
+        //    Header h = new Header
+        //    {
+        //        Name = typeof(T).Name,
+        //        size = Marshal.SizeOf(typeof(AssociateStruct)),
+        //        amount = associateCollection.Count
+        //    };
 
-            ObjectToByteArray(assStruct, h);
-        }
+        //    ObjectToByteArray(assStruct, h);
+        //}
 
-        /* Not used right now
+        
         private static void HandleSupplierModel(ObservableCollection<SupplierModel> supp)
         {
             SupplierStruct[] suppStruct = new SupplierStruct[supp.Count];
@@ -205,8 +208,8 @@ namespace GoldstarrTrading.Classes
 
             Header h = new Header
             {
-                Name = typeof(MerchandiseStruct).Name,
-                size = Marshal.SizeOf(typeof(MerchandiseStruct)),
+                Name = typeof(SupplierStruct).Name,
+                size = Marshal.SizeOf(typeof(SupplierStruct)),
                 amount = supp.Count
             };
 
@@ -221,18 +224,19 @@ namespace GoldstarrTrading.Classes
                 custStruct[i].Name = cust[i].Name;
                 custStruct[i].Address = cust[i].Address;
                 custStruct[i].Phone = cust[i].Phone;
+                custStruct[i].Email = cust[i].Email;
             }
 
             Header h = new Header
             {
-                Name = typeof(MerchandiseStruct).Name,
-                size = Marshal.SizeOf(typeof(MerchandiseStruct)),
+                Name = typeof(CustomerStruct).Name,
+                size = Marshal.SizeOf(typeof(CustomerStruct)),
                 amount = cust.Count
             };
 
             ObjectToByteArray(custStruct, h);
         }
-         */
+         
 
         private static void HandleMerchandiseModel(ObservableCollection<MerchandiseModel> merch)
         {
@@ -479,11 +483,11 @@ namespace GoldstarrTrading.Classes
                             case "MerchandiseStruct":
                                 ReadMerchandiseStruct(br, h, vm);
                                 break;
-                            case "CustomerModel":
-                                ReadAssociateStruct(br, h, vm);
+                            case "CustomerStruct":
+                                ReadCustomerStruct(br, h, vm);
                                 break;
-                            case "SupplierModel":
-                                ReadAssociateStruct(br, h, vm);
+                            case "SupplierStruct":
+                                ReadSupplierStruct(br, h, vm);
                                 break;
                         }
                     }
@@ -529,6 +533,8 @@ namespace GoldstarrTrading.Classes
             return h;
         }
 
+        // Not used anymore
+        /*
         private static void ReadAssociateStruct(BinaryReader br, Header h, ViewModel vm) 
         {
             AssociateStruct[] asc = new AssociateStruct[h.amount];
@@ -556,9 +562,33 @@ namespace GoldstarrTrading.Classes
                 vmList.Add(cm);
             }
         }
+         */
 
+        private static void ReadSupplierStruct(BinaryReader br, Header h, ViewModel vm)
+        {
+            SupplierStruct[] ss = new SupplierStruct[h.amount];
+            for (int i = 0; i < h.amount; i++)
+            {
+                ss[i] = ReadStructData<SupplierStruct>(br, h);
+            }
+            AddSupplierStructToList(ss, vm);
+        }
 
-        /* Not used for now
+        private static void AddSupplierStructToList(SupplierStruct[] cs, ViewModel vm)
+        {
+            for (int i = 0; i < cs.Length; i++)
+            {
+                SupplierModel sm = new SupplierModel
+                {
+                    Name = cs[i].Name,
+                    Address = cs[i].Address,
+                    Phone = cs[i].Phone
+                };
+
+                vm.Supplier.Add(sm);
+            }
+        }
+
         private static void ReadCustomerStruct(BinaryReader br, Header h, ViewModel vm)
         {
             CustomerStruct[] cs = new CustomerStruct[h.amount];
@@ -577,13 +607,14 @@ namespace GoldstarrTrading.Classes
                 {
                     Name = cs[i].Name,
                     Address = cs[i].Address,
-                    Phone = cs[i].Phone
+                    Phone = cs[i].Phone,
+                    Email = cs[i].Email
                 };
 
                 vm.CustomerList.Add(cm);
             }
         }
-         */
+         
 
         private static void ReadMerchandiseStruct(BinaryReader br, Header h, ViewModel vm)
         {
