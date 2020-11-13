@@ -270,7 +270,7 @@ namespace GoldstarrTrading.Classes
 
                 orderStruct[i].CustomerName = order[i].CustomerName;
                 orderStruct[i].OrderedAmount = order[i].OrderedAmount;
-                orderStruct[i].OrderDate = DateTime.Now.ToString();
+                orderStruct[i].OrderDate = order[i].OrderDate.ToString();
                 orderStruct[i].ProductName = tmpMerch.ProductName;
                 orderStruct[i].Supplier = tmpMerch.Supplier;
                 if (order[0].IsPendingOrder)
