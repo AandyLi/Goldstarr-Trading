@@ -228,6 +228,8 @@ namespace GoldstarrTrading
 
 
             tmpPendingOrder.Merch.RemoveStock(tmpPendingOrder.OrderedAmount);
+            UpdateAmountDropDown(tmpPendingOrder.Merch);
+
             vm.PendingOrder.Remove(tmpPendingOrder);
             await Task.Delay(500);
             vm.Order.Insert(0, tmpPendingOrder);
@@ -236,7 +238,9 @@ namespace GoldstarrTrading
             await Task.Delay(500);
             await FileManager.SaveToFile(vm.ObsMerch);
 
-            await Task.Delay(50);
+
+            PendingOrdersList.ItemsSource = null;
+            PendingOrdersList.ItemsSource = vm.PendingOrder;
         }
 
         private void PendingOrdersList_Loaded(object sender, RoutedEventArgs e)
